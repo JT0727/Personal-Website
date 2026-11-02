@@ -44,6 +44,7 @@ function assertRedirectPage(
   expect(canonicals[0], file).not.toContain("#");
 }
 
+// rule:legacy-redirects
 describe("exported /writing/ and /work/ redirects", () => {
   it("writes index HTML that points at the current-base-path home anchors", () => {
     assertRedirectPage("out/writing/index.html", "writing", "Go to Writing");

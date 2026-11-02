@@ -34,6 +34,7 @@ function cssToken(block: string, name: string): string | undefined {
 }
 
 describe("shared palette lock", () => {
+  // rule:shared-palette
   it("imports icon and OG colors from the palette module with no color literals", () => {
     for (const file of COLOR_FILES) {
       const source = readSiteFile(file);

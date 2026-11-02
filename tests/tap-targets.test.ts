@@ -81,6 +81,7 @@ describe("390px tap targets and first screen", () => {
     return { browser, page };
   }
 
+  // rule:tap-targets-44px
   it("keeps every visible link and button at least 44px tall", async () => {
     for (const path of ["/", "/work/tesla-energy-ai-product/"]) {
       const { browser, page } = await open(path);

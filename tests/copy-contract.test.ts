@@ -57,6 +57,7 @@ describe("visitor-facing copy contract", () => {
     expect(lower).toContain("vc-adjacent");
   });
 
+  // rule:one-public-narrative
   it("does not repeat a five-word phrase across strings unless it carries a figure", () => {
     // Shared closers the humanize pack keeps on purpose (headline/bio; Tesla hours line).
     const allowed = new Set([
@@ -71,6 +72,7 @@ describe("visitor-facing copy contract", () => {
     ).toEqual([]);
   });
 
+  // rule:no-factory-framing
   it("does not use factory, manufacturing, or heavy operational framing", () => {
     expect(BANNED_FRAMING_TOKENS).toEqual(
       expect.arrayContaining(["unit cost", "cost per unit"]),
@@ -89,6 +91,7 @@ describe("visitor-facing copy contract", () => {
     expect(haystack).not.toMatch(/\bNYC\b/);
   });
 
+  // rule:official-title
   it("uses one official title everywhere", () => {
     const title = site.positioning.currentRole;
     expect(title).toBe("Lead, AI Enablement & Factory Strategy");
@@ -263,6 +266,7 @@ describe("visitor-facing copy contract", () => {
     );
   });
 
+  // rule:no-em-dashes
   it("does not use em-dashes in content files or rendered pages", () => {
     const emDash = /\u2014|&mdash;|&#8212;|&#x2014;/i;
     const hits: string[] = [];

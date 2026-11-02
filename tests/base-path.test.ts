@@ -67,6 +67,7 @@ describe("withBasePath", () => {
 });
 
 describe("deploy wiring", () => {
+  // rule:live-site-base-path
   it("tells agents that production is jarrodtran.com with an empty deploy BASE_PATH", () => {
     const readme = readSiteFile("README.md");
     expect(readme).toContain("https://jarrodtran.com");

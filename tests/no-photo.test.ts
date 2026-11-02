@@ -21,6 +21,7 @@ function htmlFiles(dir: string): string[] {
     .map((file) => path.join(dir, file));
 }
 
+// rule:no-photo
 describe("built HTML does not ship a photo of Jarrod", () => {
   const pages = htmlFiles(outDir).map((file) => ({
     file: path.relative(root, file),
