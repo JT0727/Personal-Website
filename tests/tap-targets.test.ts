@@ -81,6 +81,25 @@ describe("390px tap targets and first screen", () => {
     return { browser, page };
   }
 
+  it("keeps the writing subscribe link and post titles at least 44px tall", async () => {
+    const { browser, page } = await open("/");
+    const writing = await page.evaluate(() => {
+      const section = document.getElementById("writing");
+      return [...(section?.querySelectorAll("a") ?? [])].map((control) => ({
+        name: control.textContent?.replace(/\s+/g, " ").trim() ?? "",
+        height: control.getBoundingClientRect().height,
+      }));
+    });
+    await browser.close();
+    expect(writing.length).toBeGreaterThan(0);
+    expect(
+      writing.some((link) => link.name.includes("Subscribe on Substack")),
+    ).toBe(true);
+    for (const link of writing) {
+      expect(link.height, link.name).toBeGreaterThanOrEqual(44);
+    }
+  });
+
   it("keeps every visible link and button at least 44px tall", async () => {
     for (const path of ["/", "/work/tesla-energy-ai-product/"]) {
       const { browser, page } = await open(path);

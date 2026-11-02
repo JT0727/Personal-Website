@@ -74,7 +74,7 @@ export interface SiteContent {
     currentRole: string;
     currentCompany: string;
   };
-  /** Empty name/url/feedUrl until the newsletter launches. */
+  /** Public Substack. url is the subscribe target; feedUrl is fetched at build. */
   substack: {
     name: string;
     url: string;
@@ -143,8 +143,8 @@ export const site: SiteContent = {
   },
   substack: {
     name: "",
-    url: "",
-    feedUrl: "",
+    url: "https://jarrodtran.substack.com",
+    feedUrl: "https://jarrodtran.substack.com/feed",
   },
   talks: [],
   highlights: [
@@ -541,7 +541,7 @@ export const site: SiteContent = {
     writing: {
       eyebrow: "01 / Essays",
       title: "Writing",
-      description: "Titles and notes from the newsletter, when it is live.",
+      description: "Posts from my Substack.",
     },
     about: {
       eyebrow: "02 / Profile",
