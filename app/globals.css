@@ -150,6 +150,6 @@ footer a {
   text-underline-offset: 3px;
 }
 
-#writing li a {
+#writing li a:not(:hover) {
   text-decoration: none;
 }

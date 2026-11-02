@@ -107,7 +107,7 @@ describe("writing", () => {
         target: "_blank",
       },
     ]);
-    expect(html).toMatch(/rel="noreferrer"/);
+    expect(html).toMatch(/rel="noopener noreferrer"/);
     expect(html).toContain(btnGhost);
     expect(html).toContain("size-[16px]");
     expect(html).toMatch(/max-w-2xl[\s\S]*Subscribe on Substack/);
@@ -146,6 +146,7 @@ describe("writing", () => {
     expect(html).toMatch(
       /<ol\b[^>]*>[\s\S]*<a\b[^>]*\bno-underline\b[^>]*\bhover:underline\b/,
     );
+    expect(html).toMatch(/rel="noopener noreferrer"/);
     expect(html).not.toContain("All writing");
     expect(html).not.toContain("First post soon");
     expect(links(html)).toEqual([

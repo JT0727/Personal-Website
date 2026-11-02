@@ -18,10 +18,10 @@ function SubscribeLink({ href }: { href: string }) {
       href={href}
       className={`${btnGhost} mt-6 w-fit`}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
     >
       Subscribe on Substack
-      <ArrowUpRight className="size-[16px]" aria-hidden="true" />
+      <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
     </a>
   );
 }
@@ -54,7 +54,7 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
                     href={post.href}
                     className={`${tap} text-foreground max-w-full gap-1 text-lg font-medium no-underline hover:underline`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     <span className="min-w-0">{post.title}</span>
                     <ArrowUpRight

@@ -281,7 +281,9 @@ describe("writing title underline", () => {
       "utf8",
     );
     expect(css).toMatch(/main li a/);
-    expect(css).toMatch(/#writing\s+li\s+a\s*\{[^}]*text-decoration:\s*none/);
+    expect(css).toMatch(
+      /#writing\s+li\s+a:not\(:hover\)\s*\{[^}]*text-decoration:\s*none/,
+    );
     expect(source).toMatch(/no-underline/);
     expect(source).toMatch(/hover:underline/);
   });
