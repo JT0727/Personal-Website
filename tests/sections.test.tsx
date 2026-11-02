@@ -134,6 +134,9 @@ describe("writing", () => {
     expect(html).toContain("line-clamp-2");
     expect(html).toContain("(opens Substack)");
     expect(html).toContain("size-[16px]");
+    expect(html).toMatch(
+      /<ol\b[^>]*>[\s\S]*<a\b[^>]*\bno-underline\b[^>]*\bhover:underline\b/,
+    );
     expect(html).not.toContain("All writing");
     expect(html).not.toContain("First post soon");
     expect(links(html)).toEqual([
