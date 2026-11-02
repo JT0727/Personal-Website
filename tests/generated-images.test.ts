@@ -121,6 +121,7 @@ function sameRgb(
   return r === target[0] && g === target[1] && b === target[2];
 }
 
+// rule:generated-images-palette
 describe("built icon and OG images stay on palette A", () => {
   const files = collectPngs(path.join(root, "out"));
 

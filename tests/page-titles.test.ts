@@ -20,6 +20,7 @@ function pageTitle(html: string): string {
 }
 
 describe("route tab titles", () => {
+  // rule:404-title-absolute
   it("gives the 404 its own absolute title instead of the home documentTitle", () => {
     const source = readSiteFile("app/not-found.tsx");
     expect(source).toMatch(/title:\s*\{/);

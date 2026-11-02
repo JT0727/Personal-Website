@@ -48,11 +48,11 @@ The block below is an example only. Do not treat it as a completed review.
 ### Rule or coverage claims
 
 1. Rule broken: theme icon grows past 16px at 200% text
-2. Test that should catch it: `pnpm a11y` (200% text header clip)
+2. Test that should catch it: `tests/tap-targets.test.ts` (200% text header icons)
 3. Failing output:
 
 ```
-header clips its controls at 200% text: theme icon 24x24 (expected 16x16)
+AssertionError: Toggle color theme width: expected 24 to be 16
 ```
 
 4. Passes after revert: yes

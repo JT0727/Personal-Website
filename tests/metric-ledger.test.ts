@@ -45,6 +45,7 @@ describe("number ledger", () => {
     }
   });
 
+  // rule:metric-ledger
   it("only shows figures that appear in the résumé or have a recorded source", () => {
     const untraced = extractFigures(getProofCopy()).filter(
       (figure) => !resumeFigures.has(figure) && !sourcedFigures[figure],

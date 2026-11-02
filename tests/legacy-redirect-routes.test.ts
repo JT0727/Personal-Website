@@ -8,6 +8,7 @@ function readSiteFile(relativePath: string): string {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
+// rule:legacy-redirects
 describe("legacy /writing/ and /work/ index routes", () => {
   it("does not add the old index URLs to the sitemap", () => {
     const source = readSiteFile("app/sitemap.ts");
