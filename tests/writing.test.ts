@@ -205,6 +205,23 @@ describe("fetchSubstackPosts and loadWriting", () => {
   });
 });
 
+describe("writing title underline", () => {
+  it("overrides main li a so titles have no underline at rest", () => {
+    const css = readFileSync(
+      path.resolve(__dirname, "../app/globals.css"),
+      "utf8",
+    );
+    const source = readFileSync(
+      path.resolve(__dirname, "../components/sections/writing.tsx"),
+      "utf8",
+    );
+    expect(css).toMatch(/main li a/);
+    expect(css).toMatch(/#writing\s+li\s+a\s*\{[^}]*text-decoration:\s*none/);
+    expect(source).toMatch(/no-underline/);
+    expect(source).toMatch(/hover:underline/);
+  });
+});
+
 describe("daily deploy wiring", () => {
   it("keeps push and manual deploys and adds a daily schedule that can skip unchanged feeds", () => {
     const deploy = readFileSync(
