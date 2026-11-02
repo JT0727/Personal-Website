@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 export interface WritingPost {
@@ -61,20 +60,6 @@ export function formatPostDate(iso: string): string {
     year: "numeric",
     timeZone: WRITING_DATE_TIME_ZONE,
   }).format(date);
-}
-
-export function writingFeedFingerprint(posts: WritingPost[]): string {
-  const normalized = posts.map((post) => ({
-    title: post.title,
-    href: post.href,
-    date: post.date,
-    summary: post.summary,
-  }));
-  return createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
-}
-
-function warnFeed(message: string): void {
-  console.warn(`::warning::Writing feed: ${message}`);
 }
 
 function decode(text: string): string {
@@ -177,15 +162,11 @@ export async function loadWritingResult(
       signal: AbortSignal.timeout(WRITING_FEED_TIMEOUT_MS),
     });
     if (!response.ok) {
-      const reason = `HTTP ${response.status}`;
-      warnFeed(reason);
-      return { ok: false, posts: [], reason };
+      return { ok: false, posts: [], reason: `HTTP ${response.status}` };
     }
     const xml = await response.text();
     if (!looksLikeFeed(xml)) {
-      const reason = "malformed feed XML";
-      warnFeed(reason);
-      return { ok: false, posts: [], reason };
+      return { ok: false, posts: [], reason: "malformed feed XML" };
     }
     return {
       ok: true,
@@ -193,7 +174,6 @@ export async function loadWritingResult(
     };
   } catch (error) {
     const reason = error instanceof Error ? error.message : "fetch failed";
-    warnFeed(reason);
     return { ok: false, posts: [], reason };
   }
 }

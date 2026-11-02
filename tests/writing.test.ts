@@ -147,7 +147,7 @@ describe("fetchSubstackPosts and loadWriting", () => {
     expect(await fetchSubstackPosts({ name: "", url: "" })).toEqual([]);
   });
 
-  it("returns [] and warns on non-200, throw, timeout, or malformed XML", async () => {
+  it("returns [] quietly on non-200, throw, timeout, or malformed XML", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const timeout = vi.spyOn(AbortSignal, "timeout");
 
@@ -171,11 +171,9 @@ describe("fetchSubstackPosts and loadWriting", () => {
     expect(await fetchSubstackPosts(ownFeed)).toEqual([]);
 
     expect(timeout).toHaveBeenCalledWith(WRITING_FEED_TIMEOUT_MS);
-    const warnings = warn.mock.calls.map((call) => String(call[0]));
-    expect(warnings.length).toBeGreaterThanOrEqual(4);
-    expect(warnings.every((message) => message.startsWith("::warning::"))).toBe(
-      true,
-    );
+    expect(
+      warn.mock.calls.some((call) => String(call[0]).includes("::warning::")),
+    ).toBe(false);
   });
 
   it("loads a live fixture newest first without inventing posts", async () => {
@@ -289,20 +287,7 @@ describe("writing title underline", () => {
   });
 });
 
-describe("daily deploy wiring", () => {
-  it("keeps push and manual deploys and adds a daily schedule that can skip unchanged feeds", () => {
-    const deploy = readFileSync(
-      path.resolve(__dirname, "../.github/workflows/deploy.yml"),
-      "utf8",
-    );
-    expect(deploy).toMatch(/push:\n\s+branches:\s*\[main\]/);
-    expect(deploy).toContain("workflow_dispatch");
-    expect(deploy).toMatch(/schedule:/);
-    expect(deploy).toMatch(/cron:\s*["']\S+ \S+ \* \* \*["']/);
-    expect(deploy).toContain("scripts/feed-changed.ts");
-    expect(deploy).toContain("github.event_name == 'schedule'");
-  });
-
+describe("writing-output CI wiring", () => {
   it("runs the writing-output check after the production build in CI and deploy", () => {
     const ci = readFileSync(
       path.resolve(__dirname, "../.github/workflows/ci.yml"),
@@ -314,5 +299,7 @@ describe("daily deploy wiring", () => {
     );
     expect(ci).toMatch(/pnpm test:tap\n\s+- run: pnpm test:writing-output/);
     expect(deploy).toContain("pnpm test:writing-output");
+    expect(deploy).not.toMatch(/schedule:/);
+    expect(deploy).not.toContain("scripts/feed-changed.ts");
   });
 });
