@@ -540,4 +540,70 @@ describe("390px tap targets and first screen", () => {
       }
     },
   );
+
+  it.each([
+    { width: 320, height: 844 },
+    { width: 390, height: 844 },
+  ])(
+    "keeps every link and button icon at 16px at $width with 200% text",
+    async ({ width, height }) => {
+      const browser = await chromium.launch();
+      const page = await browser.newPage({
+        viewport: { width, height },
+        colorScheme: "light",
+      });
+      await page.goto(`${origin}/`, { waitUntil: "networkidle" });
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "32px";
+      });
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            const done = () => requestAnimationFrame(() => resolve());
+            if (document.fonts.status === "loaded") {
+              done();
+              return;
+            }
+            document.fonts.ready.then(done).catch(done);
+          }),
+      );
+      await page.waitForTimeout(300);
+
+      const icons = await page.evaluate(() => {
+        return [...document.querySelectorAll("a svg, button svg")]
+          .filter((svg) => {
+            const style = getComputedStyle(svg);
+            const box = svg.getBoundingClientRect();
+            return (
+              style.display !== "none" &&
+              style.visibility !== "hidden" &&
+              box.width > 1 &&
+              box.height > 1
+            );
+          })
+          .map((svg) => {
+            const host = svg.closest("a, button");
+            const box = svg.getBoundingClientRect();
+            return {
+              name:
+                host?.getAttribute("aria-label") ||
+                host?.textContent?.replace(/\s+/g, " ").trim() ||
+                "icon",
+              width: Number(box.width.toFixed(1)),
+              height: Number(box.height.toFixed(1)),
+            };
+          });
+      });
+      await browser.close();
+
+      expect(icons.length).toBeGreaterThan(0);
+      expect(
+        icons.some((icon) => icon.name.includes("Subscribe on Substack")),
+      ).toBe(true);
+      for (const icon of icons) {
+        expect(icon.width, `${icon.name} width`).toBe(16);
+        expect(icon.height, `${icon.name} height`).toBe(16);
+      }
+    },
+  );
 });
