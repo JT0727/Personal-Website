@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Jarrod Tran</title>
+    <item>
+      <title><![CDATA[<b>ZXQ Writing Fixture Aurora</b>]]></title>
+      <link>https://jarrodtran.substack.com/p/zxq-aurora</link>
+      <pubDate>Mon, 02 Nov 2026 18:00:00 GMT</pubDate>
+      <description><![CDATA[<p>ZXQ aurora blurb start. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word. Alpha word.</p>]]></description>
+      <content:encoded><![CDATA[<p>ZXQ_WRITING_FIXTURE_SECRET_BODY</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Beacon</title>
+      <link>https://jarrodtran.substack.com/p/zxq-beacon</link>
+      <pubDate>Mon, 02 Nov 2026 05:00:00 GMT</pubDate>
+      <description>Beacon note after HTML is gone.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Cedar</title>
+      <link>https://jarrodtran.substack.com/p/zxq-cedar</link>
+      <pubDate>Thu, 15 Oct 2026 17:00:00 GMT</pubDate>
+      <description></description>
+      <content:encoded><![CDATA[<p>ZXQ_WRITING_FIXTURE_SECRET_BODY</p>]]></content:encoded>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Dropped Host</title>
+      <link>https://other.substack.com/p/zxq-dropped-host</link>
+      <pubDate>Wed, 04 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Should never render.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Dropped Http</title>
+      <link>http://jarrodtran.substack.com/p/zxq-dropped-http</link>
+      <pubDate>Thu, 05 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Should never render.</description>
+    </item>
+  </channel>
+</rss>

@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Daily. Scheduled runs deploy only when the writing feed fingerprint changed.
+    - cron: "17 11 * * *"
 
 permissions:
   contents: read
@@ -16,9 +19,15 @@ concurrency:
 
 # Production builds for the site root at https://jarrodtran.com.
 # PR CI runs a path-prefixed build as a check only. No preview is deployed.
+# Scheduled runs hash the normalized post list (title, href, date, summary)
+# and compare it to the fingerprint saved after the last successful deploy.
+# Push and workflow_dispatch always deploy. A feed fetch failure on a
+# scheduled run skips deploy so a down feed cannot overwrite live posts.
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.gate.outputs.deploy }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -27,20 +36,58 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: npx playwright install --with-deps chromium
-      - run: pnpm lint
-      - run: pnpm check
-      - run: pnpm test
-      - run: pnpm build
-      - run: pnpm test:tap
-      - run: pnpm a11y
-      - run: pnpm size
-      - uses: actions/upload-pages-artifact@v3
+      - name: Restore last writing-feed fingerprint
+        if: github.event_name == 'schedule'
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/writing-feed.sha
+          key: writing-feed-${{ github.run_id }}
+          restore-keys: |
+            writing-feed-
+      - id: gate
+        name: Decide whether to deploy
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node --experimental-strip-types --experimental-default-type=module scripts/feed-changed.ts check
+      - name: Install browser
+        if: steps.gate.outputs.deploy == 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Verify
+        if: steps.gate.outputs.deploy == 'true'
+        run: |
+          pnpm lint
+          pnpm check
+          pnpm test
+      - name: Export
+        if: steps.gate.outputs.deploy == 'true'
+        run: pnpm build
+      - name: Post-build checks
+        if: steps.gate.outputs.deploy == 'true'
+        run: |
+          pnpm test:tap
+          pnpm test:writing-output
+          pnpm a11y
+          pnpm size
+      - name: Remember writing-feed fingerprint
+        if: steps.gate.outputs.deploy == 'true'
+        run: node --experimental-strip-types --experimental-default-type=module scripts/feed-changed.ts remember
+      - name: Save writing-feed fingerprint
+        if: steps.gate.outputs.deploy == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/writing-feed.sha
+          key: writing-feed-${{ github.run_id }}
+      - if: steps.gate.outputs.deploy == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: out
 
   deploy:
     needs: build
+    if: needs.build.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
