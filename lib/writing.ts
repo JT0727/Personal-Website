@@ -11,14 +11,23 @@ export interface WritingPost {
 export interface SubstackConfig {
   name: string;
   url: string;
-  feedUrl: string;
 }
 
 export const WRITING_POST_LIMIT = 5;
 export const WRITING_BLURB_MAX_CHARS = 220;
 export const WRITING_FEED_TIMEOUT_MS = 10_000;
 export const WRITING_DATE_TIME_ZONE = "America/Chicago";
-export const WRITING_HOST = "jarrodtran.substack.com";
+
+export function writingSubscribeUrl(
+  config: Pick<SubstackConfig, "url">,
+): string {
+  return config.url.trim().replace(/\/+$/, "");
+}
+
+export function writingFeedUrl(config: Pick<SubstackConfig, "url">): string {
+  const base = writingSubscribeUrl(config);
+  return base ? `${base}/feed` : "";
+}
 
 export function isSubstackUrl(url: string): boolean {
   try {
@@ -29,10 +38,11 @@ export function isSubstackUrl(url: string): boolean {
   }
 }
 
-export function isOwnWritingUrl(url: string): boolean {
+export function isOwnWritingUrl(url: string, baseUrl: string): boolean {
   try {
     const parsed = new URL(url);
-    return parsed.protocol === "https:" && parsed.hostname === WRITING_HOST;
+    const base = new URL(writingSubscribeUrl({ url: baseUrl }));
+    return parsed.protocol === "https:" && parsed.hostname === base.hostname;
   } catch {
     return false;
   }
@@ -104,14 +114,14 @@ function looksLikeFeed(xml: string): boolean {
   return /<(rss|feed|rdf:RDF)\b/i.test(xml);
 }
 
-function selectPosts(posts: WritingPost[]): WritingPost[] {
+function selectPosts(posts: WritingPost[], baseUrl: string): WritingPost[] {
   return posts
-    .filter((post) => isOwnWritingUrl(post.href))
+    .filter((post) => isOwnWritingUrl(post.href, baseUrl))
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
     .slice(0, WRITING_POST_LIMIT);
 }
 
-export function parseFeed(xml: string): WritingPost[] {
+export function parseFeed(xml: string, baseUrl: string): WritingPost[] {
   const items = [...xml.matchAll(/<item\b[\s\S]*?<\/item>/gi)].map(
     (match) => match[0],
   );
@@ -120,10 +130,10 @@ export function parseFeed(xml: string): WritingPost[] {
   );
   const blocks = items.length > 0 ? items : entries;
 
-  const posts = blocks.flatMap((block) => {
+  return blocks.flatMap((block) => {
     const title = tag(block, "title");
     const href = hrefOf(block);
-    if (!title || !href || !isOwnWritingUrl(href)) return [];
+    if (!title || !href || !isOwnWritingUrl(href, baseUrl)) return [];
     const rawDate =
       tag(block, "pubDate") || tag(block, "published") || tag(block, "updated");
     const parsed = rawDate ? new Date(rawDate) : null;
@@ -139,26 +149,27 @@ export function parseFeed(xml: string): WritingPost[] {
       },
     ];
   });
-
-  return posts;
 }
 
 export type WritingLoad =
   { ok: true; posts: WritingPost[] } | { ok: false; posts: []; reason: string };
 
-function readFixturePosts(): WritingPost[] | null {
+function readFixturePosts(baseUrl: string): WritingPost[] | null {
   const fixture = process.env.WRITING_FEED_PATH;
   if (!fixture) return null;
-  return selectPosts(parseFeed(readFileSync(fixture, "utf8")));
+  return selectPosts(
+    parseFeed(readFileSync(fixture, "utf8"), baseUrl),
+    baseUrl,
+  );
 }
 
 export async function loadWritingResult(
   config: SubstackConfig,
 ): Promise<WritingLoad> {
-  const fixture = readFixturePosts();
+  const fixture = readFixturePosts(config.url);
   if (fixture) return { ok: true, posts: fixture };
 
-  const feedUrl = config.feedUrl.trim();
+  const feedUrl = writingFeedUrl(config);
   if (!feedUrl) return { ok: true, posts: [] };
 
   try {
@@ -176,7 +187,10 @@ export async function loadWritingResult(
       warnFeed(reason);
       return { ok: false, posts: [], reason };
     }
-    return { ok: true, posts: selectPosts(parseFeed(xml)) };
+    return {
+      ok: true,
+      posts: selectPosts(parseFeed(xml, config.url), config.url),
+    };
   } catch (error) {
     const reason = error instanceof Error ? error.message : "fetch failed";
     warnFeed(reason);

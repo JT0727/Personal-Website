@@ -74,11 +74,14 @@ export interface SiteContent {
     currentRole: string;
     currentCompany: string;
   };
-  /** Public Substack. url is the subscribe target; feedUrl is fetched at build. */
+  /**
+   * Public Substack. `url` is the only publication setting: subscribe href,
+   * `/feed`, and the allowed https host are all derived from it.
+   * Change the publication name here. Do not merge until Jarrod sets it.
+   */
   substack: {
     name: string;
     url: string;
-    feedUrl: string;
   };
   talks: { event: string; date: string; href: string }[];
   highlights: { value: string; label: string; source?: string }[];
@@ -144,7 +147,6 @@ export const site: SiteContent = {
   substack: {
     name: "",
     url: "https://jarrodtran.substack.com",
-    feedUrl: "https://jarrodtran.substack.com/feed",
   },
   talks: [],
   highlights: [
