@@ -1,6 +1,7 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { site } from "@/content/site";
 import {
   fetchSubstackPosts,
   formatPostDate,
@@ -8,12 +9,14 @@ import {
   isSubstackUrl,
   loadWriting,
   parseFeed,
+  writingFeedUrl,
   WRITING_BLURB_MAX_CHARS,
   WRITING_FEED_TIMEOUT_MS,
   WRITING_POST_LIMIT,
   type SubstackConfig,
 } from "@/lib/writing";
 import {
+  WRITING_FIXTURE_BASE,
   WRITING_FIXTURE_LONG_BLURB,
   WRITING_FIXTURE_SECRET_BODY,
   WRITING_FIXTURE_TITLES,
@@ -26,52 +29,59 @@ const emptyXml = readFileSync(path.join(fixtures, "empty.xml"), "utf8");
 
 const ownFeed: SubstackConfig = {
   name: "",
-  url: "https://jarrodtran.substack.com",
-  feedUrl: "https://jarrodtran.substack.com/feed",
+  url: WRITING_FIXTURE_BASE,
 };
 
 function stubFeed(body: string, ok = true) {
   vi.stubGlobal(
     "fetch",
-    vi
-      .fn()
-      .mockResolvedValue({
-        ok,
-        status: ok ? 200 : 503,
-        text: async () => body,
-      }),
+    vi.fn().mockResolvedValue({
+      ok,
+      status: ok ? 200 : 503,
+      text: async () => body,
+    }),
   );
 }
 
 describe("isSubstackUrl", () => {
   it("accepts only Substack hosts", () => {
-    expect(isSubstackUrl("https://jarrodtran.substack.com")).toBe(true);
+    expect(isSubstackUrl("https://example.substack.com")).toBe(true);
     expect(isSubstackUrl("https://example.com")).toBe(false);
     expect(isSubstackUrl("not-a-url")).toBe(false);
   });
 });
 
 describe("isOwnWritingUrl", () => {
-  it("keeps only https links on jarrodtran.substack.com", () => {
-    expect(isOwnWritingUrl("https://jarrodtran.substack.com/p/aurora")).toBe(
-      true,
-    );
-    expect(isOwnWritingUrl("http://jarrodtran.substack.com/p/aurora")).toBe(
-      false,
-    );
-    expect(isOwnWritingUrl("https://other.substack.com/p/aurora")).toBe(false);
-    expect(isOwnWritingUrl("https://substack.com/p/aurora")).toBe(false);
+  it("keeps only https links on the configured base host", () => {
+    expect(
+      isOwnWritingUrl(`${WRITING_FIXTURE_BASE}/p/aurora`, WRITING_FIXTURE_BASE),
+    ).toBe(true);
+    expect(
+      isOwnWritingUrl(
+        `${WRITING_FIXTURE_BASE.replace("https://", "http://")}/p/aurora`,
+        WRITING_FIXTURE_BASE,
+      ),
+    ).toBe(false);
+    expect(
+      isOwnWritingUrl(
+        "https://other.substack.com/p/aurora",
+        WRITING_FIXTURE_BASE,
+      ),
+    ).toBe(false);
+    expect(
+      isOwnWritingUrl("https://substack.com/p/aurora", WRITING_FIXTURE_BASE),
+    ).toBe(false);
   });
 });
 
 describe("parseFeed", () => {
   it("reads a 3-post fixture newest-capable, strips HTML, caps blurbs, and drops foreign or http links", () => {
-    const posts = parseFeed(threeXml);
+    const posts = parseFeed(threeXml, WRITING_FIXTURE_BASE);
     expect(posts.map((post) => post.title)).toEqual([
       ...WRITING_FIXTURE_TITLES,
     ]);
     expect(posts).toHaveLength(3);
-    expect(posts[0]?.href).toBe("https://jarrodtran.substack.com/p/zxq-aurora");
+    expect(posts[0]?.href).toBe(`${WRITING_FIXTURE_BASE}/p/zxq-aurora`);
     expect(posts[0]?.summary).toBe(
       WRITING_FIXTURE_LONG_BLURB.slice(0, WRITING_BLURB_MAX_CHARS).trimEnd(),
     );
@@ -95,16 +105,16 @@ describe("parseFeed", () => {
 <feed>
   <entry>
     <title>Atom essay</title>
-    <link href="https://jarrodtran.substack.com/p/atom"/>
+    <link href="${WRITING_FIXTURE_BASE}/p/atom"/>
     <published>2026-03-03T12:00:00Z</published>
     <summary>From Atom.</summary>
     <content>ZXQ_WRITING_FIXTURE_SECRET_BODY</content>
   </entry>
 </feed>`;
-    expect(parseFeed(atom)).toEqual([
+    expect(parseFeed(atom, WRITING_FIXTURE_BASE)).toEqual([
       {
         title: "Atom essay",
-        href: "https://jarrodtran.substack.com/p/atom",
+        href: `${WRITING_FIXTURE_BASE}/p/atom`,
         date: "2026-03-03T12:00:00.000Z",
         summary: "From Atom.",
       },
@@ -134,9 +144,7 @@ describe("fetchSubstackPosts and loadWriting", () => {
   });
 
   it("returns [] when the feed URL is empty", async () => {
-    expect(
-      await fetchSubstackPosts({ name: "", url: "", feedUrl: "" }),
-    ).toEqual([]);
+    expect(await fetchSubstackPosts({ name: "", url: "" })).toEqual([]);
   });
 
   it("returns [] and warns on non-200, throw, timeout, or malformed XML", async () => {
@@ -202,6 +210,65 @@ describe("fetchSubstackPosts and loadWriting", () => {
     stubFeed(emptyXml);
     expect(await loadWriting(ownFeed)).toEqual([]);
     expect(warn).not.toHaveBeenCalled();
+  });
+
+  it("fetches the feed URL derived from the configured base", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: async () => emptyXml,
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const alt = { name: "", url: "https://altname.substack.com" };
+    expect(writingFeedUrl(alt)).toBe("https://altname.substack.com/feed");
+    await loadWriting(alt);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://altname.substack.com/feed",
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+      }),
+    );
+  });
+});
+
+describe("substack base config", () => {
+  it("hardcodes the publication URL only on site.substack.url", () => {
+    const token = "jarrodtran.substack.com";
+    const root = path.resolve(__dirname, "..");
+    const hits: string[] = [];
+    const skip = new Set(["node_modules", "out", ".git", ".next", "tests"]);
+
+    function walk(dir: string) {
+      for (const name of readdirSync(dir, { encoding: "utf8" })) {
+        if (skip.has(name)) continue;
+        const full = path.join(dir, name);
+        const rel = path.relative(root, full);
+        if (statSync(full).isDirectory()) {
+          walk(full);
+          continue;
+        }
+        if (!/\.(ts|tsx|mjs|js|yml|yaml|md|json)$/.test(name)) continue;
+        const source = readFileSync(full, "utf8");
+        if (!source.includes(token)) continue;
+        if (rel === "content/site.ts") {
+          source.split("\n").forEach((line, index) => {
+            if (
+              line.includes(token) &&
+              !/url:\s*"https:\/\/jarrodtran\.substack\.com"/.test(line)
+            ) {
+              hits.push(`${rel}:${index + 1}`);
+            }
+          });
+          continue;
+        }
+        hits.push(rel);
+      }
+    }
+
+    walk(root);
+    expect(hits).toEqual([]);
+    expect(site.substack.url).toContain(token);
+    expect(site.substack).not.toHaveProperty("feedUrl");
   });
 });
 

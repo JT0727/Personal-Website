@@ -9,8 +9,17 @@ import { Hero } from "@/components/sections/hero";
 import { Writing } from "@/components/sections/writing";
 import { nextSelectedWork, site } from "@/content/site";
 import { btnGhost } from "@/lib/ui";
-import { formatPostDate, parseFeed } from "@/lib/writing";
-import { WRITING_FIXTURE_TITLES } from "./fixtures/writing/titles";
+import {
+  formatPostDate,
+  isOwnWritingUrl,
+  parseFeed,
+  writingFeedUrl,
+  writingSubscribeUrl,
+} from "@/lib/writing";
+import {
+  WRITING_FIXTURE_BASE,
+  WRITING_FIXTURE_TITLES,
+} from "./fixtures/writing/titles";
 
 const entities: Record<string, string> = {
   "&amp;": "&",
@@ -93,7 +102,7 @@ describe("writing", () => {
     expect(html).not.toMatch(/skeleton|card|placeholder/i);
     expect(links(html)).toEqual([
       {
-        href: "https://jarrodtran.substack.com",
+        href: writingSubscribeUrl(site.substack),
         text: "Subscribe on Substack",
         target: "_blank",
       },
@@ -108,7 +117,7 @@ describe("writing", () => {
   });
 
   it("lists three fixture posts newest first with Chicago dates, then subscribe", () => {
-    const fixturePosts = parseFeed(threeXml);
+    const fixturePosts = parseFeed(threeXml, WRITING_FIXTURE_BASE);
     expect(fixturePosts.map((post) => post.title)).toEqual([
       ...WRITING_FIXTURE_TITLES,
     ]);
@@ -141,26 +150,69 @@ describe("writing", () => {
     expect(html).not.toContain("First post soon");
     expect(links(html)).toEqual([
       {
-        href: "https://jarrodtran.substack.com/p/zxq-aurora",
+        href: `${WRITING_FIXTURE_BASE}/p/zxq-aurora`,
         text: `${WRITING_FIXTURE_TITLES[0]} (opens Substack)`,
         target: "_blank",
       },
       {
-        href: "https://jarrodtran.substack.com/p/zxq-beacon",
+        href: `${WRITING_FIXTURE_BASE}/p/zxq-beacon`,
         text: `${WRITING_FIXTURE_TITLES[1]} (opens Substack)`,
         target: "_blank",
       },
       {
-        href: "https://jarrodtran.substack.com/p/zxq-cedar",
+        href: `${WRITING_FIXTURE_BASE}/p/zxq-cedar`,
         text: `${WRITING_FIXTURE_TITLES[2]} (opens Substack)`,
         target: "_blank",
       },
       {
-        href: "https://jarrodtran.substack.com",
+        href: writingSubscribeUrl(site.substack),
         text: "Subscribe on Substack",
         target: "_blank",
       },
     ]);
+  });
+
+  it("follows a swapped Substack base for feed, subscribe, and allowed host", () => {
+    const previous = site.substack.url;
+    const alt = "https://altname.substack.com";
+    site.substack.url = alt;
+    try {
+      expect(writingSubscribeUrl(site.substack)).toBe(alt);
+      expect(writingFeedUrl(site.substack)).toBe(`${alt}/feed`);
+      expect(isOwnWritingUrl(`${alt}/p/kept`, site.substack.url)).toBe(true);
+      expect(
+        isOwnWritingUrl(`${WRITING_FIXTURE_BASE}/p/old`, site.substack.url),
+      ).toBe(false);
+
+      const html = renderToStaticMarkup(<Writing posts={[]} />);
+      expect(links(html)).toEqual([
+        {
+          href: alt,
+          text: "Subscribe on Substack",
+          target: "_blank",
+        },
+      ]);
+
+      const xml = `<?xml version="1.0"?><rss><channel>
+<item>
+  <title>Kept on alt</title>
+  <link>${alt}/p/kept</link>
+  <pubDate>Mon, 02 Nov 2026 18:00:00 GMT</pubDate>
+  <description>Alt post.</description>
+</item>
+<item>
+  <title>Dropped old host</title>
+  <link>${WRITING_FIXTURE_BASE}/p/old</link>
+  <pubDate>Tue, 03 Nov 2026 18:00:00 GMT</pubDate>
+  <description>Should drop.</description>
+</item>
+</channel></rss>`;
+      expect(
+        parseFeed(xml, site.substack.url).map((post) => post.href),
+      ).toEqual([`${alt}/p/kept`]);
+    } finally {
+      site.substack.url = previous;
+    }
   });
 });
 

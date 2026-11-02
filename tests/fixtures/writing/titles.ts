@@ -1,3 +1,6 @@
+/** Host used only by fixture XML. Production host comes from site.substack.url. */
+export const WRITING_FIXTURE_BASE = "https://jarrodtran.substack.com";
+
 /** Unique titles used only in test fixtures. Must never appear in content/ or out/. */
 export const WRITING_FIXTURE_TITLES = [
   "ZXQ Writing Fixture Aurora",

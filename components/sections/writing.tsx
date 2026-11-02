@@ -5,6 +5,7 @@ import { btnGhost, tap } from "@/lib/ui";
 import {
   formatPostDate,
   isOwnWritingUrl,
+  writingSubscribeUrl,
   type WritingPost,
 } from "@/lib/writing";
 
@@ -27,8 +28,9 @@ function SubscribeLink({ href }: { href: string }) {
 
 export function Writing({ posts }: { posts: WritingPost[] }) {
   const latest = posts.slice(0, 5);
-  const subscribe = site.substack.url;
-  const canSubscribe = Boolean(subscribe) && isOwnWritingUrl(subscribe);
+  const subscribe = writingSubscribeUrl(site.substack);
+  const canSubscribe =
+    Boolean(subscribe) && isOwnWritingUrl(subscribe, site.substack.url);
 
   return (
     <Section id="writing">
