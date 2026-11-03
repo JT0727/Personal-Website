@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -32,6 +32,26 @@ function cssToken(block: string, name: string): string | undefined {
   const match = block.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`));
   return match?.[1]?.toLowerCase();
 }
+
+describe("shared app sources stay off literal colors", () => {
+  // rule:shared-palette
+  it("keeps every app/*.tsx free of hex or rgb literals", () => {
+    const files = readdirSync(path.join(root, "app"), {
+      encoding: "utf8",
+      recursive: true,
+    })
+      .filter((file) => file.endsWith(".tsx"))
+      .sort();
+    expect(files.length).toBeGreaterThan(0);
+    for (const file of files) {
+      const source = readFileSync(path.join(root, "app", file), "utf8");
+      expect(
+        source.match(HEX_OR_RGB) ?? [],
+        `${JSON.stringify(file)} colors must come from @/lib/palette or CSS tokens`,
+      ).toEqual([]);
+    }
+  });
+});
 
 describe("shared palette lock", () => {
   // rule:shared-palette
