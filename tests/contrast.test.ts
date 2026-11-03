@@ -48,7 +48,6 @@ describe("theme contrast", () => {
   });
 
   // rule:contrast-aa
-  // rule:theme-no-js
   it("meets WCAG AA for body text and large text in both themes", () => {
     for (const theme of Object.values(themes)) {
       expect(
