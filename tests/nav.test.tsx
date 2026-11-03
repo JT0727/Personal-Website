@@ -10,54 +10,41 @@ vi.mock("next/navigation", () => ({
 
 import { Nav } from "@/components/nav";
 
+function renderNav(pathname: string) {
+  mockedPathname = pathname;
+  return renderToStaticMarkup(
+    <Nav
+      name={site.positioning.name}
+      items={site.nav}
+      resumeHref={site.contact.resumeHref}
+      resumeFilename={site.contact.resumeFilename}
+    />,
+  );
+}
+
+function linkAttributes(html: string, label: string) {
+  return [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].find(
+    ([, , inner]) => inner.trim() === label,
+  )?.[1];
+}
+
 describe("Nav active route and control states", () => {
   it("marks Work as the current nav item with an underline when viewing a case study route", () => {
-    mockedPathname = "/work/tesla-energy-ai-product/";
-    const html = renderToStaticMarkup(
-      <Nav
-        name={site.positioning.name}
-        items={site.nav}
-        resumeHref={site.contact.resumeHref}
-        resumeFilename={site.contact.resumeFilename}
-      />,
-    );
-
-    const workLink = [
-      ...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g),
-    ].find(([, , inner]) => inner.trim() === "Work");
+    const html = renderNav(`/work/${site.selectedWork[0].slug}/`);
+    const workLink = linkAttributes(html, "Work");
 
     expect(workLink).toBeDefined();
-    expect(workLink?.[1]).toContain('aria-current="location"');
-    expect(workLink?.[1]).toContain("underline");
-    expect(workLink?.[1]).toContain("underline-offset-8");
+    expect(workLink).toContain('aria-current="location"');
+    expect(workLink).toContain("underline");
+    expect(workLink).toContain("underline-offset-8");
   });
 
   it("does not mark any section link as current on the home route before scrolling", () => {
-    mockedPathname = "/";
-    const html = renderToStaticMarkup(
-      <Nav
-        name={site.positioning.name}
-        items={site.nav}
-        resumeHref={site.contact.resumeHref}
-        resumeFilename={site.contact.resumeFilename}
-      />,
-    );
-
-    expect(html).not.toContain('aria-current="location"');
+    expect(renderNav("/")).not.toContain('aria-current="location"');
   });
 
-  it("gives the mobile menu toggle button a hover border transition matching other header controls", () => {
-    mockedPathname = "/";
-    const html = renderToStaticMarkup(
-      <Nav
-        name={site.positioning.name}
-        items={site.nav}
-        resumeHref={site.contact.resumeHref}
-        resumeFilename={site.contact.resumeFilename}
-      />,
-    );
-
-    const menuButton = html.match(
+  it("gives the mobile menu toggle a hover border transition", () => {
+    const menuButton = renderNav("/").match(
       /<button\b[^>]*aria-controls="mobile-nav"[^>]*>/,
     )?.[0];
     expect(menuButton).toBeDefined();

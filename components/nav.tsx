@@ -30,7 +30,7 @@ export function Nav({
   const navRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const onHome = pathname === "/" || pathname === "";
-  const onWork = Boolean(pathname && /(?:^|\/)work(?:\/|$)/.test(pathname));
+  const onWork = pathname === "/work" || pathname.startsWith("/work/");
   const sectionHref = (href: string) =>
     withBasePath(href.startsWith("#") && !onHome ? `/${href}` : href);
   const homeHref = onHome ? "#top" : withBasePath("/");
@@ -59,9 +59,7 @@ export function Nav({
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) {
-          setActive(
-            visible.target.id === "top" ? "" : `#${visible.target.id}`,
-          );
+          setActive(visible.target.id === "top" ? "" : `#${visible.target.id}`);
         }
       },
       { rootMargin: "-35% 0px -50% 0px", threshold: [0, 0.25, 0.6] },
