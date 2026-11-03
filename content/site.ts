@@ -149,7 +149,7 @@ export const site: SiteContent = {
   ],
   about: {
     bio: [
-      `I work at Tesla Energy as ${currentTitle}. Before returning to Tesla, I worked on Apple's India launch and in Engineering Operations at Waymo. I began at Tesla in Special Projects, including the 4680 launch.`,
+      "I worked on Apple's entry into India, Waymo's Engineering Operations, and Tesla's 4680 program.",
     ],
     education:
       "University at Buffalo · B.S. Business Administration, Finance · Cum Laude",

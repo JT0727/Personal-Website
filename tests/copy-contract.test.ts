@@ -80,8 +80,6 @@ describe("visitor-facing copy contract", () => {
     const title = site.positioning.currentRole;
     expect(title).toBe("Lead, AI Enablement & Factory Strategy");
     expect(site.experience[0].roles[0].title).toBe(title);
-    expect(site.about.bio.join(" ")).toContain(title);
-
     const sources = [
       "content/site.ts",
       "app/layout.tsx",
