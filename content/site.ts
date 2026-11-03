@@ -45,8 +45,6 @@ export interface CaseStudy {
   outcomeDetail: string;
   /** What Jarrod personally owned. Prefer dropping a claim over inventing credit. */
   role: string[];
-  /** Who else was in the room. No invented titles. */
-  team: string[];
 }
 
 export interface SelectedWorkItem {
@@ -56,7 +54,6 @@ export interface SelectedWorkItem {
   problem: string;
   contribution: string;
   outcome: string;
-  tags: string[];
   panel: WorkPanel;
   link?: { label: string; href: string };
   caseStudy: CaseStudy;
@@ -306,7 +303,6 @@ export const site: SiteContent = {
         "I stood up the product and engineering team, ranked the use cases, and set up training and adoption reporting for everything we shipped.",
       outcome:
         "Modeled at ~540 hours reclaimed per week and $1.6M in annualized productivity value.",
-      tags: ["AI Product", "Organizational Design", "Executive Alignment"],
       panel: {
         kicker: "Tesla Energy",
         value: "1,000+",
@@ -315,14 +311,14 @@ export const site: SiteContent = {
       link: { label: "Tesla Energy", href: "https://www.tesla.com/energy" },
       caseStudy: {
         context:
-          'Scattered experiments sat next to real Energy work with no shared bar for "done." Leaders wanted tools in daily jobs, not another pilot deck.',
+          'Scattered experiments sat next to real Energy work with no shared bar for "done." Leaders wanted tools people used in their daily work.',
         constraints: [
-          "Adoption had to be scored against workflows, not vanity installs",
+          "Adoption was measured by use in real workflows",
           "Finite roadmap capacity meant every use case needed a named owner",
           "Security and data boundaries could not bend for release speed",
         ],
         decisions: [
-          "Build a real product-and-engineering team, not a side project",
+          "Build a dedicated product-and-engineering team",
           "Sequence the backlog by hours reclaimed and decision quality",
           "Ship training plus weekly adoption reporting with each release",
         ],
@@ -332,11 +328,6 @@ export const site: SiteContent = {
           "Owned the enablement roadmap and what leadership saw each week",
           "Hired and led the product-and-engineering squad",
           "Set prioritization rules, governance, and adoption metrics",
-        ],
-        team: [
-          "Forward-deployed engineers embedded with Energy teams",
-          "Product managers sequencing the use-case backlog",
-          "Business sponsors who owned training the trainers",
         ],
       },
     },
@@ -349,7 +340,6 @@ export const site: SiteContent = {
         "I built Python and Tableau models linking investment, labor, cost, and timing. We funded the work with the best return and killed the rest. The same logic ranks AI use cases today.",
       outcome:
         "3.2× scale on Megapack, $260M in annualized savings, and $550M in tariff exposure mitigated.",
-      tags: ["Capital Allocation", "Decision Models", "Executive Alignment"],
       panel: {
         kicker: "Tesla Energy",
         value: "$156M",
@@ -361,7 +351,7 @@ export const site: SiteContent = {
           "Capital asks ran ahead of the budget. Dozens of initiatives fought for the same dollars with weak ties to profit.",
         constraints: [
           "Only $23M was available against 50+ competing requests",
-          "Leaders needed a transparent kill-or-fund rule, not a popularity contest",
+          "Leaders needed one clear rule for what got funded and what got cut",
           "Labor, cost, and timing had to live in one decision model",
         ],
         decisions: [
@@ -376,11 +366,6 @@ export const site: SiteContent = {
           "Built the models executives used to compare asks",
           "Ran the tradeoff meetings that killed low-return work",
         ],
-        team: [
-          "Finance partners stress-testing cost and return assumptions",
-          "Site and program leads accountable for execution",
-          "Leadership sponsors who enforced the kill list",
-        ],
       },
     },
     {
@@ -392,7 +377,6 @@ export const site: SiteContent = {
         "I drove market-entry decisions, partner qualification, and launch readiness, and kept demand, quality, and geopolitical risk in one plan.",
       outcome:
         "Program revenue grew from $2B to $10B, and exports expanded from 6 to 40+ countries.",
-      tags: ["0→1 Launch", "Geographic Strategy", "Cross-Functional Delivery"],
       panel: {
         kicker: "Apple",
         value: "293%",
@@ -419,11 +403,6 @@ export const site: SiteContent = {
           "Kept entry, partners, and readiness on one schedule",
           "Brought quality, regulatory, and timing risks to leadership",
         ],
-        team: [
-          "Operations and quality partners closest to the work",
-          "Commercial and planning stakeholders sizing demand",
-          "Leadership reviewers on stage gates",
-        ],
       },
     },
     {
@@ -435,7 +414,6 @@ export const site: SiteContent = {
         "I built the annual planning, OKR, resource-plan, QBR, and dashboard rhythm that every function worked from.",
       outcome:
         "A shared Engineering Operations rhythm that forced tradeoffs into the open and cut the ad-hoc reporting.",
-      tags: ["Operating Model", "Executive Cadence", "Decision Systems"],
       panel: {
         kicker: "Waymo",
         value: "One plan",
@@ -446,9 +424,9 @@ export const site: SiteContent = {
         context:
           "Planning lived in silos. Leaders argued over conflicting numbers in meetings that rarely left one shared set of facts.",
         constraints: [
-          "Safety and regulatory work had to stay first-class in every plan",
+          "Every plan had to account for safety and regulatory work",
           "Six functions needed shared targets without private scorekeeping",
-          "Senior time was burning on one-off decks",
+          "Senior leaders spent too much time on one-off decks",
         ],
         decisions: [
           "Set one rhythm for OKRs, resources, QBRs, and dashboards",
@@ -461,11 +439,6 @@ export const site: SiteContent = {
           "Facilitated planning and QBR cycles for Engineering Operations",
           "Built the scoreboard leadership used instead of ad-hoc pulls",
           "Aligned targets and resources across functions",
-        ],
-        team: [
-          "Engineering Operations partners who ran the cadence",
-          "Function leads accountable for their slice of the plan",
-          "Senior leaders who consumed the shared scoreboard",
         ],
       },
     },
