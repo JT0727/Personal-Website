@@ -9,7 +9,7 @@ export function Highlights() {
       {site.highlights.map((item) => (
         <div
           key={item.label}
-          className="border-border min-w-0 px-0 py-6 not-last:border-b sm:border-b-0 sm:px-6 sm:py-7 sm:not-last:border-r sm:first:pl-0 sm:last:pr-0"
+          className="border-border min-w-0 px-0 py-6 max-sm:nth-[-n+2]:border-b sm:px-4 sm:py-7 sm:not-last:border-r sm:first:pl-0 sm:last:pr-0 md:px-6"
         >
           <p className="tabular font-display text-3xl sm:text-[2.15rem]">
             {item.value}
