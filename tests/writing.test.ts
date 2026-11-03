@@ -17,7 +17,6 @@ import {
 } from "@/lib/writing";
 import {
   WRITING_FIXTURE_BASE,
-  WRITING_FIXTURE_LONG_BLURB,
   WRITING_FIXTURE_SECRET_BODY,
   WRITING_FIXTURE_TITLES,
 } from "./fixtures/writing/titles";
@@ -99,8 +98,6 @@ describe("parseFeed", () => {
   });
 
   it("keeps surrogate pairs whole when an emoji sits on the truncation boundary", () => {
-    // 110 emoji equals 220 UTF-16 code units; the old byte-slice cut the last
-    // pair in half at the window edge.
     const blurb = "😀".repeat(110) + " End of the room.";
     const xml = `<item><title>Emoji boundary</title><link>${WRITING_FIXTURE_BASE}/p/emoji</link><description>${blurb}</description></item>`;
     const [post] = parseFeed(xml, WRITING_FIXTURE_BASE);
