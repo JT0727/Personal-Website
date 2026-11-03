@@ -80,7 +80,7 @@ export function SelectedWork() {
                   <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                     <Link href={caseHref} className={textAction}>
                       Read the case study
-                      <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                      <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
                     </Link>
                     {item.link ? (
                       <a
@@ -93,7 +93,7 @@ export function SelectedWork() {
                         rel="noreferrer"
                       >
                         {item.link.label}
-                        <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                        <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
                       </a>
                     ) : null}
                   </div>

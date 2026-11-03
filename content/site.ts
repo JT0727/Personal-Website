@@ -74,11 +74,14 @@ export interface SiteContent {
     currentRole: string;
     currentCompany: string;
   };
-  /** Empty name/url/feedUrl until the newsletter launches. */
+  /**
+   * Public Substack. `url` is the only publication setting: subscribe href,
+   * `/feed`, and the allowed https host are all derived from it.
+   * `name` drives the #writing heading.
+   */
   substack: {
     name: string;
     url: string;
-    feedUrl: string;
   };
   talks: { event: string; date: string; href: string }[];
   highlights: { value: string; label: string; source?: string }[];
@@ -94,7 +97,7 @@ export interface SiteContent {
   principles: { title: string; description: string }[];
   capabilities: { group: string; items: string[] }[];
   sections: {
-    writing: SectionCopy;
+    writing: Omit<SectionCopy, "title">;
     experience: SectionCopy;
     work: SectionCopy;
     about: Omit<SectionCopy, "description">;
@@ -142,9 +145,8 @@ export const site: SiteContent = {
     currentCompany: "Tesla Energy",
   },
   substack: {
-    name: "",
-    url: "",
-    feedUrl: "",
+    name: "Worth Mulling",
+    url: "https://jarrodtran.substack.com",
   },
   talks: [],
   highlights: [
@@ -540,8 +542,7 @@ export const site: SiteContent = {
   sections: {
     writing: {
       eyebrow: "01 / Essays",
-      title: "Writing",
-      description: "Titles and notes from the newsletter, when it is live.",
+      description: "Posts from my Substack.",
     },
     about: {
       eyebrow: "02 / Profile",

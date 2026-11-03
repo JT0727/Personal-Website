@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Jarrod Tran</title>
+    <item>
+      <title>ZXQ Writing Fixture Aurora</title>
+      <link>https://jarrodtran.substack.com/p/zxq-six-aurora</link>
+      <pubDate>Fri, 06 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Six-post aurora.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Beacon</title>
+      <link>https://jarrodtran.substack.com/p/zxq-six-beacon</link>
+      <pubDate>Thu, 05 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Six-post beacon.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Cedar</title>
+      <link>https://jarrodtran.substack.com/p/zxq-six-cedar</link>
+      <pubDate>Wed, 04 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Six-post cedar.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Drift</title>
+      <link>https://jarrodtran.substack.com/p/zxq-six-drift</link>
+      <pubDate>Tue, 03 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Six-post drift.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Ember</title>
+      <link>https://jarrodtran.substack.com/p/zxq-six-ember</link>
+      <pubDate>Mon, 02 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Six-post ember.</description>
+    </item>
+    <item>
+      <title>ZXQ Writing Fixture Flint</title>
+      <link>https://jarrodtran.substack.com/p/zxq-six-flint</link>
+      <pubDate>Sun, 01 Nov 2026 18:00:00 GMT</pubDate>
+      <description>Six-post flint.</description>
+    </item>
+  </channel>
+</rss>

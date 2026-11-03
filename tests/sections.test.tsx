@@ -8,6 +8,18 @@ import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
 import { Writing } from "@/components/sections/writing";
 import { nextSelectedWork, site } from "@/content/site";
+import { btnGhost } from "@/lib/ui";
+import {
+  formatPostDate,
+  isOwnWritingUrl,
+  parseFeed,
+  writingFeedUrl,
+  writingSubscribeUrl,
+} from "@/lib/writing";
+import {
+  WRITING_FIXTURE_BASE,
+  WRITING_FIXTURE_TITLES,
+} from "./fixtures/writing/titles";
 
 const entities: Record<string, string> = {
   "&amp;": "&",
@@ -69,55 +81,157 @@ describe("hero", () => {
   });
 });
 
+const EMPTY_WRITING =
+  "Nothing published yet. Subscribe and the first post will land in your inbox.";
+const threeXml = readFileSync(
+  path.join(__dirname, "fixtures/writing/three-posts.xml"),
+  "utf8",
+);
+
 describe("writing", () => {
-  it("shows a heading and First post soon when the feed is empty", () => {
+  it("shows the intro, empty-state copy, and subscribe link when there are 0 posts", () => {
     const html = renderToStaticMarkup(<Writing posts={[]} />);
-    expect(textOf(html)).toContain(site.sections.writing.title);
-    expect(textOf(html)).toContain("First post soon");
-    expect(links(html)).toEqual([]);
-    expect(html).not.toMatch(/skeleton|card/i);
-    expect(html).toMatch(/text-\[1\.0625rem\][^>]*>\s*First post soon/);
+    const text = textOf(html);
+    expect(text).toContain(site.substack.name);
+    expect(text).toContain("01 / Essays");
+    expect(text).toContain("Posts from my Substack.");
+    expect(text).toContain(EMPTY_WRITING);
+    expect(text).not.toContain("First post soon");
+    expect(text).not.toContain("All writing");
+    expect(html).not.toMatch(/<ol\b/);
+    expect(html).not.toMatch(/skeleton|card|placeholder/i);
+    expect(links(html)).toEqual([
+      {
+        href: writingSubscribeUrl(site.substack),
+        text: "Subscribe on Substack",
+        target: "_blank",
+      },
+    ]);
+    expect(html).toMatch(/rel="noopener noreferrer"/);
+    expect(html).toContain(btnGhost);
+    expect(html).toContain("size-[16px]");
+    expect(html).toMatch(/max-w-2xl[\s\S]*Subscribe on Substack/);
+    expect(html).toMatch(
+      /mt-6[\s\S]*Subscribe on Substack|Subscribe on Substack[\s\S]*mt-6/,
+    );
   });
 
-  it("lists title, date, and summary rows, then All writing, when posts exist", () => {
-    site.substack.url = "https://jarrodtran.substack.com";
+  it("sets the writing heading from site.substack.name", () => {
+    const previous = site.substack.name;
+    const alt = "ZXQ Writing Publication Name";
+    site.substack.name = alt;
     try {
-      const html = renderToStaticMarkup(
-        <Writing
-          posts={[
-            {
-              title: "A real essay",
-              href: "https://jarrodtran.substack.com/p/a-real-essay",
-              date: "2026-03-01T12:00:00.000Z",
-              summary: "One line about the essay.",
-            },
-          ]}
-        />,
-      );
-      expect(textOf(html)).toContain("A real essay");
-      expect(textOf(html)).toContain("1 Mar 2026");
-      expect(textOf(html)).toContain("One line about the essay.");
+      const html = renderToStaticMarkup(<Writing posts={[]} />);
+      expect(html).toContain('id="writing"');
+      expect(headings(html, "h2")).toEqual([alt]);
+    } finally {
+      site.substack.name = previous;
+    }
+  });
+
+  it("lists three fixture posts newest first with Chicago dates, then subscribe", () => {
+    const fixturePosts = parseFeed(threeXml, WRITING_FIXTURE_BASE);
+    expect(fixturePosts.map((post) => post.title)).toEqual([
+      ...WRITING_FIXTURE_TITLES,
+    ]);
+    const html = renderToStaticMarkup(<Writing posts={fixturePosts} />);
+    const text = textOf(html);
+    expect(text).toContain("Posts from my Substack.");
+    const aurora = text.indexOf(WRITING_FIXTURE_TITLES[0]);
+    const beacon = text.indexOf(WRITING_FIXTURE_TITLES[1]);
+    const cedar = text.indexOf(WRITING_FIXTURE_TITLES[2]);
+    expect(aurora).toBeGreaterThan(-1);
+    expect(beacon).toBeGreaterThan(aurora);
+    expect(cedar).toBeGreaterThan(beacon);
+    expect(text).toContain(formatPostDate("2026-11-02T18:00:00.000Z"));
+    expect(text).toContain("2 Nov 2026");
+    expect(text).toContain("1 Nov 2026");
+    expect(text).toContain("15 Oct 2026");
+    expect(html).toMatch(
+      /<time[^>]*dateTime="2026-11-02T18:00:00.000Z"[^>]*>2 Nov 2026<\/time>/,
+    );
+    expect(html).toMatch(
+      /<time[^>]*dateTime="2026-11-02T05:00:00.000Z"[^>]*>1 Nov 2026<\/time>/,
+    );
+    expect(html).toContain("line-clamp-2");
+    expect(html).toContain("(opens Substack)");
+    expect(html).toContain("size-[16px]");
+    expect(html).toMatch(
+      /<ol\b[^>]*>[\s\S]*<a\b[^>]*\bno-underline\b[^>]*\bhover:underline\b/,
+    );
+    expect(html).toMatch(/rel="noopener noreferrer"/);
+    expect(html).not.toContain("All writing");
+    expect(html).not.toContain("First post soon");
+    expect(links(html)).toEqual([
+      {
+        href: `${WRITING_FIXTURE_BASE}/p/zxq-aurora`,
+        text: `${WRITING_FIXTURE_TITLES[0]} (opens Substack)`,
+        target: "_blank",
+      },
+      {
+        href: `${WRITING_FIXTURE_BASE}/p/zxq-beacon`,
+        text: `${WRITING_FIXTURE_TITLES[1]} (opens Substack)`,
+        target: "_blank",
+      },
+      {
+        href: `${WRITING_FIXTURE_BASE}/p/zxq-cedar`,
+        text: `${WRITING_FIXTURE_TITLES[2]} (opens Substack)`,
+        target: "_blank",
+      },
+      {
+        href: writingSubscribeUrl(site.substack),
+        text: "Subscribe on Substack",
+        target: "_blank",
+      },
+    ]);
+  });
+
+  it("follows a swapped Substack base for feed, subscribe, and allowed host", () => {
+    const previous = site.substack.url;
+    const alt = "https://altname.substack.com";
+    site.substack.url = alt;
+    try {
+      expect(writingSubscribeUrl(site.substack)).toBe(alt);
+      expect(writingFeedUrl(site.substack)).toBe(`${alt}/feed`);
+      expect(isOwnWritingUrl(`${alt}/p/kept`, site.substack.url)).toBe(true);
+      expect(
+        isOwnWritingUrl(`${WRITING_FIXTURE_BASE}/p/old`, site.substack.url),
+      ).toBe(false);
+
+      const html = renderToStaticMarkup(<Writing posts={[]} />);
       expect(links(html)).toEqual([
         {
-          href: "https://jarrodtran.substack.com/p/a-real-essay",
-          text: "A real essay",
-          target: "_blank",
-        },
-        {
-          href: "https://jarrodtran.substack.com",
-          text: "All writing",
+          href: alt,
+          text: "Subscribe on Substack",
           target: "_blank",
         },
       ]);
-      expect(html).toContain("text-lg");
+
+      const xml = `<?xml version="1.0"?><rss><channel>
+<item>
+  <title>Kept on alt</title>
+  <link>${alt}/p/kept</link>
+  <pubDate>Mon, 02 Nov 2026 18:00:00 GMT</pubDate>
+  <description>Alt post.</description>
+</item>
+<item>
+  <title>Dropped old host</title>
+  <link>${WRITING_FIXTURE_BASE}/p/old</link>
+  <pubDate>Tue, 03 Nov 2026 18:00:00 GMT</pubDate>
+  <description>Should drop.</description>
+</item>
+</channel></rss>`;
+      expect(
+        parseFeed(xml, site.substack.url).map((post) => post.href),
+      ).toEqual([`${alt}/p/kept`]);
     } finally {
-      site.substack.url = "";
+      site.substack.url = previous;
     }
   });
 });
 
 describe("body text size", () => {
-  it("uses 18px body text and keeps First post soon at 17px", () => {
+  it("uses 18px body text and does not keep a 17px empty-state exception", () => {
     const root = path.resolve(__dirname, "..");
     const leftovers: string[] = [];
 
@@ -132,13 +246,6 @@ describe("body text size", () => {
         const source = readFileSync(path.join(root, dir, file), "utf8");
         for (const [index, line] of source.split("\n").entries()) {
           if (!line.includes("text-[1.0625rem]")) continue;
-          const next = source.split("\n")[index + 1] ?? "";
-          if (
-            relative === "components/sections/writing.tsx" &&
-            next.includes("First post soon")
-          ) {
-            continue;
-          }
           leftovers.push(`${relative}:${index + 1}`);
         }
       }
@@ -245,8 +352,6 @@ describe("case study", () => {
     expect(text.indexOf(`Next: ${next!.title}`)).toBeGreaterThan(
       text.indexOf(item.panel.value),
     );
-    expect(html).toMatch(
-      new RegExp(`/work/${next!.slug}/?`),
-    );
+    expect(html).toMatch(new RegExp(`/work/${next!.slug}/?`));
   });
 });

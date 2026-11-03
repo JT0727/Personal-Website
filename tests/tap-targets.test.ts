@@ -1,10 +1,12 @@
-import { existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { cpSync, existsSync, rmSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
 import { chromium } from "playwright-core";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { site } from "@/content/site";
+import { WRITING_FIXTURE_TITLES } from "./fixtures/writing/titles";
 
 const types: Record<string, string> = {
   ".css": "text/css",
@@ -31,6 +33,32 @@ const built = existsSync(join(process.cwd(), "out/index.html"));
 
 if (!built) {
   throw new Error("tap-targets test needs a production build in out/");
+}
+
+function buildWritingFixtureOut(): () => void {
+  const root = process.cwd();
+  const out = join(root, "out");
+  const backup = join(root, "out.tap-empty");
+  const fixture = join(root, "tests/fixtures/writing/three-posts.xml");
+  rmSync(backup, { recursive: true, force: true });
+  cpSync(out, backup, { recursive: true });
+  try {
+    execFileSync("pnpm", ["build"], {
+      cwd: root,
+      env: { ...process.env, WRITING_FEED_PATH: fixture },
+      stdio: "pipe",
+    });
+  } catch (error) {
+    rmSync(out, { recursive: true, force: true });
+    cpSync(backup, out, { recursive: true });
+    rmSync(backup, { recursive: true, force: true });
+    throw error;
+  }
+  return () => {
+    rmSync(out, { recursive: true, force: true });
+    cpSync(backup, out, { recursive: true });
+    rmSync(backup, { recursive: true, force: true });
+  };
 }
 
 describe("390px tap targets and first screen", () => {
@@ -80,6 +108,49 @@ describe("390px tap targets and first screen", () => {
     await page.goto(`${origin}${path}`, { waitUntil: "networkidle" });
     return { browser, page };
   }
+
+  it("keeps the writing subscribe link and post titles at least 44px tall", async () => {
+    const { browser, page } = await open("/");
+    const writing = await page.evaluate(() => {
+      const section = document.getElementById("writing");
+      return [...(section?.querySelectorAll("a") ?? [])].map((control) => ({
+        name: control.textContent?.replace(/\s+/g, " ").trim() ?? "",
+        height: control.getBoundingClientRect().height,
+      }));
+    });
+    await browser.close();
+    expect(writing.length).toBeGreaterThan(0);
+    expect(
+      writing.some((link) => link.name.includes("Subscribe on Substack")),
+    ).toBe(true);
+    for (const link of writing) {
+      expect(link.height, link.name).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  it("underlines the first writing title only while hovered", async () => {
+    const restore = buildWritingFixtureOut();
+    let browser: Awaited<ReturnType<typeof open>>["browser"] | undefined;
+    try {
+      const opened = await open("/");
+      browser = opened.browser;
+      const title = opened.page.locator("#writing li a").first();
+      await title.scrollIntoViewIfNeeded();
+      expect(await title.innerText()).toContain(WRITING_FIXTURE_TITLES[0]);
+      const rest = await title.evaluate(
+        (node) => getComputedStyle(node).textDecorationLine,
+      );
+      expect(rest).toBe("none");
+      await title.hover();
+      const hovered = await title.evaluate(
+        (node) => getComputedStyle(node).textDecorationLine,
+      );
+      expect(hovered).toBe("underline");
+    } finally {
+      await browser?.close();
+      restore();
+    }
+  }, 180_000);
 
   // rule:tap-targets-44px
   it("keeps every visible link and button at least 44px tall", async () => {
@@ -142,7 +213,7 @@ describe("390px tap targets and first screen", () => {
       site.positioning.name,
       site.positioning.headline,
     ]);
-    expect(view.writingTitle).toBe(site.sections.writing.title);
+    expect(view.writingTitle).toBe(site.substack.name);
     expect(view.writingBottom).toBeGreaterThan(0);
     expect(view.writingBottom).toBeLessThanOrEqual(view.viewport);
   });
@@ -466,6 +537,72 @@ describe("390px tap targets and first screen", () => {
       for (const icon of icons) {
         expect(icon.width, `${icon.label} width`).toBe(16);
         expect(icon.height, `${icon.label} height`).toBe(16);
+      }
+    },
+  );
+
+  it.each([
+    { width: 320, height: 844 },
+    { width: 390, height: 844 },
+  ])(
+    "keeps every link and button icon at 16px at $width with 200% text",
+    async ({ width, height }) => {
+      const browser = await chromium.launch();
+      const page = await browser.newPage({
+        viewport: { width, height },
+        colorScheme: "light",
+      });
+      await page.goto(`${origin}/`, { waitUntil: "networkidle" });
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "32px";
+      });
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            const done = () => requestAnimationFrame(() => resolve());
+            if (document.fonts.status === "loaded") {
+              done();
+              return;
+            }
+            document.fonts.ready.then(done).catch(done);
+          }),
+      );
+      await page.waitForTimeout(300);
+
+      const icons = await page.evaluate(() => {
+        return [...document.querySelectorAll("a svg, button svg")]
+          .filter((svg) => {
+            const style = getComputedStyle(svg);
+            const box = svg.getBoundingClientRect();
+            return (
+              style.display !== "none" &&
+              style.visibility !== "hidden" &&
+              box.width > 1 &&
+              box.height > 1
+            );
+          })
+          .map((svg) => {
+            const host = svg.closest("a, button");
+            const box = svg.getBoundingClientRect();
+            return {
+              name:
+                host?.getAttribute("aria-label") ||
+                host?.textContent?.replace(/\s+/g, " ").trim() ||
+                "icon",
+              width: Number(box.width.toFixed(1)),
+              height: Number(box.height.toFixed(1)),
+            };
+          });
+      });
+      await browser.close();
+
+      expect(icons.length).toBeGreaterThan(0);
+      expect(
+        icons.some((icon) => icon.name.includes("Subscribe on Substack")),
+      ).toBe(true);
+      for (const icon of icons) {
+        expect(icon.width, `${icon.name} width`).toBe(16);
+        expect(icon.height, `${icon.name} height`).toBe(16);
       }
     },
   );

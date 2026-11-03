@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 export interface WritingPost {
   title: string;
   href: string;
@@ -8,13 +10,38 @@ export interface WritingPost {
 export interface SubstackConfig {
   name: string;
   url: string;
-  feedUrl: string;
+}
+
+export const WRITING_POST_LIMIT = 5;
+export const WRITING_BLURB_MAX_CHARS = 220;
+export const WRITING_FEED_TIMEOUT_MS = 10_000;
+export const WRITING_DATE_TIME_ZONE = "America/Chicago";
+
+export function writingSubscribeUrl(
+  config: Pick<SubstackConfig, "url">,
+): string {
+  return config.url.trim().replace(/\/+$/, "");
+}
+
+export function writingFeedUrl(config: Pick<SubstackConfig, "url">): string {
+  const base = writingSubscribeUrl(config);
+  return base ? `${base}/feed` : "";
 }
 
 export function isSubstackUrl(url: string): boolean {
   try {
     const host = new URL(url).hostname;
     return host === "substack.com" || host.endsWith(".substack.com");
+  } catch {
+    return false;
+  }
+}
+
+export function isOwnWritingUrl(url: string, baseUrl: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const base = new URL(writingSubscribeUrl({ url: baseUrl }));
+    return parsed.protocol === "https:" && parsed.hostname === base.hostname;
   } catch {
     return false;
   }
@@ -31,6 +58,7 @@ export function formatPostDate(iso: string): string {
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: WRITING_DATE_TIME_ZONE,
   }).format(date);
 }
 
@@ -47,9 +75,14 @@ function decode(text: string): string {
   );
 }
 
+function capBlurb(text: string): string {
+  if (text.length <= WRITING_BLURB_MAX_CHARS) return text;
+  return text.slice(0, WRITING_BLURB_MAX_CHARS).trimEnd();
+}
+
 function tag(block: string, name: string): string {
   const match = block.match(
-    new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`, "i"),
+    new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)</${name}>`, "i"),
   );
   return match ? decode(match[1]) : "";
 }
@@ -62,7 +95,18 @@ function hrefOf(block: string): string {
   return tag(block, "link") || tag(block, "guid");
 }
 
-export function parseFeed(xml: string): WritingPost[] {
+function looksLikeFeed(xml: string): boolean {
+  return /<(rss|feed|rdf:RDF)\b/i.test(xml);
+}
+
+function selectPosts(posts: WritingPost[], baseUrl: string): WritingPost[] {
+  return posts
+    .filter((post) => isOwnWritingUrl(post.href, baseUrl))
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+    .slice(0, WRITING_POST_LIMIT);
+}
+
+export function parseFeed(xml: string, baseUrl: string): WritingPost[] {
   const items = [...xml.matchAll(/<item\b[\s\S]*?<\/item>/gi)].map(
     (match) => match[0],
   );
@@ -74,7 +118,7 @@ export function parseFeed(xml: string): WritingPost[] {
   return blocks.flatMap((block) => {
     const title = tag(block, "title");
     const href = hrefOf(block);
-    if (!title || !href) return [];
+    if (!title || !href || !isOwnWritingUrl(href, baseUrl)) return [];
     const rawDate =
       tag(block, "pubDate") || tag(block, "published") || tag(block, "updated");
     const parsed = rawDate ? new Date(rawDate) : null;
@@ -84,35 +128,66 @@ export function parseFeed(xml: string): WritingPost[] {
         href,
         date:
           parsed && !Number.isNaN(parsed.getTime()) ? parsed.toISOString() : "",
-        summary: oneLine(
-          tag(block, "description") ||
-            tag(block, "summary") ||
-            tag(block, "content"),
+        summary: capBlurb(
+          oneLine(tag(block, "description") || tag(block, "summary")),
         ),
       },
     ];
   });
 }
 
+export type WritingLoad =
+  { ok: true; posts: WritingPost[] } | { ok: false; posts: []; reason: string };
+
+function readFixturePosts(baseUrl: string): WritingPost[] | null {
+  const fixture = process.env.WRITING_FEED_PATH;
+  if (!fixture) return null;
+  return selectPosts(
+    parseFeed(readFileSync(fixture, "utf8"), baseUrl),
+    baseUrl,
+  );
+}
+
+export async function loadWritingResult(
+  config: SubstackConfig,
+): Promise<WritingLoad> {
+  const fixture = readFixturePosts(config.url);
+  if (fixture) return { ok: true, posts: fixture };
+
+  const feedUrl = writingFeedUrl(config);
+  if (!feedUrl) return { ok: true, posts: [] };
+
+  try {
+    const response = await fetch(feedUrl, {
+      signal: AbortSignal.timeout(WRITING_FEED_TIMEOUT_MS),
+    });
+    if (!response.ok) {
+      return { ok: false, posts: [], reason: `HTTP ${response.status}` };
+    }
+    const xml = await response.text();
+    if (!looksLikeFeed(xml)) {
+      return { ok: false, posts: [], reason: "malformed feed XML" };
+    }
+    return {
+      ok: true,
+      posts: selectPosts(parseFeed(xml, config.url), config.url),
+    };
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : "fetch failed";
+    return { ok: false, posts: [], reason };
+  }
+}
+
 export async function fetchSubstackPosts(
   config: SubstackConfig,
 ): Promise<WritingPost[]> {
-  const feedUrl = config.feedUrl.trim();
-  if (!feedUrl) return [];
-  try {
-    const response = await fetch(feedUrl, {
-      signal: AbortSignal.timeout(8_000),
-    });
-    if (!response.ok) return [];
-    return parseFeed(await response.text());
-  } catch {
-    return [];
-  }
+  const result = await loadWritingResult(config);
+  return result.posts;
 }
 
 export async function loadWriting(
   config: SubstackConfig,
 ): Promise<WritingPost[]> {
-  const posts = await fetchSubstackPosts(config);
-  return posts.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  const result = await loadWritingResult(config);
+  return result.posts;
 }
