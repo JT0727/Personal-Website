@@ -11,11 +11,6 @@ export function Section({
   children: React.ReactNode;
   className?: string;
   contained?: boolean;
-  /**
-   * Tighter vertical padding for a section whose content is a single row.
-   * A padding variant cannot come through `className`: `cn` only joins, so
-   * `py-16` and `py-12` would both ship and `py-16` would win on source order.
-   */
   compact?: boolean;
 }) {
   return (

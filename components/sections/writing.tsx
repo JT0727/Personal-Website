@@ -44,9 +44,6 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
     <Section id="writing" compact={empty}>
       <SectionHeading title={site.substack.name} />
       {empty ? (
-        // With no posts this section is one line of copy, so the copy and the
-        // subscribe button share a row. Stacking them (and a full section pad)
-        // pushed About below the fold on a phone and a laptop.
         <div className="flex max-w-3xl flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
           <p className="text-muted-foreground measure text-lg leading-relaxed">
             {EMPTY_COPY}
