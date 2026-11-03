@@ -108,7 +108,7 @@ describe("hero", () => {
 });
 
 const EMPTY_WRITING =
-  "Nothing published yet. Subscribe and the first post will land in your inbox.";
+  "No posts yet. Subscribe to get new writing by email.";
 const threeXml = readFileSync(
   path.join(__dirname, "fixtures/writing/three-posts.xml"),
   "utf8",

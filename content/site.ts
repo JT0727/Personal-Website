@@ -118,7 +118,7 @@ export interface SiteContent {
 export const site: SiteContent = {
   positioning: {
     name: "Jarrod Tran",
-    headline: "I write about AI product work, judgment, and making a P&L move.",
+    headline: "I write about building AI products and deciding what gets funded.",
     headlineVariants: {
       tech: "The person who takes an AI bet from a slide to something people use, with a P&L.",
       vc: "I put capital on the line, kill weak bets, and drive the rest to an outcome.",
@@ -129,7 +129,7 @@ export const site: SiteContent = {
     },
     documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
     valueProp:
-      "Unclear brief, real P&L. At Tesla Energy I lead AI enablement: a product and engineering team whose tools are in production. Before that: Apple and Waymo.",
+      "I lead AI enablement at Tesla Energy. Earlier, I worked on Apple's iPhone launch in India, Engineering Operations at Waymo, and Tesla Special Projects.",
     status: "Open to the right role",
     location: "Houston, TX",
     currentRole: currentTitle,
@@ -164,7 +164,7 @@ export const site: SiteContent = {
   ],
   about: {
     bio: [
-      `I work at Tesla Energy as ${currentTitle}. I built the team that ships our AI tools, got people using them, and put reporting in place so leadership can see whether the tools move the business. Before that: Apple's 0→1 iPhone launch in India, Engineering Operations planning at Waymo, and Tesla Special Projects through the 4680 launch.`,
+      `I work at Tesla Energy as ${currentTitle}. Before returning to Tesla, I worked on Apple's India launch and in Engineering Operations at Waymo. I began at Tesla in Special Projects, including the 4680 launch.`,
     ],
     lookingForIntro:
       "I want a seat where my judgment changes the outcome, not just the deck.",
@@ -191,20 +191,20 @@ export const site: SiteContent = {
           title: currentTitle,
           dates: "Aug 2023 - Present",
           summary:
-            "I own Tesla Energy’s AI enablement strategy and the product team that ships it: roadmap, rules, and what I report to leadership.",
+            "I set Tesla Energy’s AI product roadmap, lead the team that ships it, and report adoption and business results to leadership.",
           bullets: [
             {
-              text: "Built and lead a forward-deployed AI product and engineering org at Tesla Energy, scaling adoption to 1,000+ active users across 20+ production AI solutions: RAG troubleshooting, automated reporting, workflow automation, and decision-support.",
+              text: "Built and now lead Tesla Energy’s AI product and engineering team. Its 1,000+ users rely on 20+ production tools for RAG troubleshooting, automated reporting, workflow automation, and decision support.",
               metric: "1,000+",
               audiences: ["tech", "startup"],
             },
             {
-              text: "Modeled AI productivity at roughly 540 hours reclaimed per week and $1.6M in annualized value, with more upside as automation adoption grows.",
+              text: "Our model estimates about 540 hours reclaimed each week, worth $1.6M annually.",
               metric: "$1.6M",
               audiences: ["tech", "vc"],
             },
             {
-              text: "Owned the global investment roadmap across California, Texas, and Shanghai: scaled Megapack 3.2×, allocated $23M across 50+ initiatives for $156M in incremental annual profit, and led a separate program that delivered $260M in annualized savings.",
+              text: "Set investment priorities across California, Texas, and Shanghai. Allocated $23M across 50+ initiatives, producing $156M in incremental annual profit and 3.2× Megapack growth. A separate program saved $260M annually.",
               metric: "$156M",
               audiences: ["vc", "consulting"],
             },
@@ -222,7 +222,7 @@ export const site: SiteContent = {
             "I ran new programs at Tesla, including the 4680 launch and the Model 3 and Model Y scale-up.",
           bullets: [
             {
-              text: "Advanced Project Roadrunner, Tesla's 4680 program, from early pilot to a launch-ready platform. Stage gates, readiness reviews, and cross-functional ownership through Battery Day.",
+              text: "Advanced Project Roadrunner, Tesla's 4680 program, from pilot to launch readiness through Battery Day.",
               audiences: ["startup", "tech"],
             },
             {
@@ -246,15 +246,15 @@ export const site: SiteContent = {
           dates: "Oct 2022 - May 2023",
           bullets: [
             {
-              text: "Led annual planning, OKRs, and quarterly business reviews for Engineering Operations. Turned org priorities into resource plans, targets, and milestones.",
+              text: "Led annual planning and quarterly business reviews for Engineering Operations. Turned priorities into OKRs, resource plans, and milestones.",
               audiences: ["consulting", "tech"],
             },
             {
-              text: "Got hardware, software, fleet, Product, Legal, and Engineering onto the same facts, including safety and regulatory work for commercial autonomous-vehicle deployment.",
+              text: "Brought hardware, software, fleet, Product, Legal, and Engineering teams together on safety and regulatory work for commercial autonomous-vehicle deployment.",
               audiences: ["consulting", "startup"],
             },
             {
-              text: "Built leadership dashboards for performance, fleet health, and program milestones so senior leaders weren't stuck in ad-hoc reporting.",
+              text: "Built dashboards for performance, fleet health, and program milestones, reducing ad hoc reporting for senior leaders.",
               audiences: ["tech", "vc"],
             },
           ],
@@ -269,16 +269,16 @@ export const site: SiteContent = {
           dates: "Jun 2021 - Jun 2022",
           bullets: [
             {
-              text: "Led the 0→1 iPhone India launch from market entry and partner qualification through readiness and scaled delivery, under tight quality, regulatory, and timing requirements.",
+              text: "Led Apple's first iPhone launch in India from market entry to scaled delivery, coordinating partner readiness, quality, and regulatory requirements.",
               audiences: ["startup", "tech"],
             },
             {
-              text: "Supported 293% year-over-year growth (4.3M → 16.9M units) and a program whose reported revenue grew from $2B to $10B by translating demand into investment and readiness plans.",
+              text: "Translated demand into investment and launch-readiness plans as iPhone volume grew 293% year over year, from 4.3M to 16.9M units. Reported program revenue rose from $2B to $10B.",
               metric: "293%",
               audiences: ["tech", "vc"],
             },
             {
-              text: "Expanded iPhone India exports from 6 to 40+ countries, building a second-source network that reduced geographic concentration risk.",
+              text: "Expanded exports from India from 6 to 40+ countries and built a second-source network to reduce reliance on one region.",
               metric: "40+",
               audiences: ["consulting", "tech"],
             },
@@ -292,11 +292,11 @@ export const site: SiteContent = {
       slug: "tesla-energy-ai-product",
       title: "Tesla Energy: AI product that got used",
       problem:
-        "Tesla Energy needed AI tools people would actually use. Priorities were scattered, nobody owned the use cases, and we couldn't tell if adoption changed results.",
+        "Tesla Energy had scattered AI experiments, but no one owned the use cases or tracked whether adoption improved results.",
       contribution:
-        "I stood up the product and engineering team, ranked the use cases, and set up training and adoption reporting for everything we shipped.",
+        "I formed a product and engineering team, prioritized use cases, and added training and adoption tracking to each release.",
       outcome:
-        "Modeled at ~540 hours reclaimed per week and $1.6M in annualized productivity value.",
+        "Our model estimates about 540 hours reclaimed each week, or $1.6M in annual productivity value.",
       panel: {
         kicker: "Tesla Energy",
         value: "1,000+",
@@ -317,7 +317,7 @@ export const site: SiteContent = {
           "Ship training plus weekly adoption reporting with each release",
         ],
         outcomeDetail:
-          "We hit 1,000+ active users across 20+ production AI solutions. Modeled impact: about 540 hours back each week and $1.6M in annualized productivity value.",
+          "Weekly reports tracked adoption after each release. A model estimates about 540 hours reclaimed per week and $1.6M in annual productivity value.",
         role: [
           "Owned the enablement roadmap and what leadership saw each week",
           "Hired and led the product-and-engineering squad",
@@ -331,9 +331,9 @@ export const site: SiteContent = {
       problem:
         "Demand outran what we could fund. 50+ asks. $23M to spend. Which dollar moved the P&L?",
       contribution:
-        "I built Python and Tableau models linking investment, labor, cost, and timing. We funded the work with the best return and killed the rest. The same logic ranks AI use cases today.",
+        "I built Python and Tableau models to compare return, labor, cost, and timing. We funded the highest-return work and cut the rest.",
       outcome:
-        "3.2× scale on Megapack, $260M in annualized savings, and $550M in tariff exposure mitigated.",
+        "Megapack grew 3.2×, a separate program saved $260M annually, and a redesign mitigated $550M in tariff exposure.",
       panel: {
         kicker: "Tesla Energy",
         value: "$156M",
@@ -342,7 +342,7 @@ export const site: SiteContent = {
       link: { label: "Tesla Megapack", href: "https://www.tesla.com/megapack" },
       caseStudy: {
         context:
-          "Capital asks ran ahead of the budget. Dozens of initiatives fought for the same dollars with weak ties to profit.",
+          "50+ initiatives competed for a $23M budget. Their expected returns were hard to compare.",
         constraints: [
           "Only $23M was available against 50+ competing requests",
           "Leaders needed one clear rule for what got funded and what got cut",
@@ -354,7 +354,7 @@ export const site: SiteContent = {
           "Reuse the ranking method later when sequencing AI use cases",
         ],
         outcomeDetail:
-          "The funded set delivered $156M in incremental annual profit, with 3.2× Megapack scale, $260M in annualized savings, and $550M in tariff exposure mitigated.",
+          "Megapack grew 3.2×. Separate programs delivered $260M in annualized savings and mitigated $550M in tariff exposure.",
         role: [
           "Owned the Energy investment roadmap and review cadence",
           "Built the models executives used to compare asks",
@@ -366,11 +366,11 @@ export const site: SiteContent = {
       slug: "apple-iphone-india",
       title: "Apple: 0→1 iPhone India",
       problem:
-        "India had to go from plan to scaled launch while market entry, partner readiness, and demand were all still moving.",
+        "Apple was preparing to launch iPhone in India for the first time while demand, partner readiness, and regulatory requirements were changing.",
       contribution:
-        "I drove market-entry decisions, partner qualification, and launch readiness, and kept demand, quality, and geopolitical risk in one plan.",
+        "I led market-entry decisions and partner qualification, then coordinated demand, quality, and geopolitical risks through launch.",
       outcome:
-        "Program revenue grew from $2B to $10B, and exports expanded from 6 to 40+ countries.",
+        "The program reported revenue growth from $2B to $10B, and exports from India grew from 6 to 40+ countries.",
       panel: {
         kicker: "Apple",
         value: "293%",
@@ -391,7 +391,7 @@ export const site: SiteContent = {
           "Build second sources so exports weren't pinned to one geography",
         ],
         outcomeDetail:
-          "Reported program revenue moved from $2B to $10B while volume grew 293% year over year (4.3M → 16.9M units). Exports reached 40+ countries.",
+          "Volume grew from 4.3M to 16.9M units year over year, while exports from India reached 40+ countries.",
         role: [
           "Led the India launch program end to end",
           "Kept entry, partners, and readiness on one schedule",
@@ -403,11 +403,11 @@ export const site: SiteContent = {
       slug: "waymo-engineering-ops",
       title: "Waymo: one plan, six functions",
       problem:
-        "Each function ran its own planning, and leadership settled conflicts with data nobody else trusted.",
+        "Six functions used different plans and numbers. Leaders had no shared basis for settling conflicts.",
       contribution:
-        "I built the annual planning, OKR, resource-plan, QBR, and dashboard rhythm that every function worked from.",
+        "I set up shared annual planning, OKRs, quarterly reviews, and dashboards for six functions.",
       outcome:
-        "A shared Engineering Operations rhythm that forced tradeoffs into the open and cut the ad-hoc reporting.",
+        "The teams used one planning calendar and one set of numbers. Scheduled reviews replaced many one-off reporting requests.",
       panel: {
         kicker: "Waymo",
         value: "One plan",
@@ -416,19 +416,19 @@ export const site: SiteContent = {
       link: { label: "Waymo", href: "https://waymo.com/" },
       caseStudy: {
         context:
-          "Planning lived in silos. Leaders argued over conflicting numbers in meetings that rarely left one shared set of facts.",
+          "Six Engineering Operations functions brought different plans and numbers to leadership reviews.",
         constraints: [
           "Every plan had to account for safety and regulatory work",
           "Six functions needed shared targets without private scorekeeping",
           "Senior leaders spent too much time on one-off decks",
         ],
         decisions: [
-          "Set one rhythm for OKRs, resources, QBRs, and dashboards",
+          "Set shared dates for OKRs, resource planning, quarterly reviews, and dashboards",
           "Move tradeoffs into scheduled reviews instead of private escalations",
           "Publish dashboards covering performance, vehicle health, and milestones",
         ],
         outcomeDetail:
-          "Plans finally shared one calendar and one set of numbers. Escalations moved into scheduled reviews, and one-off reporting requests dropped.",
+          "All six functions used a common planning calendar and shared numbers, which cut one-off reporting requests.",
         role: [
           "Facilitated planning and QBR cycles for Engineering Operations",
           "Built the scoreboard leadership used instead of ad-hoc pulls",
@@ -439,29 +439,29 @@ export const site: SiteContent = {
   ],
   principles: [
     {
-      title: "Get the facts first",
+      title: "Write down the decision",
       description:
-        "Get the outcome, constraints, economics, and assumptions on the table before anyone spends. Structured problem-solving starts there.",
+        "Before anyone spends, I put the goal, constraints, economics, and assumptions in writing.",
     },
     {
-      title: "Find where work stalls",
+      title: "Find the stuck handoff",
       description:
-        "Follow the dependencies, incentives, and bottlenecks. Problems usually show up where one team hands work to another.",
+        "I trace the work between teams until I find the handoff or decision slowing it down.",
     },
     {
-      title: "Cut what doesn't matter",
+      title: "Rank the requests",
       description:
-        "Cut work that doesn't serve the outcome. On Megapack that was 50+ requests down to a ranked $23M portfolio.",
+        "On Megapack, we compared 50+ requests against a $23M budget and funded the strongest cases.",
     },
     {
-      title: "Name an owner",
+      title: "Name who owns it",
       description:
-        "Name the tradeoff, the owner, and the next move. A plan only counts once each step has an owner.",
+        "I write down the tradeoff, the decision-maker, and the next step.",
     },
     {
-      title: "Keep improving it",
+      title: "Check what changed",
       description:
-        "Add the feedback (and the automation) that makes the system better as it grows. I add AI where it clearly saves time.",
+        "After launch, I review usage and fix the slow steps. I automate only when it saves time.",
     },
   ],
   capabilities: [
