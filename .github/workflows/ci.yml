@@ -26,6 +26,7 @@ jobs:
       - run: pnpm check
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm test:banned
       - run: pnpm test:redirects
       - run: pnpm test:titles
       - run: pnpm test:tap
@@ -34,6 +35,9 @@ jobs:
       - run: pnpm a11y
       - run: pnpm size
       - run: pnpm build
+        env:
+          BASE_PATH: /Personal-Website
+      - run: pnpm test:banned
         env:
           BASE_PATH: /Personal-Website
       - run: pnpm test:redirects
