@@ -346,14 +346,12 @@ describe("section headings", () => {
 
 describe("selected work", () => {
   it("spans the last card when the cards after the featured one are odd", () => {
-    // Four cards: featured, a pair, then one card that would leave a hole.
     expect([0, 1, 2, 3].map((index) => isWideCard(index, 4))).toEqual([
       true,
       false,
       false,
       true,
     ]);
-    // Five cards: featured plus two full rows of pairs, so no hole to fill.
     expect([0, 1, 2, 3, 4].map((index) => isWideCard(index, 5))).toEqual([
       true,
       false,

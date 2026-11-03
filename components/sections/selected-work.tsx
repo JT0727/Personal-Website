@@ -16,14 +16,10 @@ function WorkMeta({ label, children }: { label: string; children: string }) {
   );
 }
 
-/**
- * The first card is the featured one. When the cards after it come to an odd
- * number the last card also spans the row, so the two-column grid never ends
- * on a half-empty row.
- */
 export function isWideCard(index: number, total: number): boolean {
   if (index === 0) return true;
-  return index === total - 1 && total % 2 === 0;
+  const cardsAfterFeatured = total - 1;
+  return index === total - 1 && cardsAfterFeatured % 2 === 1;
 }
 
 export function SelectedWork() {
