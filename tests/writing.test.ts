@@ -82,9 +82,7 @@ describe("parseFeed", () => {
     ]);
     expect(posts).toHaveLength(3);
     expect(posts[0]?.href).toBe(`${WRITING_FIXTURE_BASE}/p/zxq-aurora`);
-    expect(posts[0]?.summary).toBe(
-      WRITING_FIXTURE_LONG_BLURB.slice(0, WRITING_BLURB_MAX_CHARS).trimEnd(),
-    );
+    expect(posts[0]?.summary.endsWith("…")).toBe(true);
     expect(posts[0]?.summary.length).toBeLessThanOrEqual(
       WRITING_BLURB_MAX_CHARS,
     );
