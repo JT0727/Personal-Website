@@ -21,9 +21,7 @@ function BulletList({ items }: { items: string[] }) {
   return (
     <ul className="text-muted-foreground measure marker:text-muted-foreground/60 list-disc space-y-3 pl-5 text-lg leading-relaxed">
       {items.map((item) => (
-        <li key={item} className="text-pretty">
-          {item}
-        </li>
+        <li key={item}>{item}</li>
       ))}
     </ul>
   );

@@ -18,7 +18,6 @@ describe("bullet list markers and 404 typography", () => {
       expect(cls).toContain("list-disc");
       expect(cls).toContain("pl-5");
     }
-    expect(expHtml).toMatch(/font-mono-label[^"]*\btabular\b/);
 
     const caseHtml = renderToStaticMarkup(
       <CaseStudyBody item={site.selectedWork[0]} />,
@@ -35,8 +34,12 @@ describe("bullet list markers and 404 typography", () => {
 
   it("uses 18px body text and responsive display heading scale on the 404 page and removes unused brand-icons", () => {
     const html = renderToStaticMarkup(<NotFound />);
-    expect(html).toMatch(/<h1 class="[^"]*\bfont-display\b[^"]*\bleading-tight\b[^"]*\bsm:text-5xl\b/);
-    expect(html).toMatch(/<p class="[^"]*\bmeasure\b[^"]*\btext-lg\b[^"]*\bleading-relaxed\b/);
+    expect(html).toMatch(
+      /<h1 class="[^"]*\bfont-display\b[^"]*\bleading-tight\b[^"]*\bsm:text-5xl\b/,
+    );
+    expect(html).toMatch(
+      /<p class="[^"]*\bmeasure\b[^"]*\btext-lg\b[^"]*\bleading-relaxed\b/,
+    );
     expect(
       existsSync(path.resolve(__dirname, "../components/brand-icons.tsx")),
     ).toBe(false);
