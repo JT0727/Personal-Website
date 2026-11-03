@@ -42,11 +42,12 @@ After a build:
   - the phone menu cannot reach its last link on a short viewport
   - at 320x256 with 200% text the header grows past 184px, or Résumé sits outside the panel
   - the copy-email button does not announce success or failure
+- `node scripts/print.mjs` loads `out/` in Chromium with print media emulated, in light and dark, on the home page and a case study. It fails when dark-mode paper is not white with dark ink, when the sticky bar or its buttons or the phone menu print, when reveal rows still animate, or when the sheet scrolls sideways.
 - `pnpm size` prints the JS and HTML bytes the home page loads, raw and gzip, and fails when the JS is over 150 kB gzip. Raise the budget in `scripts/js-size.mjs` only on purpose.
 
 ## CI and deploy
 
-- [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs lint, typecheck, tests, build, the 390px tap-target check (`pnpm test:tap`), the accessibility check (`pnpm a11y`, axe and page checks in Chrome against `out/`), and the JS budget (`pnpm size`) on every pull request.
+- [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs lint, typecheck, tests, build, the 390px tap-target check (`pnpm test:tap`), the accessibility check (`pnpm a11y`, axe and page checks in Chrome against `out/`), the print check (`node scripts/print.mjs`), and the JS budget (`pnpm size`) on every pull request.
 - [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the same gate on every push to `main`, then publishes `out/` to GitHub Pages. A failing check blocks the deploy. Production builds with an empty `BASE_PATH` so assets stay `/_next/...` at `https://jarrodtran.com`. Pull-request CI also rebuilds with `BASE_PATH=/Personal-Website` so a path-prefixed build still works. Pull requests do not deploy a preview.
 - [`.github/workflows/lighthouse.yml`](.github/workflows/lighthouse.yml) builds the static export and runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) against `out/` on pull requests and `main`. Config lives in [`.lighthouserc.cjs`](.lighthouserc.cjs). Reports upload as the `lighthouse-results` workflow artifact.
 

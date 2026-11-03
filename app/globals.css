@@ -153,3 +153,67 @@ footer a {
 #writing li a:not(:hover) {
   text-decoration: none;
 }
+
+/*
+ * Print. Browsers drop page backgrounds by default, so a dark-mode visitor
+ * printing the page would get #f2f2f2 text on white paper. Force the light
+ * tokens, drop the interactive chrome, and keep rows and cards off page breaks.
+ */
+@media print {
+  :root,
+  .dark,
+  html:not(.light) {
+    --background: #ffffff;
+    --foreground: #111111;
+    --muted: #ffffff;
+    --muted-foreground: #333333;
+    --border: #d4d4d4;
+    --card: #ffffff;
+    --accent: #111111;
+    --accent-hover: #111111;
+    --accent-foreground: #ffffff;
+    --ring: #111111;
+    color-scheme: light;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: #ffffff;
+    color: #111111;
+  }
+
+  /* The bar would otherwise repeat on every sheet, holding dead controls. */
+  header {
+    position: static;
+  }
+
+  header button,
+  #mobile-nav {
+    display: none !important;
+  }
+
+  .reveal {
+    animation: none !important;
+    translate: none !important;
+  }
+
+  .reveal,
+  #writing ol > li {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+}
+

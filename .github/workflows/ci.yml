@@ -34,6 +34,7 @@ jobs:
       - run: pnpm test:images
       - run: pnpm test:theme
       - run: pnpm a11y
+      - run: node scripts/print.mjs
       - run: pnpm size
       - run: pnpm build
         env:
