@@ -31,8 +31,6 @@ pnpm dev
 
 Useful scripts: `pnpm check` (TypeScript), `pnpm lint`, `pnpm test`, `pnpm test:tap` (390px tap targets against `out/`), `pnpm build` (writes static files to `out/`), `pnpm format`, `pnpm lhci` (Lighthouse CI against `out/` - see below).
 
-`pnpm test:all` runs `pnpm test` plus every suite the default run excludes (banned copy, tap targets, writing output, generated images, redirects, page titles, theme). Build first: the excluded suites read `out/`, so run `pnpm build` before `pnpm test:all` on a fresh checkout. It is tests only - lint, typecheck, a11y, and size ship separately (`pnpm check` `pnpm lint` `pnpm a11y` `pnpm size`).
-
 After a build:
 
 - `pnpm a11y` runs axe on `out/` in Playwright Chromium at desktop and phone widths, in light and dark. Install the browser with `npx playwright install --with-deps chromium`. It also fails when:
