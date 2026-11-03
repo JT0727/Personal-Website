@@ -125,10 +125,8 @@ describe("visitor-facing copy contract", () => {
 
     const sectionFiles = [
       "about",
-      "capabilities",
       "contact",
       "experience",
-      "how-i-work",
       "selected-work",
       "writing",
     ].map((name) => readSiteFile(`components/sections/${name}.tsx`));
@@ -229,8 +227,6 @@ describe("visitor-facing copy contract", () => {
       ["components/sections/about.tsx", "site.sections.about"],
       ["components/sections/experience.tsx", "site.sections.experience"],
       ["components/sections/selected-work.tsx", "site.sections.work"],
-      ["components/sections/how-i-work.tsx", "site.sections.approach"],
-      ["components/sections/capabilities.tsx", "site.sections.capabilities"],
       ["components/sections/contact.tsx", "site.sections.contact"],
     ] as const;
 

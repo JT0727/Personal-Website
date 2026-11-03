@@ -82,7 +82,6 @@ export function getProofCopy(): string {
     highlights,
     experience,
     selectedWork,
-    principles,
     about,
     positioning,
   } = site;
@@ -90,7 +89,6 @@ export function getProofCopy(): string {
     highlights,
     experience,
     selectedWork,
-    principles,
     about,
     positioning,
   }).join("\n");

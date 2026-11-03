@@ -4,12 +4,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { SectionHeading } from "@/components/section";
 import { About } from "@/components/sections/about";
-import { Capabilities } from "@/components/sections/capabilities";
 import { CaseStudyBody } from "@/components/sections/case-study";
 import { Contact } from "@/components/sections/contact";
 import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
-import { HowIWork } from "@/components/sections/how-i-work";
 import { SelectedWork } from "@/components/sections/selected-work";
 import { Writing } from "@/components/sections/writing";
 import { nextSelectedWork, site } from "@/content/site";
@@ -288,8 +286,6 @@ describe("section headings", () => {
       renderToStaticMarkup(<About />),
       renderToStaticMarkup(<Experience />),
       renderToStaticMarkup(<SelectedWork />),
-      renderToStaticMarkup(<HowIWork />),
-      renderToStaticMarkup(<Capabilities />),
       renderToStaticMarkup(<Contact />),
     ].join("\n");
     const text = textOf(html);
