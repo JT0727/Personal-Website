@@ -11,11 +11,7 @@ export function MetricText({
 
   const index = text.indexOf(metric);
   if (index === -1) {
-    return (
-      <>
-        <span className="text-foreground font-medium">{metric}</span> {text}
-      </>
-    );
+    return <>{text}</>;
   }
 
   return (
