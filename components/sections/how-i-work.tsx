@@ -4,11 +4,9 @@ import { site } from "@/content/site";
 export function HowIWork() {
   return (
     <Section id="approach" className="bg-muted/50">
-      <SectionHeading
-        eyebrow={site.sections.approach.eyebrow}
-        title={site.sections.approach.title}
-        description={site.sections.approach.description}
-      />
+      <div className="mb-10 max-w-2xl sm:mb-12">
+        <SectionHeading title={site.sections.approach.title} />
+      </div>
 
       <ol>
         {site.principles.map((principle, index) => (

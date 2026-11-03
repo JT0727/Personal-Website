@@ -11,12 +11,6 @@ export interface ImpactBullet {
   audiences?: Audience[];
 }
 
-export interface SectionCopy {
-  eyebrow: string;
-  title: string;
-  description: string;
-}
-
 export interface WorkPanel {
   kicker: string;
   value: string;
@@ -94,13 +88,12 @@ export interface SiteContent {
   principles: { title: string; description: string }[];
   capabilities: { group: string; items: string[] }[];
   sections: {
-    writing: Omit<SectionCopy, "title">;
-    experience: SectionCopy;
-    work: SectionCopy;
-    about: Omit<SectionCopy, "description">;
-    approach: SectionCopy;
-    capabilities: SectionCopy;
-    contact: SectionCopy;
+    experience: { title: string };
+    work: { title: string };
+    about: { title: string };
+    approach: { title: string };
+    capabilities: { title: string };
+    contact: { title: string };
   };
   knowsAbout: string[];
   nav: { label: string; href: string }[];
@@ -112,6 +105,7 @@ export interface SiteContent {
     resumeHref: string;
     resumeFilename: string;
     calendar?: string;
+    intro: string;
   };
   /** Paste-ready outreach. Not rendered on the public site. */
   outreach: {
@@ -509,42 +503,23 @@ export const site: SiteContent = {
     },
   ],
   sections: {
-    writing: {
-      eyebrow: "01 / Essays",
-      description: "Posts from my Substack.",
-    },
     about: {
-      eyebrow: "02 / Profile",
       title: "About Jarrod",
     },
     experience: {
-      eyebrow: "03 / Career",
       title: "Experience",
-      description: "Tesla, Apple, Waymo. Result first, then how we got it.",
     },
     work: {
-      eyebrow: "04 / Case studies",
       title: "Selected work",
-      description:
-        "Four projects from three companies. Each one starts with the problem and ends with the numbers.",
     },
     approach: {
-      eyebrow: "05 / Approach",
       title: "How I work",
-      description:
-        "I start from the facts, then build a system the team can run.",
     },
     capabilities: {
-      eyebrow: "06 / Toolkit",
       title: "Capabilities",
-      description:
-        "The skills I use most, grouped by area.",
     },
     contact: {
-      eyebrow: "07 / Contact",
       title: "Looking for product, strategy, or AI roles.",
-      description:
-        "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.",
     },
   },
   knowsAbout: [
@@ -568,6 +543,8 @@ export const site: SiteContent = {
     github: "https://github.com/jarrodtran",
     resumeHref: "/resume.pdf",
     resumeFilename: "Jarrod-Tran-Resume.pdf",
+    intro:
+      "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.",
   },
   outreach: {
     linkedin:

@@ -28,11 +28,12 @@ export function Contact() {
   return (
     <Section id="contact" className="bg-muted/50">
       <div className="grid items-start gap-x-14 lg:grid-cols-2">
-        <SectionHeading
-          eyebrow={site.sections.contact.eyebrow}
-          title={site.sections.contact.title}
-          description={site.sections.contact.description}
-        />
+        <div className="mb-10 max-w-2xl sm:mb-12">
+          <SectionHeading title={site.sections.contact.title} />
+          <p className="text-muted-foreground measure mt-4 text-lg leading-relaxed text-pretty">
+            {site.contact.intro}
+          </p>
+        </div>
         <dl className="border-border bg-card divide-border divide-y border">
           <ContactRow label="Email">
             <a
