@@ -253,6 +253,34 @@ describe("390px tap targets and first screen", () => {
     }
   });
 
+  it("puts the selected work card ring on the article, not the title link", async () => {
+    const { browser, page } = await open("/");
+    const title = page.locator("#work article a").first();
+    await title.scrollIntoViewIfNeeded();
+    await page.keyboard.press("Tab");
+    await title.focus();
+
+    const outlines = await title.evaluate((link) => {
+      const article = link.closest("article");
+      if (!article) return null;
+      const linkStyle = getComputedStyle(link);
+      const articleStyle = getComputedStyle(article);
+      return {
+        linkMatches: link.matches(":focus-visible"),
+        linkOutlineStyle: linkStyle.outlineStyle,
+        articleOutlineStyle: articleStyle.outlineStyle,
+        articleOutlineWidth: articleStyle.outlineWidth,
+      };
+    });
+    await browser.close();
+
+    expect(outlines).not.toBeNull();
+    expect(outlines?.linkMatches).toBe(true);
+    expect(outlines?.linkOutlineStyle).toBe("none");
+    expect(outlines?.articleOutlineStyle).toBe("solid");
+    expect(outlines?.articleOutlineWidth).toBe("2px");
+  });
+
   it("does not scroll sideways at 390px", async () => {
     const { browser, page } = await open("/");
     const overflow = await page.evaluate(
