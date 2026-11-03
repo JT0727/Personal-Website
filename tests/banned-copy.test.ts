@@ -38,6 +38,7 @@ describe("banned phrase list", () => {
     expect(listed).toContain("NYC");
     expect(listed).toContain("New York City");
     expect(listed).toContain("San Francisco");
+    expect(listed).toContain("relocat");
     expect(listed).toContain("\u2014");
     expect(listed).toContain("\u2013");
     expect(listed).toContain("delve");
