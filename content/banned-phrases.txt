@@ -13,6 +13,8 @@ Open to Work
 NYC
 New York City
 San Francisco
+# Jarrod, 2026-11-03: "Our rules say no relocation claim"
+relocat
 
 # --- Punctuation tics (CI should also regex U+2014 and U+2013) ---
 —
