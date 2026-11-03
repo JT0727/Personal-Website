@@ -16,28 +16,40 @@ function WorkMeta({ label, children }: { label: string; children: string }) {
   );
 }
 
+/**
+ * The first card is the featured one. When the cards after it come to an odd
+ * number the last card also spans the row, so the two-column grid never ends
+ * on a half-empty row.
+ */
+export function isWideCard(index: number, total: number): boolean {
+  if (index === 0) return true;
+  return index === total - 1 && total % 2 === 0;
+}
+
 export function SelectedWork() {
+  const total = site.selectedWork.length;
+
   return (
     <Section id="work">
       <SectionHeading title={site.sections.work.title} />
 
       <div className="grid gap-6 sm:grid-cols-2">
         {site.selectedWork.map((item, index) => {
-          const featured = index === 0;
+          const wide = isWideCard(index, total);
           const caseHref = `/work/${item.slug}/`;
           return (
             <article
               key={item.slug}
               className={cn(
                 "reveal border-border bg-card flex min-w-0 flex-col overflow-hidden border",
-                featured &&
+                wide &&
                   "sm:col-span-2 sm:grid sm:grid-cols-2 sm:items-stretch",
               )}
             >
               <div
                 className={cn(
                   "border-border bg-muted flex aspect-[3/2] w-full min-w-0 flex-col justify-between border-b p-5 sm:p-7",
-                  featured &&
+                  wide &&
                     "sm:aspect-auto sm:h-full sm:min-h-[20rem] sm:border-r sm:border-b-0",
                 )}
               >

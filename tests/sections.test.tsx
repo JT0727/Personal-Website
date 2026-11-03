@@ -10,7 +10,10 @@ import { Contact } from "@/components/sections/contact";
 import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
 import { HowIWork } from "@/components/sections/how-i-work";
-import { SelectedWork } from "@/components/sections/selected-work";
+import {
+  isWideCard,
+  SelectedWork,
+} from "@/components/sections/selected-work";
 import { Writing } from "@/components/sections/writing";
 import { nextSelectedWork, site } from "@/content/site";
 import { btnGhost } from "@/lib/ui";
@@ -338,6 +341,43 @@ describe("section headings", () => {
     expect(contact).toContain("max-w-2xl");
     expect(contact).toContain("sm:mb-12");
     expect(contact).toMatch(/<h2\b[^>]*>[\s\S]*?<\/h2>\s*<p\b[^>]*\bmt-4\b/);
+  });
+});
+
+describe("selected work", () => {
+  it("spans the last card when the cards after the featured one are odd", () => {
+    // Four cards: featured, a pair, then one card that would leave a hole.
+    expect([0, 1, 2, 3].map((index) => isWideCard(index, 4))).toEqual([
+      true,
+      false,
+      false,
+      true,
+    ]);
+    // Five cards: featured plus two full rows of pairs, so no hole to fill.
+    expect([0, 1, 2, 3, 4].map((index) => isWideCard(index, 5))).toEqual([
+      true,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    expect([0, 1, 2].map((index) => isWideCard(index, 3))).toEqual([
+      true,
+      false,
+      false,
+    ]);
+    expect([0, 1].map((index) => isWideCard(index, 2))).toEqual([true, true]);
+    expect(isWideCard(0, 1)).toBe(true);
+  });
+
+  it("renders two full-row cards and leaves no empty column", () => {
+    const html = renderToStaticMarkup(<SelectedWork />);
+    expect(site.selectedWork).toHaveLength(4);
+    expect(html.match(/sm:col-span-2/g) ?? []).toHaveLength(2);
+
+    const lastCard = html.slice(html.lastIndexOf("<article"));
+    expect(lastCard).toContain("sm:col-span-2");
+    expect(lastCard).toContain("sm:border-r");
   });
 });
 
