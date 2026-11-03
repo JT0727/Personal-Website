@@ -36,7 +36,7 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
     <Section id="writing">
       <SectionHeading
         eyebrow={site.sections.writing.eyebrow}
-        title={site.sections.writing.title}
+        title={site.substack.name}
         description={site.sections.writing.description}
       />
       <div className="max-w-2xl">

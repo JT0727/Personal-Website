@@ -92,7 +92,7 @@ describe("writing", () => {
   it("shows the intro, empty-state copy, and subscribe link when there are 0 posts", () => {
     const html = renderToStaticMarkup(<Writing posts={[]} />);
     const text = textOf(html);
-    expect(text).toContain(site.sections.writing.title);
+    expect(text).toContain(site.substack.name);
     expect(text).toContain("01 / Essays");
     expect(text).toContain("Posts from my Substack.");
     expect(text).toContain(EMPTY_WRITING);

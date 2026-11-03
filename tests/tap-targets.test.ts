@@ -213,7 +213,7 @@ describe("390px tap targets and first screen", () => {
       site.positioning.name,
       site.positioning.headline,
     ]);
-    expect(view.writingTitle).toBe(site.sections.writing.title);
+    expect(view.writingTitle).toBe(site.substack.name);
     expect(view.writingBottom).toBeGreaterThan(0);
     expect(view.writingBottom).toBeLessThanOrEqual(view.viewport);
   });

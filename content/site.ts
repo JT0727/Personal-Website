@@ -77,7 +77,7 @@ export interface SiteContent {
   /**
    * Public Substack. `url` is the only publication setting: subscribe href,
    * `/feed`, and the allowed https host are all derived from it.
-   * Change the publication name here. Do not merge until Jarrod sets it.
+   * `name` drives the #writing heading.
    */
   substack: {
     name: string;
@@ -97,7 +97,7 @@ export interface SiteContent {
   principles: { title: string; description: string }[];
   capabilities: { group: string; items: string[] }[];
   sections: {
-    writing: SectionCopy;
+    writing: Omit<SectionCopy, "title">;
     experience: SectionCopy;
     work: SectionCopy;
     about: Omit<SectionCopy, "description">;
@@ -542,7 +542,6 @@ export const site: SiteContent = {
   sections: {
     writing: {
       eyebrow: "01 / Essays",
-      title: "Worth Mulling",
       description: "Posts from my Substack.",
     },
     about: {
