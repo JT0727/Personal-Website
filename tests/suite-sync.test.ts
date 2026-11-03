@@ -35,6 +35,7 @@ function suiteFiles(): string[] {
     .sort();
 }
 
+// rule:test-suite-sync
 describe("test suite sync", () => {
   it("keeps every tests/*.test file reachable from pnpm test or a test:* script", () => {
     const orphaned: string[] = [];
