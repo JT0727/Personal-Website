@@ -10,7 +10,7 @@ export function Hero() {
         <p className="text-muted-foreground font-mono-label mb-4 flex items-center gap-2">
           <span
             aria-hidden="true"
-            className="size-1.5 rounded-full bg-accent"
+            className="bg-accent size-1.5 rounded-full"
           />
           {site.positioning.status}
         </p>
