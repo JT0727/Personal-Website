@@ -157,10 +157,30 @@ describe("390px tap targets and first screen", () => {
     for (const path of ["/", "/work/tesla-energy-ai-product/"]) {
       const { browser, page } = await open(path);
       const short = await page.evaluate(() => {
+        const tapBox = (control: Element) => {
+          const box = control.getBoundingClientRect();
+          const after = getComputedStyle(control, "::after");
+          if (
+            after.position === "absolute" &&
+            after.content &&
+            after.content !== "none"
+          ) {
+            const width = parseFloat(after.width);
+            const height = parseFloat(after.height);
+            if (Number.isFinite(width) && Number.isFinite(height)) {
+              return {
+                width: Math.max(box.width, width),
+                height: Math.max(box.height, height),
+              };
+            }
+          }
+          return box;
+        };
+
         return [...document.querySelectorAll("a, button")]
           .filter((control) => {
             const style = getComputedStyle(control);
-            const box = control.getBoundingClientRect();
+            const box = tapBox(control);
             return (
               style.display !== "none" &&
               style.visibility !== "hidden" &&
@@ -168,18 +188,68 @@ describe("390px tap targets and first screen", () => {
               box.height > 1
             );
           })
-          .filter((control) => control.getBoundingClientRect().height < 44)
+          .filter((control) => tapBox(control).height < 44)
           .map((control) => {
             const name =
               control.getAttribute("aria-label") ||
               control.textContent?.trim() ||
               control.getAttribute("href") ||
               control.tagName;
-            return `${name}: ${control.getBoundingClientRect().height.toFixed(1)}px`;
+            return `${name}: ${tapBox(control).height.toFixed(1)}px`;
           });
       });
       await browser.close();
       expect(short, `${path} short controls`).toEqual([]);
+    }
+  });
+
+  it("makes each selected work title link cover its card with a 44px tap box", async () => {
+    const { browser, page } = await open("/");
+    const cards = await page.evaluate(
+      (slugs) => {
+        const section = document.getElementById("work");
+        return [...(section?.querySelectorAll("article") ?? [])].map(
+          (article, index) => {
+            const link = article.querySelector("a");
+            const after = link ? getComputedStyle(link, "::after") : null;
+            const articleBox = article.getBoundingClientRect();
+            const afterWidth = after ? parseFloat(after.width) : 0;
+            const afterHeight = after ? parseFloat(after.height) : 0;
+            return {
+              slug: slugs[index],
+              href: link?.getAttribute("href") ?? "",
+              linkCount: article.querySelectorAll("a").length,
+              afterWidth,
+              afterHeight,
+              articleWidth: articleBox.width,
+              articleHeight: articleBox.height,
+            };
+          },
+        );
+      },
+      site.selectedWork.map((item) => item.slug),
+    );
+    await browser.close();
+
+    expect(cards).toHaveLength(site.selectedWork.length);
+    for (const card of cards) {
+      expect(card.linkCount, card.slug).toBe(1);
+      expect(card.href, card.slug).toMatch(new RegExp(`/work/${card.slug}/?$`));
+      expect(card.afterWidth, `${card.slug} tap width`).toBeGreaterThanOrEqual(
+        44,
+      );
+      expect(
+        card.afterHeight,
+        `${card.slug} tap height`,
+      ).toBeGreaterThanOrEqual(44);
+      expect(
+        card.afterWidth,
+        `${card.slug} overlay width`,
+      ).toBeGreaterThanOrEqual(card.articleWidth - 4);
+      expect(
+        card.afterHeight,
+        `${card.slug} overlay height`,
+      ).toBeGreaterThanOrEqual(card.articleHeight - 4);
     }
   });
 

@@ -282,7 +282,7 @@ describe("body text size", () => {
 });
 
 describe("section headings", () => {
-  it("renders section headings as only an h2 with no eyebrow or description text", () => {
+  it("renders each section heading as one h2 with no eyebrow or description text", () => {
     const html = [
       renderToStaticMarkup(<Writing posts={[]} />),
       renderToStaticMarkup(<About />),
@@ -338,6 +338,50 @@ describe("section headings", () => {
     expect(contact).toContain("max-w-2xl");
     expect(contact).toContain("sm:mb-12");
     expect(contact).toMatch(/<h2\b[^>]*>[\s\S]*?<\/h2>\s*<p\b[^>]*\bmt-4\b/);
+  });
+});
+
+function markupById(html: string, id: string): string {
+  const idAttr = `id="${id}"`;
+  const idAt = html.indexOf(idAttr);
+  expect(idAt, `missing #${id}`).toBeGreaterThan(-1);
+  return html.slice(html.lastIndexOf("<", idAt));
+}
+
+describe("selected work cards", () => {
+  it("makes each card title the only link and drops kickers, meta labels, and the case-study row", () => {
+    const html = renderToStaticMarkup(<SelectedWork />);
+    const work = markupById(html, "work");
+    const workText = textOf(work);
+    const articles = [
+      ...work.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/g),
+    ].map(([article]) => article);
+
+    expect(articles).toHaveLength(site.selectedWork.length);
+
+    site.selectedWork.forEach((item, index) => {
+      const article = articles[index];
+      const articleLinks = links(article);
+      expect(articleLinks).toHaveLength(1);
+      expect(articleLinks[0].href).toMatch(
+        new RegExp(`^/work/${item.slug}/?$`),
+      );
+      expect(articleLinks[0].text).toBe(item.title);
+
+      const paragraphs = [
+        ...article.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g),
+      ].map(([, inner]) => textOf(inner));
+      expect(paragraphs).not.toContain(item.panel.kicker);
+    });
+
+    expect(workText).not.toContain("Read the case study");
+
+    const workParagraphs = [...work.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(
+      ([, inner]) => textOf(inner),
+    );
+    expect(workParagraphs).not.toContain("Problem");
+    expect(workParagraphs).not.toContain("What I did");
+    expect(workParagraphs).not.toContain("Outcome");
   });
 });
 
