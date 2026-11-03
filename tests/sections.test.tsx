@@ -430,6 +430,13 @@ describe("contact", () => {
       site.contact.calendar = configured;
     }
   });
+
+  it("styles the résumé row to match the other Contact links", () => {
+    const resumeLink = html.match(/<a\b[^>]*\bdownload="[^"]*"[^>]*>/)?.[0] ?? "";
+    expect(resumeLink).toContain("font-medium");
+    expect(resumeLink).not.toContain("text-muted-foreground");
+    expect(resumeLink).not.toContain("text-[0.9375rem]");
+  });
 });
 
 describe("case study", () => {
@@ -448,5 +455,28 @@ describe("case study", () => {
       text.indexOf(item.panel.value),
     );
     expect(html).toMatch(new RegExp(`/work/${next!.slug}/?`));
+  });
+
+  it("marks external case-study links with a 16px arrow icon and gives the breadcrumb a hover state", () => {
+    for (const work of site.selectedWork) {
+      const rendered = renderToStaticMarkup(<CaseStudyBody item={work} />);
+      const external =
+        rendered.match(
+          /<a\b[^>]*\btarget="_blank"[^>]*>[\s\S]*?<\/a>/,
+        )?.[0] ?? "";
+      expect(external, `${work.slug} external link`).toContain("<svg");
+      expect(external, `${work.slug} external icon size`).toContain(
+        "size-[16px]",
+      );
+      expect(external, `${work.slug} external icon shrink`).toContain(
+        "shrink-0",
+      );
+      const breadcrumb =
+        rendered.match(/<a\b[^>]*href="\/#work"[^>]*>Selected work<\/a>/)?.[0] ??
+        "";
+      expect(breadcrumb, `${work.slug} breadcrumb hover`).toContain(
+        "hover:text-foreground",
+      );
+    }
   });
 });

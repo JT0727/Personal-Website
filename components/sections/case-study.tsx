@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { nextSelectedWork, type SelectedWorkItem } from "@/content/site";
 import { tap, textAction } from "@/lib/ui";
@@ -34,7 +35,10 @@ export function CaseStudyBody({ item }: { item: SelectedWorkItem }) {
   return (
     <article className="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-20">
       <p className="font-mono-label text-muted-foreground">
-        <Link href="/#work" className={tap}>
+        <Link
+          href="/#work"
+          className={`${tap} hover:text-foreground transition-colors`}
+        >
           Selected work
         </Link>
         <span aria-hidden="true"> / </span>
@@ -99,6 +103,7 @@ export function CaseStudyBody({ item }: { item: SelectedWorkItem }) {
             rel="noreferrer"
           >
             {item.link.label}
+            <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
           </a>
         ) : null}
         <Link

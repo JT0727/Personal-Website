@@ -65,7 +65,7 @@ export function Contact() {
             <a
               href={withBasePath(resumeHref)}
               download={resumeFilename}
-              className={`${tap} text-muted-foreground text-[0.9375rem]`}
+              className={`${tap} font-medium`}
             >
               Résumé
             </a>
