@@ -398,29 +398,29 @@ export const site: SiteContent = {
   ],
   principles: [
     {
-      title: "Write down the decision",
+      title: "Get the facts first",
       description:
-        "Before anyone spends, I put the goal, constraints, economics, and assumptions in writing.",
+        "Get the outcome, constraints, economics, and assumptions on the table before anyone spends. Structured problem-solving starts there.",
     },
     {
-      title: "Find the stuck handoff",
+      title: "Find where work stalls",
       description:
-        "I trace the work between teams until I find the handoff or decision slowing it down.",
+        "Follow the dependencies, incentives, and bottlenecks. Problems usually show up where one team hands work to another.",
     },
     {
-      title: "Rank the requests",
+      title: "Cut what doesn't matter",
       description:
-        "On Megapack, we compared 50+ requests against a $23M budget and funded the strongest cases.",
+        "Cut work that doesn't serve the outcome. On Megapack that was 50+ requests down to a ranked $23M portfolio.",
     },
     {
-      title: "Name who owns it",
+      title: "Name an owner",
       description:
-        "I write down the tradeoff, the decision-maker, and the next step.",
+        "Name the tradeoff, the owner, and the next move. A plan only counts once each step has an owner.",
     },
     {
-      title: "Check what changed",
+      title: "Keep improving it",
       description:
-        "After launch, I review usage and fix the slow steps. I automate only when it saves time.",
+        "Add the feedback (and the automation) that makes the system better as it grows. I add AI where it clearly saves time.",
     },
   ],
   capabilities: [
