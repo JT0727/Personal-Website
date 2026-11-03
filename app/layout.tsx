@@ -48,6 +48,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
   icons: {
     icon: withBasePath("/icon.png"),
     apple: {
@@ -63,6 +67,7 @@ const personJsonLd = {
   "@type": "Person",
   name: site.positioning.name,
   url: siteUrl,
+  image: `${siteUrl}/opengraph-image.png`,
   jobTitle: site.positioning.currentRole,
   worksFor: { "@type": "Organization", name: site.experience[0].company },
   description: site.positioning.valueProp,
