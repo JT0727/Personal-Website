@@ -24,13 +24,9 @@ describe("visitor-facing copy contract", () => {
   it("imports the shipped content module, not a duplicate fixture", () => {
     expect(copy).toContain(site.positioning.headline);
     expect(copy).toContain(site.positioning.valueProp);
-    expect(copy).toContain(site.sections.contact.description);
+    expect(copy).toContain(site.contact.intro);
     expect(copy).toContain(site.about.bio[0]);
     expect(copy).toContain(site.about.lookingForIntro);
-    expect(copy).toContain(site.sections.experience.description);
-    expect(copy).toContain(site.sections.work.description);
-    expect(copy).toContain(site.sections.approach.description);
-    expect(copy).toContain(site.sections.capabilities.description);
     expect(copy).toContain("1,000+");
     expect(copy).toContain("$1.6M");
     expect(copy.includes("$156M") || copy.includes("$260M")).toBe(true);
@@ -121,21 +117,17 @@ describe("visitor-facing copy contract", () => {
     expect(title.length).toBeLessThanOrEqual(60);
   });
 
-  it("numbers section eyebrows in page order from site.sections only", () => {
-    const order = [
-      "writing",
-      "about",
-      "experience",
-      "work",
-      "approach",
-      "capabilities",
-      "contact",
-    ] as const;
-    order.forEach((key, index) => {
-      expect(site.sections[key].eyebrow).toMatch(
-        new RegExp(`^0${index + 1} / `),
-      );
-    });
+  it("does not ship section eyebrows or heading descriptions", () => {
+    expect(site.sections).not.toHaveProperty("writing");
+    for (const section of Object.values(site.sections)) {
+      expect(section).toEqual({ title: expect.any(String) });
+      expect(section).not.toHaveProperty("eyebrow");
+      expect(section).not.toHaveProperty("description");
+    }
+
+    expect(readSiteFile("content/site.ts")).not.toMatch(
+      /export interface SectionCopy/,
+    );
 
     const sectionFiles = [
       "about",
@@ -147,7 +139,8 @@ describe("visitor-facing copy contract", () => {
       "writing",
     ].map((name) => readSiteFile(`components/sections/${name}.tsx`));
     for (const source of sectionFiles) {
-      expect(source).not.toMatch(/eyebrow="/);
+      expect(source).not.toMatch(/eyebrow=/);
+      expect(source).not.toMatch(/description=\{site\.sections\./);
     }
   });
 
@@ -237,7 +230,7 @@ describe("visitor-facing copy contract", () => {
   it("renders section headings from the same content module", () => {
     const files = [
       ["components/sections/hero.tsx", "site.positioning.headline"],
-      ["components/sections/writing.tsx", "site.sections.writing"],
+      ["components/sections/writing.tsx", "site.substack.name"],
       ["components/sections/about.tsx", "site.about.bio"],
       ["components/sections/about.tsx", "site.sections.about"],
       ["components/sections/experience.tsx", "site.sections.experience"],

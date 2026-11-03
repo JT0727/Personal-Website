@@ -25,28 +25,10 @@ export function Section({
   );
 }
 
-export function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow?: string;
-  title: string;
-  description?: string;
-}) {
+export function SectionHeading({ title }: { title: string }) {
   return (
-    <div className="mb-10 max-w-2xl sm:mb-12">
-      {eyebrow ? (
-        <p className="text-accent font-mono-label mb-3">{eyebrow}</p>
-      ) : null}
-      <h2 className="font-display text-[2rem] leading-tight tracking-tight text-balance sm:text-4xl">
-        {title}
-      </h2>
-      {description ? (
-        <p className="text-muted-foreground measure mt-4 text-lg leading-relaxed text-pretty">
-          {description}
-        </p>
-      ) : null}
-    </div>
+    <h2 className="font-display text-[2rem] leading-tight tracking-tight text-balance sm:text-4xl">
+      {title}
+    </h2>
   );
 }

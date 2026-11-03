@@ -34,11 +34,9 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
 
   return (
     <Section id="writing">
-      <SectionHeading
-        eyebrow={site.sections.writing.eyebrow}
-        title={site.substack.name}
-        description={site.sections.writing.description}
-      />
+      <div className="mb-10 max-w-2xl sm:mb-12">
+        <SectionHeading title={site.substack.name} />
+      </div>
       <div className="max-w-2xl">
         {latest.length === 0 ? (
           <p className="text-muted-foreground measure text-lg leading-relaxed">

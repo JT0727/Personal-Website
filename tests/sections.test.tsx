@@ -2,10 +2,15 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { SectionHeading } from "@/components/section";
+import { About } from "@/components/sections/about";
+import { Capabilities } from "@/components/sections/capabilities";
 import { CaseStudyBody } from "@/components/sections/case-study";
 import { Contact } from "@/components/sections/contact";
 import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
+import { HowIWork } from "@/components/sections/how-i-work";
+import { SelectedWork } from "@/components/sections/selected-work";
 import { Writing } from "@/components/sections/writing";
 import { nextSelectedWork, site } from "@/content/site";
 import { btnGhost } from "@/lib/ui";
@@ -60,6 +65,27 @@ function headings(html: string, tag: string): string[] {
 
 const { email, linkedin, resumeHref, resumeFilename } = site.contact;
 
+const SECTION_EYEBROWS = [
+  "01 / Essays",
+  "02 / Profile",
+  "03 / Career",
+  "04 / Case studies",
+  "05 / Approach",
+  "06 / Toolkit",
+  "07 / Contact",
+] as const;
+
+const SECTION_DESCRIPTIONS = [
+  "Posts from my Substack.",
+  "Tesla, Apple, Waymo. Result first, then how we got it.",
+  "Four projects from three companies. Each one starts with the problem and ends with the numbers.",
+  "I start from the facts, then build a system the team can run.",
+  "The skills I use most, grouped by area.",
+] as const;
+
+const CONTACT_INTRO =
+  "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.";
+
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
 
@@ -89,12 +115,12 @@ const threeXml = readFileSync(
 );
 
 describe("writing", () => {
-  it("shows the intro, empty-state copy, and subscribe link when there are 0 posts", () => {
+  it("shows the empty-state copy and subscribe link when there are 0 posts", () => {
     const html = renderToStaticMarkup(<Writing posts={[]} />);
     const text = textOf(html);
     expect(text).toContain(site.substack.name);
-    expect(text).toContain("01 / Essays");
-    expect(text).toContain("Posts from my Substack.");
+    expect(text).not.toContain("01 / Essays");
+    expect(text).not.toContain("Posts from my Substack.");
     expect(text).toContain(EMPTY_WRITING);
     expect(text).not.toContain("First post soon");
     expect(text).not.toContain("All writing");
@@ -136,7 +162,7 @@ describe("writing", () => {
     ]);
     const html = renderToStaticMarkup(<Writing posts={fixturePosts} />);
     const text = textOf(html);
-    expect(text).toContain("Posts from my Substack.");
+    expect(text).not.toContain("Posts from my Substack.");
     const aurora = text.indexOf(WRITING_FIXTURE_TITLES[0]);
     const beacon = text.indexOf(WRITING_FIXTURE_TITLES[1]);
     const cedar = text.indexOf(WRITING_FIXTURE_TITLES[2]);
@@ -255,6 +281,33 @@ describe("body text size", () => {
   });
 });
 
+describe("section headings", () => {
+  it("renders section headings as only an h2 with no eyebrow or description text", () => {
+    const html = [
+      renderToStaticMarkup(<Writing posts={[]} />),
+      renderToStaticMarkup(<About />),
+      renderToStaticMarkup(<Experience />),
+      renderToStaticMarkup(<SelectedWork />),
+      renderToStaticMarkup(<HowIWork />),
+      renderToStaticMarkup(<Capabilities />),
+      renderToStaticMarkup(<Contact />),
+    ].join("\n");
+    const text = textOf(html);
+
+    for (const eyebrow of SECTION_EYEBROWS) {
+      expect(text).not.toContain(eyebrow);
+    }
+    for (const description of SECTION_DESCRIPTIONS) {
+      expect(text).not.toContain(description);
+    }
+
+    const heading = renderToStaticMarkup(<SectionHeading title="Experience" />);
+    expect(heading).toMatch(/^<h2\b[^>]*>Experience<\/h2>$/);
+    expect(heading).not.toContain("<p");
+    expect(heading).not.toContain("<div");
+  });
+});
+
 describe("experience", () => {
   const html = renderToStaticMarkup(<Experience />);
   const companies = site.experience.map((employer) => employer.company);
@@ -294,6 +347,15 @@ describe("contact", () => {
     ]) {
       expect(text).toContain(audience);
     }
+  });
+
+  it("renders the contact intro under the Contact h2", () => {
+    expect(site.contact.intro).toBe(CONTACT_INTRO);
+    expect(html).toMatch(
+      new RegExp(
+        `<h2\\b[^>]*>${site.sections.contact.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</h2>\\s*<p\\b[^>]*>${CONTACT_INTRO.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</p>`,
+      ),
+    );
   });
 
   it("offers email with a copy button, LinkedIn, a speaking invite, the résumé, and the calendar when set, and no form", () => {

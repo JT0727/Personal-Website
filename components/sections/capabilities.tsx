@@ -4,11 +4,9 @@ import { site } from "@/content/site";
 export function Capabilities() {
   return (
     <Section id="capabilities">
-      <SectionHeading
-        eyebrow={site.sections.capabilities.eyebrow}
-        title={site.sections.capabilities.title}
-        description={site.sections.capabilities.description}
-      />
+      <div className="mb-10 max-w-2xl sm:mb-12">
+        <SectionHeading title={site.sections.capabilities.title} />
+      </div>
 
       <div className="border-border border-t">
         {site.capabilities.map((group) => (
