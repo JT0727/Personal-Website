@@ -97,6 +97,12 @@ describe("visitor-facing copy contract", () => {
     expect(readSiteFile("components/sections/hero.tsx")).not.toContain(title);
   });
 
+  it("keeps the About summary focused on earlier roles", () => {
+    const bio = site.about.bio.join(" ");
+    expect(bio).not.toContain(site.positioning.headline);
+    expect(bio).not.toContain(site.positioning.currentRole);
+  });
+
   it("keeps the document title short enough for a browser tab or search result", () => {
     const title = site.positioning.documentTitle;
     expect(title.startsWith(site.positioning.name)).toBe(true);
