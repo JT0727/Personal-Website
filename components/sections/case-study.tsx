@@ -59,15 +59,6 @@ export function CaseStudyBody({ item }: { item: SelectedWorkItem }) {
         </p>
       </div>
 
-      {next ? (
-        <Link
-          href={`/work/${next.slug}/`}
-          className={`${textAction} mt-4 w-full sm:w-auto`}
-        >
-          Next: {next.title}
-        </Link>
-      ) : null}
-
       <div className="mt-12">
         <Block label="Context">
           <p className="text-muted-foreground measure text-lg leading-relaxed text-pretty">
@@ -89,6 +80,17 @@ export function CaseStudyBody({ item }: { item: SelectedWorkItem }) {
           <BulletList items={caseStudy.role} />
         </Block>
       </div>
+
+      {next ? (
+        <p className="mt-10">
+          <Link
+            href={`/work/${next.slug}/`}
+            className={`${textAction} w-full sm:w-auto`}
+          >
+            Next: {next.title}
+          </Link>
+        </p>
+      ) : null}
 
       <div className="border-border mt-10 flex flex-col gap-1 border-t pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
         {item.link ? (

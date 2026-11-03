@@ -437,15 +437,19 @@ describe("case study", () => {
   const html = renderToStaticMarkup(<CaseStudyBody item={item} />);
   const next = nextSelectedWork(item.slug);
 
-  it("lets a reader skim the problem, see the proof, and reach the next link", () => {
+  it("keeps the next case study after the full story", () => {
     const text = textOf(html);
     expect(text.indexOf(item.problem)).toBeGreaterThan(-1);
     expect(text.indexOf(item.panel.value)).toBeGreaterThan(
       text.indexOf(item.problem),
     );
     expect(next).toBeDefined();
+    const lastRoleDetail = item.caseStudy.role[item.caseStudy.role.length - 1];
+    expect(text.indexOf(lastRoleDetail)).toBeGreaterThan(
+      text.indexOf("My role"),
+    );
     expect(text.indexOf(`Next: ${next!.title}`)).toBeGreaterThan(
-      text.indexOf(item.panel.value),
+      text.indexOf(lastRoleDetail),
     );
     expect(html).toMatch(new RegExp(`/work/${next!.slug}/?`));
   });
