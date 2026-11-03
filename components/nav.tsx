@@ -9,6 +9,17 @@ import { cn } from "@/lib/cn";
 import { tap } from "@/lib/ui";
 import { ThemeToggle } from "@/components/theme-toggle";
 
+const TOP_SCROLL_PX = 8;
+
+export function sectionHash(visibleId: string, topOffset: number) {
+  if (topOffset >= 0 || visibleId === "top") return "";
+  return `#${visibleId}`;
+}
+
+function heroTop() {
+  return document.getElementById("top")?.getBoundingClientRect().top;
+}
+
 export function Nav({
   name,
   items,
@@ -38,9 +49,8 @@ export function Nav({
 
   useEffect(() => {
     const onScroll = () => {
-      const pastTop = window.scrollY > 8;
-      setScrolled(pastTop);
-      if (!pastTop) setActive("");
+      setScrolled(window.scrollY > TOP_SCROLL_PX);
+      if ((heroTop() ?? -1) >= 0) setActive("");
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -59,7 +69,7 @@ export function Nav({
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) {
-          setActive(visible.target.id === "top" ? "" : `#${visible.target.id}`);
+          setActive(sectionHash(visible.target.id, heroTop() ?? -1));
         }
       },
       { rootMargin: "-35% 0px -50% 0px", threshold: [0, 0.25, 0.6] },

@@ -8,7 +8,7 @@ vi.mock("next/navigation", () => ({
   usePathname: () => mockedPathname,
 }));
 
-import { Nav } from "@/components/nav";
+import { Nav, sectionHash } from "@/components/nav";
 
 function renderNav(pathname: string) {
   mockedPathname = pathname;
@@ -41,6 +41,13 @@ describe("Nav active route and control states", () => {
 
   it("does not mark any section link as current on the home route before scrolling", () => {
     expect(renderNav("/")).not.toContain('aria-current="location"');
+  });
+
+  it("clears the current section while the hero is still fully in view", () => {
+    expect(sectionHash("writing", 1)).toBe("");
+    expect(sectionHash("writing", 0)).toBe("");
+    expect(sectionHash("writing", -1)).toBe("#writing");
+    expect(sectionHash("top", -40)).toBe("");
   });
 
   it("gives the mobile menu toggle a hover border transition", () => {
