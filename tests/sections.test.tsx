@@ -84,7 +84,7 @@ const SECTION_DESCRIPTIONS = [
 ] as const;
 
 const CONTACT_INTRO =
-  "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.";
+  "Open to AI product leadership roles. Based in Houston.";
 
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
@@ -410,18 +410,6 @@ describe("experience", () => {
 
 describe("contact", () => {
   const html = renderToStaticMarkup(<Contact />);
-
-  it("names all four audiences Jarrod is talking to", () => {
-    const text = textOf(html);
-    for (const audience of [
-      "Growth-stage tech",
-      "consulting",
-      "early-stage startups",
-      "operating role at a VC firm",
-    ]) {
-      expect(text).toContain(audience);
-    }
-  });
 
   it("renders the contact intro under the Contact h2", () => {
     expect(site.contact.intro).toBe(CONTACT_INTRO);

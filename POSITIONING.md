@@ -4,27 +4,20 @@ Single public story for [jarrodtran.com](https://jarrodtran.com). Do not fragmen
 
 ## Core Direction
 
-Position Jarrod Tran as a high-signal **corporate operator / product & strategy** professional.
+Position Jarrod Tran as an AI product leader who takes work from early use case to adoption.
 
 Emphasize:
 
-- AI product work
-- Cross-functional leadership
-- Structured problem-solving
-- Organizational impact
+- AI product leadership
+- Business results
 
 Tone: polished, confident, corporate. Company names, official job titles, and proven impact numbers stay factual.
 
-Target conversations at:
-
-1. Growth-stage tech
-2. Consulting
-3. Early-stage startups
-4. VC-adjacent operator seats
+The site should communicate one focus, not a menu of industries and role types.
 
 ## Single coherent narrative
 
-There is one headline, one value proposition, and one About story. `headlineVariants` and per-bullet `audiences` tags are unused internal data — never ship four public versions.
+There is one headline, one value proposition, and one About story. Do not add audience-specific variants or per-bullet audience tags to the content model.
 
 Keep improving that one story. Do not create Tech / VC / Consulting / Startup forks of the page.
 
@@ -51,7 +44,7 @@ Every figure on the site (highlights, role bullets, case studies, principles, bi
 ```
 Plan a change to this personal site. Do not implement until the plan is approved.
 
-Core Direction: Position Jarrod Tran as a high-signal corporate operator / product & strategy professional. Emphasize AI product work, cross-functional leadership, structured problem-solving, and organizational impact. Tone: polished, confident, corporate. Target growth-stage tech, consulting, early-stage startups, and VC-adjacent operator seats.
+Core Direction: Position Jarrod Tran as an AI product leader who takes work from early use case to adoption and can show business results. Keep one public narrative and one clear role focus.
 
 Working style: one coherent public narrative — not four audience-specific stories or pages. Prefer concrete copy rewrites in content/site.ts (and site.sections for headings). Keep employers, official titles, and impact numbers; recast mechanisms as product, strategy, investment, and organizational decisions.
 
@@ -67,9 +60,9 @@ Read POSITIONING.md and content/site.ts first. Propose the smallest copy (and on
 ```
 Implement the approved plan against this personal site.
 
-Keep a single coherent corporate operator / product & strategy narrative for growth-stage tech, consulting, early-stage startups, and VC-adjacent operator seats. Emphasize AI product work, cross-functional leadership, structured problem-solving, and organizational impact. Polished, confident, corporate tone.
+Keep one clear AI product leadership narrative. Emphasize shipped work, adoption, and business results in concise, factual language.
 
-Edit content/site.ts (and site.sections) in place. Do not ship headlineVariants or per-bullet audiences as public UI. Do not invent employers, titles, or metrics.
+Edit content/site.ts (and site.sections) in place. Do not add audience-specific headline or bullet branches. Do not invent employers, titles, or metrics.
 
 Factory-language ban — visitor-facing copy must not contain: factory, manufacturing, manufactured, mass production, shop floor, GWh, unit cost, cost per unit, supplier, logistics, battery-cell, Energy Manufacturing.
 

@@ -3,12 +3,9 @@ export const siteUrl = "https://jarrodtran.com";
 /** Official current title. Every surface (bio, experience, JSON-LD) reads this one value. */
 const currentTitle = "Lead, AI Enablement & Factory Strategy";
 
-export type Audience = "tech" | "vc" | "consulting" | "startup";
-
 export interface ImpactBullet {
   text: string;
   metric?: string;
-  audiences?: Audience[];
 }
 
 export interface WorkPanel {
@@ -57,7 +54,6 @@ export interface SiteContent {
   positioning: {
     name: string;
     headline: string;
-    headlineVariants: Record<Audience, string>;
     documentTitle: string;
     valueProp: string;
     status: string;
@@ -78,9 +74,6 @@ export interface SiteContent {
   highlights: { value: string; label: string; source?: string }[];
   about: {
     bio: string[];
-    lookingFor: string[];
-    lookingForIntro: string;
-    strengths: string[];
     education: string;
   };
   experience: Employer[];
@@ -119,14 +112,6 @@ export const site: SiteContent = {
   positioning: {
     name: "Jarrod Tran",
     headline: "I lead the AI product and engineering team at Tesla Energy.",
-    headlineVariants: {
-      tech: "The person who takes an AI bet from a slide to something people use, with a P&L.",
-      vc: "I put capital on the line, kill weak bets, and drive the rest to an outcome.",
-      consulting:
-        "I break a messy brief into economics, owners, and a weekly decision rhythm.",
-      startup:
-        "I walk into chaos, set the strategy, and stay until the numbers move.",
-    },
     documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
     valueProp:
       "Product and strategy at Tesla Energy, with earlier roles at Apple and Waymo.",
@@ -166,19 +151,6 @@ export const site: SiteContent = {
     bio: [
       `I work at Tesla Energy as ${currentTitle}. Before returning to Tesla, I worked on Apple's India launch and in Engineering Operations at Waymo. I began at Tesla in Special Projects, including the 4680 launch.`,
     ],
-    lookingForIntro:
-      "I want a seat where my judgment changes the outcome, not just the deck.",
-    lookingFor: [
-      "A real business outcome and a named decision-maker",
-      "AI product work that real people use (past the pilot)",
-      "Own the plan and stay through the result",
-    ],
-    strengths: [
-      "Lead across functions without waiting on an org chart",
-      "Take AI products from first use case to production",
-      "Make portfolio calls with a P&L attached",
-      "Solve messy problems in a way a leadership team can run",
-    ],
     education:
       "University at Buffalo · B.S. Business Administration, Finance · Cum Laude",
   },
@@ -196,22 +168,18 @@ export const site: SiteContent = {
             {
               text: "Built and now lead a team that ships 20+ production AI tools, used by 1,000+ people for troubleshooting, reporting, workflow automation, and decision support.",
               metric: "1,000+",
-              audiences: ["tech", "startup"],
             },
             {
               text: "Our model estimates about 540 hours reclaimed each week, worth $1.6M annually.",
               metric: "$1.6M",
-              audiences: ["tech", "vc"],
             },
             {
               text: "Set investment priorities across California, Texas, and Shanghai. Allocated $23M across 50+ initiatives, producing $156M in incremental annual profit and 3.2× Megapack growth. A separate program saved $260M annually.",
               metric: "$156M",
-              audiences: ["vc", "consulting"],
             },
             {
               text: "Mitigated $550M in projected tariff exposure by redesigning the product and investment plan, then built and promoted successors so I could focus on AI enablement.",
               metric: "$550M",
-              audiences: ["consulting", "startup"],
             },
           ],
         },
@@ -223,16 +191,13 @@ export const site: SiteContent = {
           bullets: [
             {
               text: "Advanced Project Roadrunner, Tesla's 4680 program, from pilot to launch readiness through Battery Day.",
-              audiences: ["startup", "tech"],
             },
             {
               text: "Designed and launched a $3.5M/month coordination platform (“Warehouse on Wheels”) to protect product availability during rapid scale-up.",
               metric: "$3.5M/month",
-              audiences: ["startup", "tech"],
             },
             {
               text: "Led planning and recovery across Model 3 and Model Y programs through demand surges and supply disruptions.",
-              audiences: ["startup", "tech"],
             },
           ],
         },
@@ -247,15 +212,12 @@ export const site: SiteContent = {
           bullets: [
             {
               text: "Led annual planning and quarterly business reviews for Engineering Operations. Turned priorities into OKRs, resource plans, and milestones.",
-              audiences: ["consulting", "tech"],
             },
             {
               text: "Brought hardware, software, fleet, Product, Legal, and Engineering teams together on safety and regulatory work for commercial autonomous-vehicle deployment.",
-              audiences: ["consulting", "startup"],
             },
             {
               text: "Built dashboards for performance, fleet health, and program milestones, reducing ad hoc reporting for senior leaders.",
-              audiences: ["tech", "vc"],
             },
           ],
         },
@@ -270,17 +232,14 @@ export const site: SiteContent = {
           bullets: [
             {
               text: "Led Apple's first iPhone launch in India from market entry to scaled delivery, coordinating partner readiness, quality, and regulatory requirements.",
-              audiences: ["startup", "tech"],
             },
             {
               text: "Translated demand into investment and launch-readiness plans as iPhone volume grew 293% year over year, from 4.3M to 16.9M units. Reported program revenue rose from $2B to $10B.",
               metric: "293%",
-              audiences: ["tech", "vc"],
             },
             {
               text: "Expanded exports from India from 6 to 40+ countries and built a second-source network to reduce reliance on one region.",
               metric: "40+",
-              audiences: ["consulting", "tech"],
             },
           ],
         },
@@ -366,7 +325,7 @@ export const site: SiteContent = {
       slug: "apple-iphone-india",
       title: "Apple: 0→1 iPhone India",
       problem:
-        "Apple was preparing to launch iPhone in India for the first time while demand, partner readiness, and regulatory requirements were changing.",
+        "India was a new market for iPhone, with demand, partner readiness, and local requirements all moving at once.",
       contribution:
         "I led market-entry decisions and partner qualification, then coordinated demand, quality, and geopolitical risks through launch.",
       outcome:
@@ -519,7 +478,7 @@ export const site: SiteContent = {
       title: "Capabilities",
     },
     contact: {
-      title: "Looking for product, strategy, or AI roles.",
+      title: "Contact",
     },
   },
   knowsAbout: [
@@ -543,8 +502,7 @@ export const site: SiteContent = {
     github: "https://github.com/jarrodtran",
     resumeHref: "/resume.pdf",
     resumeFilename: "Jarrod-Tran-Resume.pdf",
-    intro:
-      "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.",
+    intro: "Open to AI product leadership roles. Based in Houston.",
   },
   outreach: {
     linkedin:
