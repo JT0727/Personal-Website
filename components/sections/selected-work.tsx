@@ -66,37 +66,25 @@ export function SelectedWork() {
                   <WorkMeta label="What I did">{item.contribution}</WorkMeta>
                   <WorkMeta label="Outcome">{item.outcome}</WorkMeta>
                 </div>
-                <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-                  <div className="flex min-w-0 flex-wrap gap-x-3 gap-y-1">
-                    {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-muted-foreground font-mono-label"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-                    <Link href={caseHref} className={textAction}>
-                      Read the case study
+                <div className="mt-auto flex flex-col gap-1 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+                  <Link href={caseHref} className={textAction}>
+                    Read the case study
+                    <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
+                  </Link>
+                  {item.link ? (
+                    <a
+                      href={item.link.href}
+                      className={cn(
+                        tap,
+                        "gap-1 text-[0.9375rem] font-medium",
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {item.link.label}
                       <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
-                    </Link>
-                    {item.link ? (
-                      <a
-                        href={item.link.href}
-                        className={cn(
-                          tap,
-                          "gap-1 text-[0.9375rem] font-medium",
-                        )}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {item.link.label}
-                        <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
-                      </a>
-                    ) : null}
-                  </div>
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </article>

@@ -88,37 +88,25 @@ export function CaseStudyBody({ item }: { item: SelectedWorkItem }) {
         <Block label="My role">
           <BulletList items={caseStudy.role} />
         </Block>
-        <Block label="Team">
-          <BulletList items={caseStudy.team} />
-        </Block>
       </div>
 
-      <div className="border-border mt-10 flex flex-col gap-3 border-t pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <div className="flex flex-wrap gap-x-3 gap-y-1">
-          {item.tags.map((tag) => (
-            <span key={tag} className="text-muted-foreground font-mono-label">
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-4">
-          {item.link ? (
-            <a
-              href={item.link.href}
-              className={textAction}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {item.link.label}
-            </a>
-          ) : null}
-          <Link
-            href="/#work"
-            className={`${tap} text-muted-foreground hover:text-foreground underline underline-offset-4`}
+      <div className="border-border mt-10 flex flex-col gap-1 border-t pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+        {item.link ? (
+          <a
+            href={item.link.href}
+            className={textAction}
+            target="_blank"
+            rel="noreferrer"
           >
-            Back to selected work
-          </Link>
-        </div>
+            {item.link.label}
+          </a>
+        ) : null}
+        <Link
+          href="/#work"
+          className={`${tap} text-muted-foreground hover:text-foreground underline underline-offset-4`}
+        >
+          Back to selected work
+        </Link>
       </div>
     </article>
   );
