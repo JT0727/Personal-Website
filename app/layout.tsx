@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, Newsreader } from "next/font/google";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { Providers } from "@/components/providers";
 import { site, siteUrl } from "@/content/site";
 import { withBasePath } from "@/lib/base-path";
+import { palette } from "@/lib/palette";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -20,6 +21,14 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
   display: "swap",
 });
+
+/** Theme colors come from the shared palette, not hardcoded hexes. */
+const themeColorViewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: palette.light.bg },
+    { media: "(prefers-color-scheme: dark)", color: palette.dark.bg },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -48,10 +57,6 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
   icons: {
     icon: withBasePath("/icon.png"),
     apple: {
@@ -61,6 +66,8 @@ export const metadata: Metadata = {
     },
   },
 };
+
+export const viewport: Viewport = themeColorViewport;
 
 const personJsonLd = {
   "@context": "https://schema.org",
