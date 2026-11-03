@@ -30,20 +30,20 @@ export function Experience() {
                     <h4 className="text-accent text-[0.9375rem] font-medium">
                       {role.title}
                     </h4>
-                    <p className="text-muted-foreground font-mono-label">
+                    <p className="text-muted-foreground font-mono-label tabular">
                       {role.dates}
                     </p>
                   </div>
                   {role.summary ? (
-                    <p className="text-muted-foreground measure mt-3 text-lg leading-relaxed">
+                    <p className="text-muted-foreground measure mt-3 text-lg leading-relaxed text-pretty">
                       {role.summary}
                     </p>
                   ) : null}
-                  <ul className="measure mt-5 space-y-3">
+                  <ul className="measure marker:text-muted-foreground/60 mt-5 list-disc space-y-3 pl-5">
                     {role.bullets.map((bullet) => (
                       <li
                         key={bullet.text}
-                        className="text-muted-foreground text-lg leading-relaxed"
+                        className="text-muted-foreground text-lg leading-relaxed text-pretty"
                       >
                         <MetricText text={bullet.text} metric={bullet.metric} />
                       </li>
