@@ -168,16 +168,34 @@ for (const [width, height] of [
         const name =
           control.textContent.trim() || control.getAttribute("aria-label");
         problems.push(
-          `"${name}" spans ${Math.round(box.left)}-${Math.round(box.right)}`,
+          `header control "${name}" spans ${Math.round(box.left)}-${Math.round(box.right)}`,
+        );
+      }
+    }
+    for (const control of document.querySelectorAll("a, button")) {
+      const style = getComputedStyle(control);
+      const box = control.getBoundingClientRect();
+      if (
+        style.display === "none" ||
+        style.display === "inline" ||
+        style.visibility === "hidden" ||
+        box.width <= 1 ||
+        box.height <= 1
+      ) {
+        continue;
+      }
+      if (control.scrollWidth > control.clientWidth + 1) {
+        const name =
+          control.textContent.trim() || control.getAttribute("aria-label");
+        problems.push(
+          `"${name}" overflows its box (${control.scrollWidth} > ${control.clientWidth})`,
         );
       }
     }
     return problems;
   });
   failures.push(
-    ...clipped.map(
-      (control) => `${width}px at 200% text: header control ${control}`,
-    ),
+    ...clipped.map((control) => `${width}px at 200% text: ${control}`),
   );
   await large.close();
 }

@@ -610,4 +610,79 @@ describe("390px tap targets and first screen", () => {
       }
     },
   );
+
+  it("keeps every link and button within its box at 320px with 200% text", async () => {
+    const browser = await chromium.launch();
+    try {
+      const page = await browser.newPage({
+        viewport: { width: 320, height: 844 },
+        colorScheme: "light",
+      });
+      await page.goto(`${origin}/`, { waitUntil: "networkidle" });
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "32px";
+      });
+      await page.waitForTimeout(200);
+      const overflowing = await page.evaluate(() => {
+        return [...document.querySelectorAll("a, button")]
+          .filter((control) => {
+            const style = getComputedStyle(control);
+            const box = control.getBoundingClientRect();
+            return (
+              style.display !== "none" &&
+              style.display !== "inline" &&
+              style.visibility !== "hidden" &&
+              box.width > 1 &&
+              box.height > 1 &&
+              control.scrollWidth > control.clientWidth + 1
+            );
+          })
+          .map((control) => {
+            const name =
+              control.getAttribute("aria-label") ||
+              control.textContent?.replace(/\s+/g, " ").trim() ||
+              control.tagName;
+            return `${name}: ${control.scrollWidth} > ${control.clientWidth}`;
+          });
+      });
+      await page.close();
+      expect(overflowing).toEqual([]);
+    } finally {
+      await browser.close();
+    }
+  });
+
+  it.each([640, 768, 1280])(
+    "keeps Selected Work body copy at least 200px wide and balances card titles at %ipx",
+    async (width) => {
+      const browser = await chromium.launch();
+      try {
+        const page = await browser.newPage({
+          viewport: { width, height: 900 },
+          colorScheme: "light",
+        });
+        await page.goto(`${origin}/`, { waitUntil: "networkidle" });
+        const work = await page.evaluate(() => {
+          const narrowParas = [
+            ...document.querySelectorAll("#work article p.text-lg"),
+          ]
+            .map((p) => Math.round(p.getBoundingClientRect().width))
+            .filter((w) => w < 200);
+          const unbalancedTitles = [
+            ...document.querySelectorAll("#work article h3"),
+          ]
+            .filter((h) => getComputedStyle(h).textWrap !== "balance")
+            .map((h) => h.textContent?.trim() ?? "");
+          return { narrowParas, unbalancedTitles };
+        });
+        await page.close();
+        expect(work.narrowParas, `${width}px narrow paragraphs`).toEqual([]);
+        expect(work.unbalancedTitles, `${width}px unbalanced titles`).toEqual(
+          [],
+        );
+      } finally {
+        await browser.close();
+      }
+    },
+  );
 });

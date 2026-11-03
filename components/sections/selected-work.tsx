@@ -7,7 +7,7 @@ import { tap, textAction } from "@/lib/ui";
 
 function WorkMeta({ label, children }: { label: string; children: string }) {
   return (
-    <div className="border-border grid gap-1 border-t py-3 first:border-t-0 first:pt-0 sm:grid-cols-[7rem_1fr] sm:gap-4">
+    <div className="border-border grid gap-1 border-t py-3 first:border-t-0 first:pt-0 lg:grid-cols-[7rem_1fr] lg:gap-4">
       <p className="text-accent font-mono-label pt-0.5">{label}</p>
       <p className="text-muted-foreground text-lg leading-relaxed">
         {children}
@@ -54,7 +54,7 @@ export function SelectedWork() {
                 </div>
               </div>
               <div className="flex min-w-0 flex-1 flex-col p-5 sm:p-7">
-                <h3 className="font-display text-2xl leading-tight tracking-tight sm:text-[1.75rem]">
+                <h3 className="font-display text-2xl leading-tight tracking-tight text-balance sm:text-[1.75rem]">
                   {item.title}
                 </h3>
                 <div className="mt-5">
@@ -63,7 +63,7 @@ export function SelectedWork() {
                   <WorkMeta label="Outcome">{item.outcome}</WorkMeta>
                 </div>
                 <div className="mt-auto flex flex-col gap-1 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-                  <Link href={caseHref} className={textAction}>
+                  <Link href={caseHref} className={cn(textAction, "flex-wrap")}>
                     Read the case study
                     <ArrowUpRight className="size-[16px] shrink-0" aria-hidden="true" />
                   </Link>
@@ -72,7 +72,7 @@ export function SelectedWork() {
                       href={item.link.href}
                       className={cn(
                         tap,
-                        "gap-1 text-[0.9375rem] font-medium",
+                        "flex-wrap gap-1 text-[0.9375rem] font-medium hover:underline",
                       )}
                       target="_blank"
                       rel="noreferrer"
