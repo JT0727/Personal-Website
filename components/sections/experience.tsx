@@ -26,7 +26,7 @@ export function Experience() {
             <div className="mt-6 space-y-10">
               {employer.roles.map((role) => (
                 <div key={role.dates}>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <div className="measure flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                     <h4 className="text-accent text-[0.9375rem] font-medium">
                       {role.title}
                     </h4>
