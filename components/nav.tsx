@@ -148,12 +148,21 @@ export function Nav({
     const onDesktop = () => {
       if (desktop.matches) setOpen(false);
     };
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+      const header = barRef.current?.parentElement;
+      if (header?.contains(target)) return;
+      setOpen(false);
+    };
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
     desktop.addEventListener("change", onDesktop);
     return () => {
       document.body.style.overflow = "";
       document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
       desktop.removeEventListener("change", onDesktop);
     };
   }, [open]);
