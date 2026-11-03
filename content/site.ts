@@ -118,7 +118,7 @@ export interface SiteContent {
 export const site: SiteContent = {
   positioning: {
     name: "Jarrod Tran",
-    headline: "I write about building AI products and deciding what gets funded.",
+    headline: "I lead the AI product and engineering team at Tesla Energy.",
     headlineVariants: {
       tech: "The person who takes an AI bet from a slide to something people use, with a P&L.",
       vc: "I put capital on the line, kill weak bets, and drive the rest to an outcome.",
@@ -129,7 +129,7 @@ export const site: SiteContent = {
     },
     documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
     valueProp:
-      "I lead AI enablement at Tesla Energy. Earlier, I worked on Apple's iPhone launch in India, Engineering Operations at Waymo, and Tesla Special Projects.",
+      "Product and strategy at Tesla Energy, with earlier roles at Apple and Waymo.",
     status: "Open to the right role",
     location: "Houston, TX",
     currentRole: currentTitle,
@@ -194,7 +194,7 @@ export const site: SiteContent = {
             "I set Tesla Energy’s AI product roadmap, lead the team that ships it, and report adoption and business results to leadership.",
           bullets: [
             {
-              text: "Built and now lead Tesla Energy’s AI product and engineering team. Its 1,000+ users rely on 20+ production tools for RAG troubleshooting, automated reporting, workflow automation, and decision support.",
+              text: "Built and now lead a team that ships 20+ production AI tools, used by 1,000+ people for troubleshooting, reporting, workflow automation, and decision support.",
               metric: "1,000+",
               audiences: ["tech", "startup"],
             },
