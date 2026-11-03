@@ -325,7 +325,7 @@ export const site: SiteContent = {
       slug: "apple-iphone-india",
       title: "Apple: 0→1 iPhone India",
       problem:
-        "India was a new market for iPhone, with demand, partner readiness, and local requirements all moving at once.",
+        "Apple had to forecast demand, qualify partners, and clear local requirements before taking iPhone to India.",
       contribution:
         "I led market-entry decisions and partner qualification, then coordinated demand, quality, and geopolitical risks through launch.",
       outcome:
