@@ -228,7 +228,7 @@ export const site: SiteContent = {
           title: "Program Manager, Special Projects",
           dates: "Jun 2018 - Jun 2021",
           summary:
-            "Special projects with no playbook: new tech and messy scale-ups.",
+            "I ran new programs at Tesla, including the 4680 launch and the Model 3 and Model Y scale-up.",
           bullets: [
             {
               text: "Advanced Project Roadrunner, Tesla's 4680 program, from early pilot to a launch-ready platform. Stage gates, readiness reviews, and cross-functional ownership through Battery Day.",
@@ -472,29 +472,29 @@ export const site: SiteContent = {
   ],
   principles: [
     {
-      title: "Ground truth",
+      title: "Get the facts first",
       description:
         "Get the outcome, constraints, economics, and assumptions on the table before anyone spends. Structured problem-solving starts there.",
     },
     {
-      title: "System map",
+      title: "Find where work stalls",
       description:
-        "Follow the dependencies, incentives, and bottlenecks. Most of the time the strategy is fine and the handoffs are not.",
+        "Follow the dependencies, incentives, and bottlenecks. Problems usually show up where one team hands work to another.",
     },
     {
-      title: "Simplify",
+      title: "Cut what doesn't matter",
       description:
         "Cut work that doesn't serve the outcome. On Megapack that was 50+ requests down to a ranked $23M portfolio.",
     },
     {
-      title: "Commit",
+      title: "Name an owner",
       description:
-        "Name the tradeoff, the owner, and the next move. If you can't run it, it isn't a strategy.",
+        "Name the tradeoff, the owner, and the next move. A plan only counts once each step has an owner.",
     },
     {
-      title: "Compound",
+      title: "Keep improving it",
       description:
-        "Add the feedback (and the automation) that makes the system better as it grows. AI included, when it earns the slot.",
+        "Add the feedback (and the automation) that makes the system better as it grows. I add AI where it clearly saves time.",
     },
   ],
   capabilities: [
@@ -524,19 +524,15 @@ export const site: SiteContent = {
     {
       group: "Leadership & Influence",
       items: [
-        "Cross-functional leadership",
+        "Hiring and leading teams",
         "Executive reporting",
-        "Stakeholder alignment",
         "Workforce planning",
-        "Organizational design",
-        "Special projects",
-        "Change management",
         "OKRs & QBRs",
       ],
     },
     {
       group: "Tools & Platforms",
-      items: ["Python", "Tableau", "Excel to executive-ready", "SQL"],
+      items: ["Python", "Tableau", "Excel", "SQL"],
     },
   ],
   sections: {
@@ -557,7 +553,7 @@ export const site: SiteContent = {
       eyebrow: "04 / Case studies",
       title: "Selected work",
       description:
-        "AI at Tesla Energy, the investment portfolio behind it, iPhone India, and Waymo planning. Same job each time: name the problem, model the economics, pick an owner, ship.",
+        "Four projects from three companies. Each one starts with the problem and ends with the numbers.",
     },
     approach: {
       eyebrow: "05 / Approach",
@@ -569,13 +565,13 @@ export const site: SiteContent = {
       eyebrow: "06 / Toolkit",
       title: "Capabilities",
       description:
-        "AI product work, clear problem-solving, and the leadership to make both stick.",
+        "The skills I use most, grouped by area.",
     },
     contact: {
       eyebrow: "07 / Contact",
       title: "Looking for product, strategy, or AI roles.",
       description:
-        "Growth-stage tech, consulting, early-stage startups, or a VC-adjacent operator seat. Based in Houston; I'll relocate for the right role.",
+        "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.",
     },
   },
   knowsAbout: [

@@ -54,7 +54,7 @@ describe("visitor-facing copy contract", () => {
     expect(lower).toContain("growth-stage tech");
     expect(lower).toContain("consulting");
     expect(lower).toContain("early-stage startup");
-    expect(lower).toContain("vc-adjacent");
+    expect(lower).toContain("operating role at a vc firm");
   });
 
   // rule:one-public-narrative

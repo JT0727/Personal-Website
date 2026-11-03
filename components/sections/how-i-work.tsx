@@ -19,7 +19,7 @@ export function HowIWork() {
             <p className="text-accent font-mono-label pt-1">
               {String(index + 1).padStart(2, "0")}
             </p>
-            <h3 className="font-display text-[1.5rem] leading-tight tracking-tight">
+            <h3 className="font-display text-[1.5rem] leading-tight tracking-tight text-balance">
               {principle.title}
             </h3>
             <p className="text-muted-foreground measure text-lg leading-relaxed sm:pt-1">

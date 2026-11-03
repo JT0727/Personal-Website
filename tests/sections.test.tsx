@@ -290,7 +290,7 @@ describe("contact", () => {
       "Growth-stage tech",
       "consulting",
       "early-stage startups",
-      "VC-adjacent operator seat",
+      "operating role at a VC firm",
     ]) {
       expect(text).toContain(audience);
     }
