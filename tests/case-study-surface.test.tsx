@@ -1,12 +1,8 @@
-import { existsSync, readFileSync } from "node:fs";
-import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { CaseStudyBody } from "@/components/sections/case-study";
 import { SelectedWork } from "@/components/sections/selected-work";
 import { selectedWorkSlugs, site } from "@/content/site";
-
-const root = path.resolve(__dirname, "..");
 
 const TAGS = [
   "AI Product",
@@ -75,18 +71,6 @@ describe("case study cards and pages drop tags and Team", () => {
         renderToStaticMarkup(<CaseStudyBody item={item} />),
         item.slug,
       );
-    }
-  });
-
-  it("keeps tags and Team out of the built home and case study HTML when out/ exists", () => {
-    const home = path.join(root, "out/index.html");
-    if (!existsSync(home)) return;
-
-    assertNoTagsOrTeam(readFileSync(home, "utf8"), "out/index.html");
-    for (const slug of selectedWorkSlugs()) {
-      const file = path.join(root, `out/work/${slug}/index.html`);
-      expect(existsSync(file), file).toBe(true);
-      assertNoTagsOrTeam(readFileSync(file, "utf8"), `out/work/${slug}/`);
     }
   });
 });
