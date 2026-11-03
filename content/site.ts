@@ -112,7 +112,7 @@ export const site: SiteContent = {
   positioning: {
     name: "Jarrod Tran",
     headline: "I lead the AI product and engineering team at Tesla Energy.",
-    documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
+    documentTitle: "Jarrod Tran · AI product leader · Tesla, Apple, Waymo",
     valueProp:
       "Product and strategy at Tesla Energy, with earlier roles at Apple and Waymo.",
     status: "Open to the right role",

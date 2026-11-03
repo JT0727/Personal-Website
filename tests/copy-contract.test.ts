@@ -106,6 +106,7 @@ describe("visitor-facing copy contract", () => {
   it("keeps the document title short enough for a browser tab or search result", () => {
     const title = site.positioning.documentTitle;
     expect(title.startsWith(site.positioning.name)).toBe(true);
+    expect(title.toLowerCase()).toContain("ai product");
     expect(title.length).toBeLessThanOrEqual(60);
   });
 
