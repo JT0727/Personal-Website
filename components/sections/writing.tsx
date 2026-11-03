@@ -9,9 +9,6 @@ import {
   type WritingPost,
 } from "@/lib/writing";
 
-const EMPTY_COPY =
-  "Nothing published yet. Subscribe and the first post will land in your inbox.";
-
 function SubscribeLink({ href }: { href: string }) {
   return (
     <a
@@ -35,12 +32,8 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
   return (
     <Section id="writing">
       <SectionHeading title={site.substack.name} />
-      <div className="max-w-2xl">
-        {latest.length === 0 ? (
-          <p className="text-muted-foreground measure text-lg leading-relaxed">
-            {EMPTY_COPY}
-          </p>
-        ) : (
+      <div className={latest.length > 0 ? "max-w-2xl" : undefined}>
+        {latest.length > 0 ? (
           <ol className="border-border border-t">
             {latest.map((post) => {
               const dateLabel = post.date ? formatPostDate(post.date) : "";
@@ -76,7 +69,7 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
               );
             })}
           </ol>
-        )}
+        ) : null}
         {canSubscribe ? <SubscribeLink href={subscribe} /> : null}
       </div>
     </Section>
