@@ -145,7 +145,7 @@ export const site: SiteContent = {
     currentCompany: "Tesla Energy",
   },
   substack: {
-    name: "",
+    name: "Worth Mulling",
     url: "https://jarrodtran.substack.com",
   },
   talks: [],
@@ -542,7 +542,7 @@ export const site: SiteContent = {
   sections: {
     writing: {
       eyebrow: "01 / Essays",
-      title: "Writing",
+      title: "Worth Mulling",
       description: "Posts from my Substack.",
     },
     about: {
