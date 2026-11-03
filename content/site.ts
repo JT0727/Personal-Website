@@ -286,9 +286,9 @@ export const site: SiteContent = {
     },
     {
       slug: "tesla-energy-portfolio",
-      title: "Tesla Energy: which dollar moves the P&L",
+      title: "Tesla Energy: $23M investment plan",
       problem:
-        "Demand outran what we could fund. 50+ asks. $23M to spend. Which dollar moved the P&L?",
+        "50+ requests competed for $23M; expected returns varied with labor, cost, and timing.",
       contribution:
         "I built Python and Tableau models to compare return, labor, cost, and timing. We funded the highest-return work and cut the rest.",
       outcome:
@@ -323,7 +323,7 @@ export const site: SiteContent = {
     },
     {
       slug: "apple-iphone-india",
-      title: "Apple: 0→1 iPhone India",
+      title: "Apple: iPhone launch in India",
       problem:
         "Apple had to forecast demand, qualify partners, and clear local requirements before taking iPhone to India.",
       contribution:
@@ -338,7 +338,7 @@ export const site: SiteContent = {
       link: { label: "Apple India", href: "https://www.apple.com/in/" },
       caseStudy: {
         context:
-          "India had to move from slides to a live, scaled iPhone launch while partners and demand kept shifting.",
+          "Demand forecasts and partner readiness changed throughout the India launch plan.",
         constraints: [
           "Quality and regulatory bars could not slip to buy speed",
           "Partner readiness trailed the volume curve",
