@@ -212,6 +212,8 @@ describe("390px tap targets and first screen", () => {
     expect(view.hero).toEqual([
       site.positioning.name,
       site.positioning.headline,
+      "Selected work",
+      "Get in touch",
     ]);
     expect(view.writingTitle).toBe(site.substack.name);
     expect(view.writingBottom).toBeGreaterThan(0);

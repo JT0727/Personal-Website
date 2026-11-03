@@ -1,4 +1,6 @@
+import { ArrowDownRight } from "lucide-react";
 import { site } from "@/content/site";
+import { btnGhost, btnPrimary } from "@/lib/ui";
 
 export function Hero() {
   return (
@@ -13,6 +15,18 @@ export function Hero() {
         <p className="measure mt-5 text-lg leading-relaxed text-pretty">
           {site.positioning.headline}
         </p>
+        <div className="mt-7 flex flex-wrap gap-3">
+          <a href="#work" className={btnPrimary}>
+            Selected work
+            <ArrowDownRight
+              className="size-[16px] shrink-0"
+              aria-hidden="true"
+            />
+          </a>
+          <a href="#contact" className={btnGhost}>
+            Get in touch
+          </a>
+        </div>
       </div>
     </section>
   );

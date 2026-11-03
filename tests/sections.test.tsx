@@ -89,13 +89,18 @@ const CONTACT_INTRO =
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
 
-  it("shows name and pitch only", () => {
+  it("shows the name, pitch, and clear next steps", () => {
     const { name, headline } = site.positioning;
-    expect(textOf(html)).toBe(`${name} ${headline}`);
+    expect(textOf(html)).toBe(
+      `${name} ${headline} Selected work Get in touch`,
+    );
+    expect(links(html)).toEqual([
+      { href: "#work", text: "Selected work" },
+      { href: "#contact", text: "Get in touch" },
+    ]);
   });
 
-  it("does not invent posts, links, or a subscribe placeholder", () => {
-    expect(links(html)).toEqual([]);
+  it("does not invent posts or a subscribe placeholder", () => {
     expect(html).not.toMatch(/substack/i);
     expect(html).not.toMatch(/subscribe/i);
     expect(html).not.toMatch(/coming soon/i);
