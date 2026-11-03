@@ -25,10 +25,19 @@ export function Section({
   );
 }
 
-export function SectionHeading({ title }: { title: string }) {
+export function SectionHeading({
+  title,
+  children,
+}: {
+  title: string;
+  children?: React.ReactNode;
+}) {
   return (
-    <h2 className="font-display text-[2rem] leading-tight tracking-tight text-balance sm:text-4xl">
-      {title}
-    </h2>
+    <div className="mb-10 max-w-2xl sm:mb-12">
+      <h2 className="font-display text-[2rem] leading-tight tracking-tight text-balance sm:text-4xl">
+        {title}
+      </h2>
+      {children}
+    </div>
   );
 }

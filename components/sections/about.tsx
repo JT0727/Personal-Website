@@ -4,9 +4,7 @@ import { site } from "@/content/site";
 export function About() {
   return (
     <Section id="about">
-      <div className="mb-10 max-w-2xl sm:mb-12">
-        <SectionHeading title={site.sections.about.title} />
-      </div>
+      <SectionHeading title={site.sections.about.title} />
       <p className="text-muted-foreground measure text-lg leading-relaxed">
         {site.about.bio.join(" ")}
       </p>

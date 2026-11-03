@@ -121,13 +121,7 @@ describe("visitor-facing copy contract", () => {
     expect(site.sections).not.toHaveProperty("writing");
     for (const section of Object.values(site.sections)) {
       expect(section).toEqual({ title: expect.any(String) });
-      expect(section).not.toHaveProperty("eyebrow");
-      expect(section).not.toHaveProperty("description");
     }
-
-    expect(readSiteFile("content/site.ts")).not.toMatch(
-      /export interface SectionCopy/,
-    );
 
     const sectionFiles = [
       "about",

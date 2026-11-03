@@ -4,9 +4,7 @@ import { site } from "@/content/site";
 export function Capabilities() {
   return (
     <Section id="capabilities">
-      <div className="mb-10 max-w-2xl sm:mb-12">
-        <SectionHeading title={site.sections.capabilities.title} />
-      </div>
+      <SectionHeading title={site.sections.capabilities.title} />
 
       <div className="border-border border-t">
         {site.capabilities.map((group) => (

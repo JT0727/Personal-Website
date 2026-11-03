@@ -4,9 +4,7 @@ import { site } from "@/content/site";
 export function HowIWork() {
   return (
     <Section id="approach" className="bg-muted/50">
-      <div className="mb-10 max-w-2xl sm:mb-12">
-        <SectionHeading title={site.sections.approach.title} />
-      </div>
+      <SectionHeading title={site.sections.approach.title} />
 
       <ol>
         {site.principles.map((principle, index) => (
