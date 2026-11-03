@@ -542,20 +542,24 @@ describe("390px tap targets and first screen", () => {
   );
 
   it.each([
-    { width: 320, height: 844 },
-    { width: 390, height: 844 },
+    { width: 320, height: 844, text: 200 },
+    { width: 390, height: 844, text: 200 },
+    { width: 1280, height: 800, text: 100 },
+    { width: 1280, height: 800, text: 200 },
   ])(
-    "keeps every link and button icon at 16px at $width with 200% text",
-    async ({ width, height }) => {
+    "keeps every link and button icon at 16px at $width with $text% text",
+    async ({ width, height, text }) => {
       const browser = await chromium.launch();
       const page = await browser.newPage({
         viewport: { width, height },
         colorScheme: "light",
       });
       await page.goto(`${origin}/`, { waitUntil: "networkidle" });
-      await page.evaluate(() => {
-        document.documentElement.style.fontSize = "32px";
-      });
+      if (text === 200) {
+        await page.evaluate(() => {
+          document.documentElement.style.fontSize = "32px";
+        });
+      }
       await page.evaluate(
         () =>
           new Promise<void>((resolve) => {
