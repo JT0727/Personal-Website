@@ -15,7 +15,7 @@ export function Capabilities() {
             <h3 className="text-lg font-medium tracking-tight">
               {group.group}
             </h3>
-            <p className="text-muted-foreground text-lg leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
               {group.items.join(" · ")}
             </p>
           </div>

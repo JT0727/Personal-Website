@@ -10,15 +10,15 @@ export function HowIWork() {
         {site.principles.map((principle, index) => (
           <li
             key={principle.title}
-            className="reveal border-border grid gap-2 border-t py-7 sm:grid-cols-[4.5rem_minmax(0,11rem)_1fr] sm:gap-8"
+            className="reveal border-border grid gap-2 border-t py-7 md:grid-cols-[2.5rem_15rem_1fr] md:gap-8"
           >
-            <p className="text-accent font-mono-label pt-1">
+            <p className="text-accent font-mono-label md:pt-1">
               {String(index + 1).padStart(2, "0")}
             </p>
             <h3 className="font-display text-[1.5rem] leading-tight tracking-tight text-balance">
               {principle.title}
             </h3>
-            <p className="text-muted-foreground measure text-lg leading-relaxed sm:pt-1">
+            <p className="text-muted-foreground measure text-lg leading-relaxed text-pretty md:pt-1">
               {principle.description}
             </p>
           </li>
