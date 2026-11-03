@@ -35,7 +35,6 @@ if (!existsSync(join(process.cwd(), "out/index.html"))) {
   throw new Error("theme-no-js test needs a production build in out/");
 }
 
-// rule:theme-no-js
 describe("theme with JavaScript disabled", () => {
   let origin = "";
   let close = async () => {};
