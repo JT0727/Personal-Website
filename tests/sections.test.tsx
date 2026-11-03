@@ -116,6 +116,19 @@ describe("writing", () => {
     );
   });
 
+  it("sets the writing heading from site.substack.name", () => {
+    const previous = site.substack.name;
+    const alt = "ZXQ Writing Publication Name";
+    site.substack.name = alt;
+    try {
+      const html = renderToStaticMarkup(<Writing posts={[]} />);
+      expect(html).toContain('id="writing"');
+      expect(headings(html, "h2")).toEqual([alt]);
+    } finally {
+      site.substack.name = previous;
+    }
+  });
+
   it("lists three fixture posts newest first with Chicago dates, then subscribe", () => {
     const fixturePosts = parseFeed(threeXml, WRITING_FIXTURE_BASE);
     expect(fixturePosts.map((post) => post.title)).toEqual([
