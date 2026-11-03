@@ -4,7 +4,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="flex flex-col justify-start pt-8 pb-12 sm:pt-16 sm:pb-16"
+      className="flex scroll-mt-24 flex-col justify-start pt-8 pb-12 sm:pt-16 sm:pb-16"
     >
       <div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
         <h1 className="font-display text-[2.25rem] leading-[1.1] tracking-tight sm:text-5xl">
