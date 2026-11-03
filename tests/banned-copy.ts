@@ -182,12 +182,28 @@ export function htmlPagePath(relativeHtmlPath: string): string {
   return `/${withoutOut}`;
 }
 
+const SKIP_PAYLOAD_NAMES = new Set(["robots.txt"]);
+
 export function requireBuiltHtml(root: string): string {
   const outDir = path.join(root, "out");
   if (!existsSync(path.join(outDir, "index.html"))) {
     throw new Error("banned-copy test needs a production build in out/");
   }
   return outDir;
+}
+
+export function listBuiltFiles(root: string, extension: string): string[] {
+  const outDir = requireBuiltHtml(root);
+  const files: string[] = [];
+  for (const relative of readdirSync(outDir, {
+    recursive: true,
+    encoding: "utf8",
+  })) {
+    if (!relative.endsWith(extension)) continue;
+    if (SKIP_PAYLOAD_NAMES.has(path.basename(relative))) continue;
+    files.push(`out/${relative.split(path.sep).join("/")}`);
+  }
+  return files.sort();
 }
 
 function rawLineForPhrase(
@@ -209,28 +225,50 @@ function rawLineForPhrase(
   return undefined;
 }
 
+function hitsForFile(
+  source: string,
+  text: string,
+  phrases: string[],
+  rawForLine = text,
+): CopyHit[] {
+  const seen = new Map<string, number>();
+  return findPhraseHits(text, phrases).map((hit) => {
+    const occurrence = seen.get(hit.phrase) ?? 0;
+    seen.set(hit.phrase, occurrence + 1);
+    return {
+      source,
+      line: rawLineForPhrase(rawForLine, hit.phrase, occurrence) ?? hit.line,
+      phrase: hit.phrase,
+      context: hit.context,
+    };
+  });
+}
+
 export function scanBuiltHtml(root: string, phrases: string[]): CopyHit[] {
-  const outDir = requireBuiltHtml(root);
   const hits: CopyHit[] = [];
-  for (const relative of readdirSync(outDir, {
-    recursive: true,
-    encoding: "utf8",
-  })) {
-    if (!relative.endsWith(".html")) continue;
-    const posixRel = relative.split(path.sep).join("/");
-    const source = `out/${posixRel} (${htmlPagePath(`out/${posixRel}`)})`;
-    const html = readFileSync(path.join(outDir, relative), "utf8");
-    const seen = new Map<string, number>();
-    for (const hit of findPhraseHits(extractHtmlCopy(html), phrases)) {
-      const occurrence = seen.get(hit.phrase) ?? 0;
-      seen.set(hit.phrase, occurrence + 1);
-      hits.push({
-        source,
-        line: rawLineForPhrase(html, hit.phrase, occurrence) ?? hit.line,
-        phrase: hit.phrase,
-        context: hit.context,
-      });
-    }
+  for (const file of listBuiltFiles(root, ".html")) {
+    const source = `${file} (${htmlPagePath(file)})`;
+    const html = readFileSync(path.join(root, file), "utf8");
+    const wording = phrases.filter(
+      (phrase) => phrase !== "\u2013" && phrase !== "\u2014",
+    );
+    // Visible copy plus title, meta description, and alt. Dashes are
+    // counted on the raw file so inlined RSC payloads are not missed.
+    hits.push(
+      ...hitsForFile(source, extractHtmlCopy(html), wording, html).filter(
+        (hit) => hit.phrase !== "\u2013" && hit.phrase !== "\u2014",
+      ),
+    );
+    hits.push(...hitsForFile(`${source} [raw]`, html, [...DASH_PHRASES]));
+  }
+  return hits;
+}
+
+export function scanBuiltPayloads(root: string, phrases: string[]): CopyHit[] {
+  const hits: CopyHit[] = [];
+  for (const file of listBuiltFiles(root, ".txt")) {
+    const text = readFileSync(path.join(root, file), "utf8");
+    hits.push(...hitsForFile(`${file} (rsc)`, text, phrases));
   }
   return hits;
 }

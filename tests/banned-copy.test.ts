@@ -1,16 +1,18 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { site } from "@/content/site";
+import { selectedWorkSlugs, site } from "@/content/site";
 import {
   extractHtmlCopy,
   findPhraseHits,
   formatHits,
   htmlPagePath,
+  listBuiltFiles,
   loadBannedPhrases,
   parseBannedPhrases,
   requireBuiltHtml,
   scanBuiltHtml,
+  scanBuiltPayloads,
   scanCopySources,
 } from "./banned-copy";
 
@@ -123,11 +125,33 @@ describe("repo scan", () => {
     expect(findPhraseHits(site.positioning.currentRole, phrases)).toEqual([]);
   });
 
+  it("walks every exported html route, including case studies", () => {
+    requireBuiltHtml(root);
+    const files = listBuiltFiles(root, ".html");
+    const required = [
+      "out/index.html",
+      "out/404.html",
+      "out/_not-found/index.html",
+      "out/writing/index.html",
+      "out/work/index.html",
+      ...selectedWorkSlugs().map((slug) => `out/work/${slug}/index.html`),
+    ];
+    expect(files).toEqual(expect.arrayContaining(required));
+    expect(listBuiltFiles(root, ".txt")).toEqual(
+      expect.arrayContaining([
+        "out/index.txt",
+        ...selectedWorkSlugs().map((slug) => `out/work/${slug}/index.txt`),
+      ]),
+    );
+    expect(listBuiltFiles(root, ".txt")).not.toContain("out/robots.txt");
+  });
+
   it("has no banned phrase, em-dash, or en-dash in copy sources or built HTML", () => {
     requireBuiltHtml(root);
     const hits = [
       ...scanCopySources(root, phrases),
       ...scanBuiltHtml(root, phrases),
+      ...scanBuiltPayloads(root, phrases),
     ];
     expect(hits, formatHits(hits)).toEqual([]);
   });

@@ -196,7 +196,7 @@ export const site: SiteContent = {
       roles: [
         {
           title: currentTitle,
-          dates: "Aug 2023 – Present",
+          dates: "Aug 2023 - Present",
           summary:
             "I own Tesla Energy’s AI enablement strategy and the product team that ships it: roadmap, rules, and what I report to leadership.",
           bullets: [
@@ -224,7 +224,7 @@ export const site: SiteContent = {
         },
         {
           title: "Program Manager, Special Projects",
-          dates: "Jun 2018 – Jun 2021",
+          dates: "Jun 2018 - Jun 2021",
           summary:
             "Special projects with no playbook: new tech and messy scale-ups.",
           bullets: [
@@ -250,7 +250,7 @@ export const site: SiteContent = {
       roles: [
         {
           title: "Strategy & Operations Manager",
-          dates: "Oct 2022 – May 2023",
+          dates: "Oct 2022 - May 2023",
           bullets: [
             {
               text: "Led annual planning, OKRs, and quarterly business reviews for Engineering Operations. Turned org priorities into resource plans, targets, and milestones.",
@@ -273,7 +273,7 @@ export const site: SiteContent = {
       roles: [
         {
           title: "Strategic Operations Program Manager",
-          dates: "Jun 2021 – Jun 2022",
+          dates: "Jun 2021 - Jun 2022",
           bullets: [
             {
               text: "Led the 0→1 iPhone India launch from market entry and partner qualification through readiness and scaled delivery, under tight quality, regulatory, and timing requirements.",
