@@ -1,0 +1,87 @@
+# banned-phrases.txt: visitor-facing copy for jarrodtran.com (Personal-Website, Jobhuntsite)
+# One phrase per line, case-insensitive substring match. Lines starting with # are comments.
+# Owner: Jobhuntsite Copy. Changes go through Engineering Lead.
+# Note: the official title "Lead, AI Enablement & Factory Strategy" is allowed; old title lines below are bans.
+
+# --- Known bans (Jarrod) ---
+Manager, AI
+Manager, AI & Factory Strategy
+Mag7
+Mag 7
+Open to Work
+#OpenToWork
+NYC
+New York City
+San Francisco
+
+# --- Punctuation tics (CI should also regex U+2014 and U+2013) ---
+—
+–
+
+# --- Puff and significance filler ---
+delve
+tapestry
+testament to
+underscore
+underscores
+pivotal
+robust
+meticulous
+vibrant
+seamless
+seamlessly
+cutting-edge
+ever-evolving
+evolving landscape
+in today's fast-paced
+landscape of
+game-changer
+game changer
+paradigm
+synergy
+holistic
+indelible
+fostering
+showcasing
+transformative
+revolutionize
+unlock the power
+unleash
+elevate
+empower
+supercharge
+harness the power
+navigate the complexities
+at the intersection of
+deep dive
+world-class
+best-in-class
+passionate about
+results-driven
+thought leader
+visionary
+
+# --- Copula avoidance and framing tics ---
+serves as
+stands as
+marks a
+not only
+it's not just
+it's not about
+more than just
+let's dive
+in conclusion
+at the end of the day
+
+# --- Chatbot residue ---
+I hope this helps
+Certainly!
+As an AI
+feel free to
+Happy to help
+
+# --- Retired on this site (replaced in humanize pass, Oct 1) ---
+corporate operator
+single source of truth
+slideware
+AI transformation
