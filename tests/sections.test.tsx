@@ -107,22 +107,19 @@ describe("hero", () => {
   });
 });
 
-const EMPTY_WRITING =
-  "No posts yet. Subscribe to get new writing by email.";
 const threeXml = readFileSync(
   path.join(__dirname, "fixtures/writing/three-posts.xml"),
   "utf8",
 );
 
 describe("writing", () => {
-  it("shows the empty-state copy and subscribe link when there are 0 posts", () => {
+  it("shows only the publication title and subscribe action when there are no posts", () => {
     const html = renderToStaticMarkup(<Writing posts={[]} />);
     const text = textOf(html);
     expect(text).toContain(site.substack.name);
     expect(text).not.toContain("01 / Essays");
     expect(text).not.toContain("Posts from my Substack.");
-    expect(text).toContain(EMPTY_WRITING);
-    expect(text).not.toContain("First post soon");
+    expect(html).not.toMatch(/<p\b/);
     expect(text).not.toContain("All writing");
     expect(html).not.toMatch(/<ol\b/);
     expect(html).not.toMatch(/skeleton|card|placeholder/i);
