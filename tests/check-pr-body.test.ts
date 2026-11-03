@@ -1,0 +1,36 @@
+import { describe, expect, it } from "vitest";
+import { checkPrBody } from "../scripts/check-pr-body.mjs";
+
+const HEAD_SHA = "78597ac6167e053591da38e12322dce4b71c4c65";
+
+describe("checkPrBody", () => {
+  it("the full head SHA passes", () => {
+    expect(checkPrBody(`Head SHA: ${HEAD_SHA}`, HEAD_SHA)).toEqual([]);
+  });
+
+  it("a 7-character head prefix passes", () => {
+    expect(checkPrBody("Head SHA: 78597ac", HEAD_SHA)).toEqual([]);
+  });
+
+  it("a stale SHA fails", () => {
+    const errors = checkPrBody(
+      "Head SHA: 0000000000000000000000000000000000000000",
+      HEAD_SHA,
+    );
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it("a body with no marker line passes", () => {
+    expect(
+      checkPrBody(
+        "This body mentions abcdef1234567 but has no Head SHA marker.",
+        HEAD_SHA,
+      ),
+    ).toEqual([]);
+  });
+
+  it("an empty body passes", () => {
+    expect(checkPrBody("", HEAD_SHA)).toEqual([]);
+    expect(checkPrBody(null, HEAD_SHA)).toEqual([]);
+  });
+});
