@@ -89,9 +89,10 @@ const CONTACT_INTRO =
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
 
-  it("shows name and pitch only", () => {
-    const { name, headline } = site.positioning;
-    expect(textOf(html)).toBe(`${name} ${headline}`);
+  it("shows availability status, name, and pitch", () => {
+    const { status, name, headline } = site.positioning;
+    expect(textOf(html)).toBe(`${status} ${name} ${headline}`);
+    expect(html).toContain("bg-accent");
   });
 
   it("does not invent posts, links, or a subscribe placeholder", () => {

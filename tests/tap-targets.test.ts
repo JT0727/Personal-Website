@@ -210,6 +210,7 @@ describe("390px tap targets and first screen", () => {
     });
     await browser.close();
     expect(view.hero).toEqual([
+      site.positioning.status.toUpperCase(),
       site.positioning.name,
       site.positioning.headline,
     ]);
