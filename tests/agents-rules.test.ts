@@ -61,10 +61,23 @@ function idsIn(text: string): string[] {
   return text.match(RULE_ID) ?? [];
 }
 
-function rowErrors(row: RuleRow): string[] {
+/** Contents of the files a row names. Other test files are never consulted. */
+type NamedFiles = Map<string, string | null>;
+
+function loadNamedFiles(rels: string[]): NamedFiles {
+  const files: NamedFiles = new Map();
+  for (const rel of rels) {
+    const file = path.join(root, rel);
+    files.set(rel, existsSync(file) ? readFileSync(file, "utf8") : null);
+  }
+  return files;
+}
+
+function rowErrors(row: RuleRow, files?: NamedFiles): string[] {
   const named = row.test.match(NAMED_FILE) ?? [];
   const untestable = UNTESTABLE.test(row.test);
   const errors: string[] = [];
+  const loaded = files instanceof Map ? files : loadNamedFiles(named);
 
   if (!untestable && named.length === 0) {
     errors.push(
@@ -73,7 +86,7 @@ function rowErrors(row: RuleRow): string[] {
   }
 
   for (const rel of named) {
-    if (!existsSync(path.join(root, rel))) {
+    if (!loaded.has(rel) || loaded.get(rel) === null) {
       errors.push(`Rule row "${row.rule}" names missing path ${rel}`);
     }
   }
@@ -92,9 +105,9 @@ function rowErrors(row: RuleRow): string[] {
 
   for (const id of ids) {
     for (const rel of named) {
-      const file = path.join(root, rel);
-      if (!existsSync(file)) continue;
-      if (!readFileSync(file, "utf8").includes(id)) {
+      const text = loaded.get(rel);
+      if (text == null) continue;
+      if (!text.includes(id)) {
         errors.push(`Rule id ${id} is missing from ${rel}`);
       }
     }
@@ -129,7 +142,10 @@ describe("AGENTS.md rule rows", () => {
       "expected a Rule | Test table in AGENTS.md",
     ).toBeGreaterThan(0);
 
-    const errors = [...rows.flatMap(rowErrors), ...duplicateIdErrors(rows)];
+    const errors = [
+      ...rows.flatMap((row) => rowErrors(row)),
+      ...duplicateIdErrors(rows),
+    ];
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));
     }
@@ -139,19 +155,44 @@ describe("AGENTS.md rule rows", () => {
     const rows = parseRuleRows(
       table("| Live site is jarrodtran.com. | `tests/base-path.test.ts` |"),
     );
-    expect(rows.flatMap(rowErrors).join("\n")).toMatch(
+    expect(rows.flatMap((row) => rowErrors(row)).join("\n")).toMatch(
       /lacks a stable id \(expected rule:kebab-case\)/,
     );
   });
 
   it("fails when a named test file does not mention the row id", () => {
+    const files: NamedFiles = new Map([
+      ["tests/named.test.ts", "it('covers something else', () => {});"],
+    ]);
+    const rows = parseRuleRows(
+      table("| `rule:example-id` Example rule. | `tests/named.test.ts` |"),
+    );
+    expect(rows.flatMap((row) => rowErrors(row, files)).join("\n")).toMatch(
+      /rule:example-id is missing from tests\/named\.test\.ts/,
+    );
+  });
+
+  it("does not accept a rule id that appears only in an unrelated test file", () => {
+    const files: NamedFiles = new Map([
+      ["tests/named.test.ts", "it('covers something else', () => {});"],
+      ["tests/other.test.ts", "// rule:example-id\nit('unrelated', () => {});"],
+    ]);
+    const rows = parseRuleRows(
+      table("| `rule:example-id` Example rule. | `tests/named.test.ts` |"),
+    );
+    expect(rows.flatMap((row) => rowErrors(row, files)).join("\n")).toMatch(
+      /rule:example-id is missing from tests\/named\.test\.ts/,
+    );
+  });
+
+  it("fails the live files when the id is only in a test the row does not name", () => {
     const rows = parseRuleRows(
       table(
-        "| `rule:live-site-base-path` Live site is jarrodtran.com. | `tests/contrast.test.ts` |",
+        "| `rule:no-photo` Do not ship a photo. | `tests/contrast.test.ts` |",
       ),
     );
-    expect(rows.flatMap(rowErrors).join("\n")).toMatch(
-      /rule:live-site-base-path is missing from tests\/contrast\.test\.ts/,
+    expect(rows.flatMap((row) => rowErrors(row)).join("\n")).toMatch(
+      /rule:no-photo is missing from tests\/contrast\.test\.ts/,
     );
   });
 
@@ -169,13 +210,17 @@ describe("AGENTS.md rule rows", () => {
     );
   });
 
-  it("accepts a testable row whose named test mentions the id", () => {
+  it("accepts a testable row only when the named test itself mentions the id", () => {
+    const files: NamedFiles = new Map([
+      [
+        "tests/named.test.ts",
+        "// rule:example-id\nit('covers the rule', () => {});",
+      ],
+    ]);
     const rows = parseRuleRows(
-      table(
-        "| `rule:live-site-base-path` Live site is jarrodtran.com. | `tests/base-path.test.ts` |",
-      ),
+      table("| `rule:example-id` Example rule. | `tests/named.test.ts` |"),
     );
-    expect(rows.flatMap(rowErrors)).toEqual([]);
+    expect(rows.flatMap((row) => rowErrors(row, files))).toEqual([]);
   });
 
   it("skips id checks for untestable rows", () => {
@@ -184,7 +229,7 @@ describe("AGENTS.md rule rows", () => {
         "| Do not invent career facts. | untestable: only Jarrod can confirm employers, titles, and dates |",
       ),
     );
-    expect(rows.flatMap(rowErrors)).toEqual([]);
+    expect(rows.flatMap((row) => rowErrors(row))).toEqual([]);
     expect(duplicateIdErrors(rows)).toEqual([]);
   });
 });
