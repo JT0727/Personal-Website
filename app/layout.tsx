@@ -22,14 +22,6 @@ const newsreader = Newsreader({
   display: "swap",
 });
 
-/** Theme colors come from the shared palette, not hardcoded hexes. */
-const themeColorViewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: palette.light.bg },
-    { media: "(prefers-color-scheme: dark)", color: palette.dark.bg },
-  ],
-};
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -67,7 +59,12 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = themeColorViewport;
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: palette.light.bg },
+    { media: "(prefers-color-scheme: dark)", color: palette.dark.bg },
+  ],
+};
 
 const personJsonLd = {
   "@context": "https://schema.org",
