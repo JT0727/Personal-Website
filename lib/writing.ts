@@ -77,8 +77,13 @@ function decode(text: string): string {
 
 function capBlurb(text: string): string {
   if (text.length <= WRITING_BLURB_MAX_CHARS) return text;
-  const window = text.slice(0, WRITING_BLURB_MAX_CHARS - 1);
+  // Truncate by code points so a limit-sized emoji is never split into a
+  // lone surrogate; the window is MAX - 1 chars so the ellipsis still fits.
+  const window = Array.from(text).slice(0, WRITING_BLURB_MAX_CHARS - 1).join("");
   const cut = window.lastIndexOf(" ");
+  // Past the halfway point a word boundary is worth up to 109 characters;
+  // below it a mid-word cut is the less-bad outcome. Keep the window so the
+  // blurb never drops to a stub.
   const base = cut > WRITING_BLURB_MAX_CHARS / 2 ? window.slice(0, cut) : window;
   return `${base.trimEnd()}…`;
 }
