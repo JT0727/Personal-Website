@@ -20,7 +20,7 @@ function textOf(html: string): string {
 }
 
 describe("case study footer next link", () => {
-  it("places Next: {title} in the bottom article footer after My role so readers finish the case study before advancing", () => {
+  it("places Next: {title} in the article footer after My role and Back to selected work", () => {
     for (const item of site.selectedWork) {
       const html = renderToStaticMarkup(<CaseStudyBody item={item} />);
       const text = textOf(html);
@@ -29,9 +29,9 @@ describe("case study footer next link", () => {
 
       const lastRoleBullet =
         item.caseStudy.role[item.caseStudy.role.length - 1];
-      expect(text.indexOf(`Next: ${next!.title}`)).toBeGreaterThan(
-        text.indexOf(lastRoleBullet),
-      );
+      const nextAt = text.indexOf(`Next: ${next!.title}`);
+      expect(nextAt).toBeGreaterThan(text.lastIndexOf(lastRoleBullet));
+      expect(nextAt).toBeGreaterThan(text.lastIndexOf("Back to selected work"));
     }
   });
 });
