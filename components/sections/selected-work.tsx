@@ -19,9 +19,7 @@ function WorkMeta({ label, children }: { label: string; children: string }) {
 export function SelectedWork() {
   return (
     <Section id="work">
-      <div className="mb-10 max-w-2xl sm:mb-12">
-        <SectionHeading title={site.sections.work.title} />
-      </div>
+      <SectionHeading title={site.sections.work.title} />
 
       <div className="grid gap-6 sm:grid-cols-2">
         {site.selectedWork.map((item, index) => {

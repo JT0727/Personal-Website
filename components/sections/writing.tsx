@@ -34,9 +34,7 @@ export function Writing({ posts }: { posts: WritingPost[] }) {
 
   return (
     <Section id="writing">
-      <div className="mb-10 max-w-2xl sm:mb-12">
-        <SectionHeading title={site.substack.name} />
-      </div>
+      <SectionHeading title={site.substack.name} />
       <div className="max-w-2xl">
         {latest.length === 0 ? (
           <p className="text-muted-foreground measure text-lg leading-relaxed">

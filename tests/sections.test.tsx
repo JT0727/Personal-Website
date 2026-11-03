@@ -302,9 +302,42 @@ describe("section headings", () => {
     }
 
     const heading = renderToStaticMarkup(<SectionHeading title="Experience" />);
-    expect(heading).toMatch(/^<h2\b[^>]*>Experience<\/h2>$/);
+    expect(heading).toMatch(/<h2\b[^>]*>Experience<\/h2>/);
     expect(heading).not.toContain("<p");
-    expect(heading).not.toContain("<div");
+    expect(heading.match(/<h2\b/g) ?? []).toHaveLength(1);
+  });
+
+  it("gives every section heading the shared spacing from one place", () => {
+    const root = path.resolve(__dirname, "..");
+    const leftover: string[] = [];
+    const sectionDir = path.join(root, "components/sections");
+
+    for (const file of readdirSync(sectionDir)) {
+      if (!file.endsWith(".tsx")) continue;
+      const source = readFileSync(path.join(sectionDir, file), "utf8");
+      if (source.includes("mb-10 max-w-2xl sm:mb-12")) {
+        leftover.push(`components/sections/${file}`);
+      }
+    }
+
+    expect(leftover).toEqual([]);
+
+    const shared = readFileSync(
+      path.join(root, "components/section.tsx"),
+      "utf8",
+    );
+    expect(shared.match(/mb-10 max-w-2xl sm:mb-12/g) ?? []).toHaveLength(1);
+
+    const heading = renderToStaticMarkup(<SectionHeading title="Experience" />);
+    expect(heading).toContain("mb-10");
+    expect(heading).toContain("max-w-2xl");
+    expect(heading).toContain("sm:mb-12");
+
+    const contact = renderToStaticMarkup(<Contact />);
+    expect(contact).toContain("mb-10");
+    expect(contact).toContain("max-w-2xl");
+    expect(contact).toContain("sm:mb-12");
+    expect(contact).toMatch(/<h2\b[^>]*>[\s\S]*?<\/h2>\s*<p\b[^>]*\bmt-4\b/);
   });
 });
 

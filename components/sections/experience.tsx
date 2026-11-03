@@ -6,9 +6,7 @@ import { site } from "@/content/site";
 export function Experience() {
   return (
     <Section id="experience" className="bg-muted/50">
-      <div className="mb-10 max-w-2xl sm:mb-12">
-        <SectionHeading title={site.sections.experience.title} />
-      </div>
+      <SectionHeading title={site.sections.experience.title} />
       <Highlights />
 
       <ol className="space-y-12">
