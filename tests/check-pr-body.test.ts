@@ -33,4 +33,23 @@ describe("checkPrBody", () => {
     expect(checkPrBody("", HEAD_SHA)).toEqual([]);
     expect(checkPrBody(null, HEAD_SHA)).toEqual([]);
   });
+
+  it("a 3-character prefix fails", () => {
+    const errors = checkPrBody("Head SHA: 785", HEAD_SHA);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it("a bold stale SHA fails", () => {
+    const errors = checkPrBody("**Head SHA:** `0000000`", HEAD_SHA);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it("lowercase label with a stale SHA fails", () => {
+    const errors = checkPrBody("head sha: 0000000", HEAD_SHA);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it("the PR template line passes", () => {
+    expect(checkPrBody("Keep `Head SHA:` current.", HEAD_SHA)).toEqual([]);
+  });
 });

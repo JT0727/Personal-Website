@@ -1,7 +1,7 @@
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const HEAD_SHA_LINE = /Head SHA:\s*`?([0-9a-fA-F]+)`?/;
+const HEAD_SHA_LINE = /head sha:[*_`\s]*([0-9a-z]+)\b/i;
 
 export function checkPrBody(body, headSha) {
   if (body == null || body === "") {
@@ -18,6 +18,10 @@ export function checkPrBody(body, headSha) {
     }
 
     const value = match[1];
+    if (!/^[0-9a-f]+$/i.test(value)) {
+      continue;
+    }
+
     const normalized = value.toLowerCase();
     if (normalized.length < 7 || !expected.startsWith(normalized)) {
       errors.push(`Head SHA: ${value} is not a current prefix of the PR head`);
