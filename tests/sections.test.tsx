@@ -84,7 +84,7 @@ const SECTION_DESCRIPTIONS = [
 ] as const;
 
 const CONTACT_INTRO =
-  "The best conversations start as a reply to something I wrote. Email is fastest. I am also glad to swap notes on AI adoption, or to come speak about it.";
+  "Reply to anything I write, or just email me. I am always up for swapping notes on AI adoption, or to come speak about it. Based in Houston.";
 
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
@@ -108,7 +108,7 @@ describe("hero", () => {
 });
 
 const EMPTY_WRITING =
-  "First essays are in draft. Subscribe and they will land in your inbox as they ship.";
+  "Nothing published yet. Subscribe and the first post will land in your inbox.";
 const threeXml = readFileSync(
   path.join(__dirname, "fixtures/writing/three-posts.xml"),
   "utf8",
@@ -422,6 +422,7 @@ describe("contact", () => {
     expect(text).toContain(CONTACT_INTRO);
     for (const audience of [
       "Growth-stage tech",
+      "consulting",
       "early-stage startups",
       "operating role at a VC firm",
     ]) {

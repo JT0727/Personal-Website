@@ -26,7 +26,6 @@ describe("visitor-facing copy contract", () => {
     expect(copy).toContain(site.positioning.valueProp);
     expect(copy).toContain(site.contact.intro);
     expect(copy).toContain(site.about.bio[0]);
-    expect(copy).toContain(site.about.lookingForIntro);
     expect(copy).toContain("1,000+");
     expect(copy).toContain("$1.6M");
     expect(copy.includes("$156M") || copy.includes("$260M")).toBe(true);
@@ -50,8 +49,12 @@ describe("visitor-facing copy contract", () => {
       lower.includes("structured problem-solving") ||
         lower.includes("organizational impact"),
     ).toBe(true);
-    expect(lower).toContain("i write about");
+    expect(lower).toContain("notes on ai and judgment");
+    expect(lower).toContain(
+      "here i write about the calls behind that work",
+    );
     expect(lower).not.toContain("growth-stage tech");
+    expect(lower).not.toContain("consulting");
     expect(lower).not.toContain("early-stage startup");
     expect(lower).not.toContain("operating role at a vc firm");
   });

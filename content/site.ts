@@ -79,7 +79,6 @@ export interface SiteContent {
   about: {
     bio: string[];
     lookingFor: string[];
-    lookingForIntro: string;
     strengths: string[];
     education: string;
   };
@@ -129,8 +128,8 @@ export const site: SiteContent = {
     },
     documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
     valueProp:
-      "Personal site of Jarrod Tran. I lead AI enablement at Tesla Energy, where my team ships tools people use in their daily work. Here I write about judgment, capital calls, and lessons from Apple and Waymo.",
-    status: "Notes on AI, judgment, and building",
+      "I lead AI enablement at Tesla Energy. My team builds tools people use in their daily work. Here I write about the calls behind that work and what Apple and Waymo taught me.",
+    status: "Notes on AI and judgment",
     location: "Houston, TX",
     currentRole: currentTitle,
     currentCompany: "Tesla Energy",
@@ -165,10 +164,8 @@ export const site: SiteContent = {
   about: {
     bio: [
       `I work at Tesla Energy as ${currentTitle}. I built the team that ships our AI tools, got people using them, and put reporting in place so leadership can see whether the tools move the business. Before that: Apple's 0→1 iPhone launch in India, Engineering Operations planning at Waymo, and Tesla Special Projects through the 4680 launch.`,
-      "The thread through all of it: an unclear brief, real stakes, and a team that needs one plan. Get the facts, cut what does not matter, name an owner, then stay until it ships and hand it off clean.",
+      "Most of my jobs started with an unclear brief and real stakes. I get the facts, cut what doesn't matter, name an owner, and stay until it ships.",
     ],
-    lookingForIntro:
-      "I want a seat where my judgment changes the outcome, not just the deck.",
     lookingFor: [
       "A real business outcome and a named decision-maker",
       "AI product work that real people use (past the pilot)",
@@ -545,7 +542,7 @@ export const site: SiteContent = {
     resumeHref: "/resume.pdf",
     resumeFilename: "Jarrod-Tran-Resume.pdf",
     intro:
-      "The best conversations start as a reply to something I wrote. Email is fastest. I am also glad to swap notes on AI adoption, or to come speak about it.",
+      "Reply to anything I write, or just email me. I am always up for swapping notes on AI adoption, or to come speak about it. Based in Houston.",
   },
   outreach: {
     linkedin:

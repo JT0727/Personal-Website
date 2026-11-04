@@ -18,26 +18,25 @@ thinks and what he is writing about, not holding a hiring pitch.
 | ----------- | ----------- | ----------------------------------------------------- |
 | Home        | /           | Who he is, featured writing, where to go next         |
 | Writing     | /writing/   | Essays and notes index (see rule conflict below)      |
-| About       | /about/     | The person: story, photo rule applies, interests      |
-| Now         | /now/       | What he is doing and thinking this month              |
+| About       | /about/     | The person: story, photo rule applies, interests (conditional, see phased plan) |
 | Work        | /work/      | One compressed page of roles, in short form           |
 | Contact     | /#contact   | Email, LinkedIn, subscribe, speaking                  |
-| Reading     | /reading/   | Optional v2: recommendations with one-line takes      |
-| Colophon    | /colophon/  | Optional v2: how the site is built                    |
 
-Target nav: Writing, About, Now, Contact.
+Target nav: Writing, About (only if the homepage is still too long after
+compression), Contact. Per round-2 review, /now/, Reading, and Colophon
+are dropped from the target state.
 
 ## Homepage layout (target state)
 
 1. Hero: name, headline, two or three sentences in first person, subscribe.
 2. Featured writing: three editor picks under a "Start here" label.
 3. Latest writing: five most recent posts with dates.
-4. About teaser: one short paragraph, link to /about/.
-5. Now teaser: two or three timestamped lines, link to /now/.
-6. Work, briefly: five compressed role lines (copy below).
-7. How I think: the five existing principles, personal framing.
-8. Contact: "Say hello." Email, LinkedIn, RSS, Substack.
-9. Footer: location and a personal line, not a company list.
+4. About teaser: one short paragraph, link to /about/ (only if /about/
+   ships; otherwise the About section stays on the homepage).
+5. Work, briefly: compressed role lines (copy below).
+6. How I think: the five existing principles, personal framing.
+7. Contact: "Say hello." Email, LinkedIn, RSS, Substack.
+8. Footer: location and a personal line, not a company list.
 
 ## Homepage copy (personal voice, drop-in)
 
@@ -48,26 +47,31 @@ no five-word phrase repeated across strings, no invented career facts.
 ### Meta
 
 - Title: keep `site.positioning.documentTitle` (tab-length rule).
-- Description (valueProp, changed in this PR): "Personal site of Jarrod
-  Tran. I lead AI enablement at Tesla Energy, where my team ships tools
-  people use in their daily work. Here I write about judgment, capital
-  calls, and lessons from Apple and Waymo."
-- Status (OG image, changed in this PR): "Notes on AI, judgment, and
-  building" replaces "Open to the right role."
+- Description (valueProp, changed in this PR, round-2 wording): "I lead
+  AI enablement at Tesla Energy. My team builds tools people use in
+  their daily work. Here I write about the calls behind that work and
+  what Apple and Waymo taught me."
+- Status (OG image, changed in this PR, round-2 wording): "Notes on AI
+  and judgment" replaces "Open to the right role."
 
 ### Hero
 
 Keep the existing headline: "I write about AI product work, judgment, and
-making a P&L move." It was always the personal thesis. The hero component
-renders name plus headline only (pinned by tests/sections.test.tsx), so the
-longer first-person intro lives in About for now. Phase 2 candidate: relax
-the hero test to allow one intro sentence under the headline.
+making a P&L move." It was always the personal thesis. On this branch
+the hero component renders name plus headline only (pinned by
+tests/sections.test.tsx), so the longer first-person intro lives in
+About for now. Note: #114, already merged to main, removed the name h1,
+so this description is stale after a rebase and the hero test must be
+reworked in that step. Phase 2 candidate: relax the hero test to allow
+one intro sentence under the headline.
 
 ### Writing (Worth Mulling)
 
-Empty state (changed in this PR): "First essays are in draft. Subscribe and
-they will land in your inbox as they ship." Honest, and it sets an
-expectation the old "Nothing published yet" copy did not.
+Empty state: NOT changed in this PR (round-2 review). #109 wins this
+string, so this PR reverted its earlier "First essays are in draft"
+change and leaves the base copy, "Nothing published yet. Subscribe and
+the first post will land in your inbox." "First essays are in draft" is
+a claim only Jarrod can confirm.
 
 Seed essays, converted from the existing case studies:
 
@@ -77,9 +81,9 @@ Seed essays, converted from the existing case studies:
 
 ### About (second paragraph added in this PR)
 
-"The thread through all of it: an unclear brief, real stakes, and a team
-that needs one plan. Get the facts, cut what does not matter, name an
-owner, then stay until it ships and hand it off clean."
+"Most of my jobs started with an unclear brief and real stakes. I get
+the facts, cut what doesn't matter, name an owner, and stay until it
+ships." (Round-2 wording.)
 
 Still open: an outside-work line (training, travel, food). Drafted in the
 working notes, not shipped, because only Jarrod can word it.
@@ -89,20 +93,27 @@ working notes, not shipped, because only Jarrod can word it.
 - Tesla Energy (2023 to now): current role. 20+ AI tools in production,
   1,000+ active users, and before the AI role, the investment roadmap
   behind the Megapack scale-up.
-- Waymo (2022 to 2023): one planning and reporting rhythm for six
+- Waymo (2022 to 2023): one planning and reporting rhythm across
   functions that had each been running their own.
 - Apple (2021 to 2022): the 0 to 1 iPhone India launch, market entry to
   scaled delivery, exports from 6 to 40+ countries.
 - Tesla (2018 to 2021): special projects, the 4680 program, Model 3 and
   Model Y scale-up.
-- Amazon (2017 to 2018): fulfillment operations.
 
 Closing line: "That is the short version. LinkedIn has the long one; it is
 better at being a resume than this site is."
 
-Note: Amazon is on the resume but missing from site.experience today.
-Adding it is a content change to content/site.ts, proposed here, not done
-in this PR.
+Notes (round-2 review): the "six functions" figure was removed from this
+target copy because it is not verified against public/resume.pdf. The
+same wording still exists in the pre-existing Waymo case study in
+content/site.ts, which is outside this PR's diff; that case study is
+flagged for a ledger follow-up, not silently rewritten here. Amazon is
+on the resume but missing from site.experience today; no Amazon line is
+drafted here, because the earlier "fulfillment operations" wording is
+banned operational framing and the review states only an approved bullet
+may be used. Adding Amazon waits on that approved bullet (owner call).
+The Tesla and Model 3 / Model Y "scale-up" lines above are target copy
+only, not visitor copy yet, and need a framing check before they ship.
 
 ### How I think (heading changed in this PR)
 
@@ -112,30 +123,40 @@ principles stay word for word.
 ### Contact (changed in this PR)
 
 - Heading: "Say hello." (was "Looking for product, strategy, or AI roles.")
-- Intro: "The best conversations start as a reply to something I wrote.
-  Email is fastest. I am also glad to swap notes on AI adoption, or to
-  come speak about it."
+- Intro (round-2 wording): "Reply to anything I write, or just email
+  me. I am always up for swapping notes on AI adoption, or to come speak
+  about it. Based in Houston."
 - Rows stay: Email, LinkedIn, Speaking, Resume (subordinate, last row).
 
-### Footer (changed in this PR)
+### Footer
 
-Right side changes from "Tesla, Apple, Waymo" to "Essays, notes, and the
-occasional strong opinion."
+NOT changed in this PR (round-2 review). #98 wins the footer tagline,
+so this PR reverted its earlier "Essays, notes, and the occasional
+strong opinion" change and leaves the base "Tesla · Apple · Waymo"
+line. A future tagline, if one comes back, is a separate decision.
 
 ## What this PR changes
 
 1. content/site.ts: valueProp, status, about.bio (added paragraph),
    sections.approach.title, sections.contact.title, contact.intro.
-2. components/sections/writing.tsx: writing empty-state copy.
-3. components/footer.tsx: footer line.
-4. tests/sections.test.tsx: CONTACT_INTRO and EMPTY_WRITING constants
-   follow the new copy.
-5. tests/copy-contract.test.ts: the positioning test now asserts the
+   Round 2 also removes the job-search leftover about.lookingForIntro.
+   Deliberately NOT changed in round 2: components/sections/writing.tsx
+   and components/footer.tsx (reverted to base; #109 and #98 win those
+   strings).
+2. tests/sections.test.tsx: CONTACT_INTRO follows the new copy;
+   EMPTY_WRITING reverted to base; the contact test now also guards
+   "consulting" as absent.
+3. tests/copy-contract.test.ts: the positioning test now asserts the
    personal direction and asserts the retired audience pitch is gone from
-   visitor copy. This is an intentional contract change for review.
-6. POSITIONING.md: addendum pointing here. The main text is untouched so
-   reviewers can diff the old brief against this proposal.
-7. This doc.
+   visitor copy, pinning the new status and valueProp strings instead of
+   the generic "i write about" (which main already contained), and
+   guarding "consulting" as absent. This is an intentional contract
+   change for review.
+4. POSITIONING.md: addendum pointing here. The main text is untouched so
+   reviewers can diff the old brief against this proposal. A full
+   rewrite is a round-2 owner call (see phased plan), not done here.
+5. This doc: sitemap, layout, copy, and phased plan updated per round-2
+   review.
 
 ## Conflicts with current repo rules (need an owner call, not done here)
 
@@ -159,15 +180,27 @@ occasional strong opinion."
 
 ## Phased plan after approval
 
-1. Rewrite POSITIONING.md to the personal direction; retire the audience
-   pitch from outreach copy as well.
-2. Add /about/ and /now/ routes; move the long About off the homepage.
-3. Decide the writing URL question: keep Substack as home with /writing/
-   as redirect (current), or publish on-domain with RSS and syndicate.
-4. Convert the three case studies into essays; keep redirects working.
-5. Compress homepage Experience, Selected Work, and Capabilities into
+Corrected per round-2 review (subtraction first; the earlier version
+listed "Work, briefly" as both phase 2 and step 5):
+
+1. The open queue lands first (#104, #98, and #109, which make some of
+   these same cuts). Note: as of round 2 these three PRs are still open,
+   not merged, so this step is pending, not done.
+2. Rewrite POSITIONING.md to the personal direction, then land the copy
+   changes (with the round-2 line notes) rebased on current main. The
+   rebase also has to rework the hero test for #114 (name h1 removed)
+   and the layout tests pinned by #110, #112, and #115. Retire the
+   audience pitch from outreach copy in the same rewrite; outreach
+   wording itself is an owner call, because the current outreach strings
+   are pinned by copy-contract tests and are not visitor copy.
+3. Compress homepage Experience, Selected Work, and Capabilities into
    "Work, briefly"; rework the layout tests in the same PR.
-6. Nav to Writing, About, Now, Contact; resume link to About and footer.
+4. Decide the writing URL question (owner call: a real /writing/ index
+   breaks rule:legacy-redirects), then turn case studies into essays.
+5. /about/ gets a brief only if the homepage is still too long after
+   step 3. /now/, Reading, and Colophon are dropped.
+6. Nav to Writing, About (conditional), Contact; resume link to About
+   and footer.
 
 ## Review ask
 
