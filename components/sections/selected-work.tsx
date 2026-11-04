@@ -21,7 +21,7 @@ export function SelectedWork() {
             >
               <div
                 className={cn(
-                  "border-border bg-muted flex aspect-[3/2] w-full min-w-0 flex-col justify-end border-b p-5 sm:p-7",
+                  "border-border bg-muted @container flex aspect-[3/2] w-full min-w-0 flex-col justify-end border-b p-[20px] sm:p-[28px]",
                   featured &&
                     "sm:order-last sm:aspect-auto sm:min-h-0 sm:justify-start sm:border-t sm:border-b-0",
                 )}
@@ -29,7 +29,7 @@ export function SelectedWork() {
                 <div>
                   <p
                     className={cn(
-                      "tabular font-display text-5xl sm:text-6xl",
+                      "tabular font-display text-[min(3rem,30cqi)] leading-none sm:text-[min(3.75rem,30cqi)]",
                       featured && "measure",
                     )}
                   >
