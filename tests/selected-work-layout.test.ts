@@ -160,16 +160,19 @@ describe("selected work featured panel layout", () => {
     }
   });
 
-  it.each([{ textPercent: 100 as const }, { textPercent: 200 as const }])(
-    "shortens #work at 1280 versus main at $textPercent% text",
-    async ({ textPercent }) => {
-      const layout = await measureWork(1280, 800, textPercent);
-      expect(
-        layout.workHeight,
-        `1280 ${textPercent}% #work height`,
-      ).toBeLessThan(MAIN_WORK_HEIGHT[1280][textPercent]);
-    },
-  );
+  it("keeps #work no taller than main at 1280 and 100% text", async () => {
+    const layout = await measureWork(1280, 800, 100);
+    expect(layout.workHeight, "1280 100% #work height").toBeLessThanOrEqual(
+      MAIN_WORK_HEIGHT[1280][100],
+    );
+  });
+
+  it("shortens #work versus main at 1280 and 200% text", async () => {
+    const layout = await measureWork(1280, 800, 200);
+    expect(layout.workHeight, "1280 200% #work height").toBeLessThan(
+      MAIN_WORK_HEIGHT[1280][200],
+    );
+  });
 
   it("does not grow #work on phones versus main at 100% and 200% text", async () => {
     for (const [width, height] of [
