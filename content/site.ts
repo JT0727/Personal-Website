@@ -128,7 +128,7 @@ export const site: SiteContent = {
     },
     documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
     valueProp:
-      "I lead AI enablement at Tesla Energy. My team builds tools people use in their daily work. Here I write about the calls behind that work and what Apple and Waymo taught me.",
+      "I lead AI enablement at Tesla Energy. My team builds tools people use daily. Here I write about the calls behind that work and what Apple and Waymo taught me.",
     status: "Notes on AI and judgment",
     location: "Houston, TX",
     currentRole: currentTitle,
@@ -164,7 +164,6 @@ export const site: SiteContent = {
   about: {
     bio: [
       `I work at Tesla Energy as ${currentTitle}. I built the team that ships our AI tools, got people using them, and put reporting in place so leadership can see whether the tools move the business. Before that: Apple's 0→1 iPhone launch in India, Engineering Operations planning at Waymo, and Tesla Special Projects through the 4680 launch.`,
-      "Most of my jobs started with an unclear brief and real stakes. I get the facts, cut what doesn't matter, name an owner, and stay until it ships.",
     ],
     lookingFor: [
       "A real business outcome and a named decision-maker",

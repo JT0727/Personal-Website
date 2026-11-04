@@ -28,7 +28,7 @@ are dropped from the target state.
 
 ## Homepage layout (target state)
 
-1. Hero: name, headline, two or three sentences in first person, subscribe.
+1. Hero: headline, an intro sentence opening "I'm Jarrod Tran." (the name appears once, in prose, not as a separate name line), subscribe. Nav brand untouched.
 2. Featured writing: three editor picks under a "Start here" label.
 3. Latest writing: five most recent posts with dates.
 4. About teaser: one short paragraph, link to /about/ (only if /about/
@@ -47,10 +47,11 @@ no five-word phrase repeated across strings, no invented career facts.
 ### Meta
 
 - Title: keep `site.positioning.documentTitle` (tab-length rule).
-- Description (valueProp, changed in this PR, round-2 wording): "I lead
-  AI enablement at Tesla Energy. My team builds tools people use in
-  their daily work. Here I write about the calls behind that work and
-  what Apple and Waymo taught me."
+- Description (valueProp, changed in this PR, round-3 wording, 158
+  characters so it fits the 155 to 160 band search results show): "I lead
+  AI enablement at Tesla Energy. My team builds tools people use daily.
+  Here I write about the calls behind that work and what Apple and
+  Waymo taught me."
 - Status (OG image, changed in this PR, round-2 wording): "Notes on AI
   and judgment" replaces "Open to the right role."
 
@@ -61,17 +62,24 @@ making a P&L move." It was always the personal thesis. On this branch
 the hero component renders name plus headline only (pinned by
 tests/sections.test.tsx), so the longer first-person intro lives in
 About for now. Note: #114, already merged to main, removed the name h1,
-so this description is stale after a rebase and the hero test must be
-reworked in that step. Phase 2 candidate: relax the hero test to allow
-one intro sentence under the headline.
+so the homepage body no longer contains the name at all (only the nav
+brand and footer copyright do). Round-3 resolution, per the follow-up
+review: do not restore a separate hero name line, which would re-create
+the nav-brand-plus-hero repetition #114 removed, and do not touch the
+nav, which #94 and #102 are both editing. The target is option (2):
+the hero intro sentence opens "I'm Jarrod Tran.", keeping one name
+occurrence in prose. That hero change lands with the rebase step, and
+the hero test must be reworked there.
 
 ### Writing (Worth Mulling)
 
-Empty state: NOT changed in this PR (round-2 review). #109 wins this
-string, so this PR reverted its earlier "First essays are in draft"
-change and leaves the base copy, "Nothing published yet. Subscribe and
-the first post will land in your inbox." "First essays are in draft" is
-a claim only Jarrod can confirm.
+Empty state: NOT changed in this PR (round-2 review, kept in round 3).
+#109 was closed on Nov 4, not merged, so it no longer competes for
+this string, but this PR still does not restore its earlier "First
+essays are in draft" change: that is a claim only Jarrod can confirm.
+Restoring it waits on his confirmation (round-3 owner call). Until then
+the base copy stays: "Nothing published yet. Subscribe and the first
+post will land in your inbox."
 
 Seed essays, converted from the existing case studies:
 
@@ -79,11 +87,15 @@ Seed essays, converted from the existing case studies:
 2. "Which dollar moves the P&L" (from /work/tesla-energy-portfolio/)
 3. "0 to 1 in India" (from /work/apple-iphone-india/)
 
-### About (second paragraph added in this PR)
+### About (second paragraph removed in round 3)
 
-"Most of my jobs started with an unclear brief and real stakes. I get
-the facts, cut what doesn't matter, name an owner, and stay until it
-ships." (Round-2 wording.)
+Round 2 added: "Most of my jobs started with an unclear brief and real
+stakes. I get the facts, cut what doesn't matter, name an owner, and
+stay until it ships." Round 3 removes it: #104 landed, so "How I think"
+is the only home for the five principles, and the paragraph is a pure
+duplicate of that surviving section. Dropping the paragraph, rather
+than deleting the principles list #104 just kept, is the smaller fix
+and keeps "say each thing once".
 
 Still open: an outside-work line (training, travel, food). Drafted in the
 working notes, not shipped, because only Jarrod can word it.
@@ -137,12 +149,16 @@ line. A future tagline, if one comes back, is a separate decision.
 
 ## What this PR changes
 
-1. content/site.ts: valueProp, status, about.bio (added paragraph),
+1. content/site.ts: valueProp, status, about.bio,
    sections.approach.title, sections.contact.title, contact.intro.
    Round 2 also removes the job-search leftover about.lookingForIntro.
-   Deliberately NOT changed in round 2: components/sections/writing.tsx
-   and components/footer.tsx (reverted to base; #109 and #98 win those
-   strings).
+   Round 3 shortens valueProp to 158 characters and removes the
+   round-2 About paragraph (duplicate of the surviving principles
+   section after #104). Deliberately NOT changed in round 2 or 3:
+   components/sections/writing.tsx and components/footer.tsx
+   (reverted to base; #98 still wins the footer string, and #109 is
+   now closed, so the writing string waits only on Jarrod confirming
+   the "in draft" claim).
 2. tests/sections.test.tsx: CONTACT_INTRO follows the new copy;
    EMPTY_WRITING reverted to base; the contact test now also guards
    "consulting" as absent.
@@ -156,7 +172,8 @@ line. A future tagline, if one comes back, is a separate decision.
    reviewers can diff the old brief against this proposal. A full
    rewrite is a round-2 owner call (see phased plan), not done here.
 5. This doc: sitemap, layout, copy, and phased plan updated per round-2
-   review.
+   review, then again per round-3 review (#104 merged, #109 closed,
+   hero fork, meta length, About duplicate).
 
 ## Conflicts with current repo rules (need an owner call, not done here)
 
@@ -183,9 +200,10 @@ line. A future tagline, if one comes back, is a separate decision.
 Corrected per round-2 review (subtraction first; the earlier version
 listed "Work, briefly" as both phase 2 and step 5):
 
-1. The open queue lands first (#104, #98, and #109, which make some of
-   these same cuts). Note: as of round 2 these three PRs are still open,
-   not merged, so this step is pending, not done.
+1. The open queue lands first. Update as of round 3: #104 merged
+   (Nov 4) and #109 closed, not merged (Nov 4); #98 is still open, so
+   this step is partly done, not finished. The rebase in step 2 picks
+   up #104 (including its Capabilities removal) and #114.
 2. Rewrite POSITIONING.md to the personal direction, then land the copy
    changes (with the round-2 line notes) rebased on current main. The
    rebase also has to rework the hero test for #114 (name h1 removed)
