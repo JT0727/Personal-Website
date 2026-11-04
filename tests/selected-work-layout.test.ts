@@ -31,7 +31,7 @@ if (!existsSync(join(process.cwd(), "out/index.html"))) {
   throw new Error("selected-work layout test needs a production build in out/");
 }
 
-// Measured on main ab14171 in this file's Playwright Chromium setup.
+// Measured on main 92fbd54 in this file's Playwright Chromium setup.
 // 200% text is document.documentElement.style.fontSize = "200%", not browser zoom.
 const MAIN_WORK_HEIGHT = {
   1280: { 100: 2152.8125, 200: 5320.65625 },
