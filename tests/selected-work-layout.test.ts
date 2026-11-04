@@ -39,6 +39,23 @@ const MAIN_WORK_HEIGHT = {
   390: { 100: 3092.5, 200: 11628.5 },
 } as const;
 
+// Measured on main 29221f1 in this file's Playwright Chromium setup
+// (32px root font for 200% text, same as tests/tap-targets.test.ts).
+const MAIN_29221F1_100 = {
+  1280: {
+    work: 2150.4375,
+    cards: [428.875, 712.65625, 712.65625, 706.90625],
+  },
+  390: {
+    work: 3092.5,
+    cards: [754.25, 695.75, 665.75, 695.75],
+  },
+  320: {
+    work: 3345.3125,
+    cards: [824.578125, 766.078125, 766.078125, 707.578125],
+  },
+} as const;
+
 describe("selected work featured panel layout", () => {
   let origin = "";
   let close = async () => {};
@@ -221,4 +238,146 @@ describe("selected work featured panel layout", () => {
       expect(layout.errors, `${width} console`).toEqual([]);
     }
   });
+
+  async function openWorkPx(
+    width: number,
+    height: number,
+    textPercent: 100 | 200,
+  ) {
+    const browser = await chromium.launch();
+    const page = await browser.newPage({
+      viewport: { width, height },
+      colorScheme: "light",
+    });
+    await page.goto(`${origin}/`, { waitUntil: "networkidle" });
+    if (textPercent === 200) {
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "32px";
+      });
+    }
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) => {
+          const done = () => requestAnimationFrame(() => resolve());
+          if (document.fonts.status === "loaded") {
+            done();
+            return;
+          }
+          document.fonts.ready.then(done).catch(done);
+        }),
+    );
+    await page.waitForTimeout(300);
+    return { browser, page };
+  }
+
+  async function measureFigures(
+    width: number,
+    height: number,
+    textPercent: 100 | 200,
+  ) {
+    const { browser, page } = await openWorkPx(width, height, textPercent);
+    const layout = await page.evaluate(() => {
+      const work = document.getElementById("work");
+      const articles = [...(work?.querySelectorAll("article") ?? [])];
+      const figures = articles.map((article) => {
+        const figure = article.querySelector("p");
+        let panel: Element | null | undefined = figure;
+        while (panel && panel.parentElement !== article) {
+          panel = panel.parentElement;
+        }
+        const panelStyle = panel ? getComputedStyle(panel) : null;
+        const padL = panelStyle ? parseFloat(panelStyle.paddingLeft) || 0 : 0;
+        const padR = panelStyle ? parseFloat(panelStyle.paddingRight) || 0 : 0;
+        const panelRect = panel?.getBoundingClientRect();
+        const figureRect = figure?.getBoundingClientRect();
+        const innerWidth = panel ? panel.clientWidth - padL - padR : -1;
+        const innerRight = panelRect ? panelRect.right - padR : -1;
+        return {
+          text: figure?.textContent?.trim() ?? "",
+          fontSize: figure ? parseFloat(getComputedStyle(figure).fontSize) : -1,
+          scrollWidth: figure?.scrollWidth ?? -1,
+          innerWidth,
+          figureRight: figureRect?.right ?? -1,
+          innerRight,
+          cardHeight: article.getBoundingClientRect().height,
+        };
+      });
+      return {
+        figures,
+        workHeight: work?.getBoundingClientRect().height ?? -1,
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+    await browser.close();
+    return layout;
+  }
+
+  it("keeps every #work figure inside its panel at 320, 390, and 768 with 200% text", async () => {
+    const expected = site.selectedWork.map((item) => item.panel.value);
+    for (const [width, height] of [
+      [320, 844],
+      [390, 844],
+      [768, 800],
+    ] as const) {
+      const at100 = await measureFigures(width, height, 100);
+      const at200 = await measureFigures(width, height, 200);
+      expect(
+        at200.figures.map((figure) => figure.text),
+        `${width} figure texts`,
+      ).toEqual(expected);
+      expect(at100.figures).toHaveLength(expected.length);
+
+      const clipped: string[] = [];
+      for (const figure of at200.figures) {
+        const size100 =
+          at100.figures.find((row) => row.text === figure.text)?.fontSize ?? -1;
+        console.log(
+          `${width} ${figure.text}: 100%=${size100}px 200%=${figure.fontSize}px`,
+        );
+        // 390 is wide enough that 30cqi stays above the 100% rem size, so
+        // 200% text must still grow. At 320 and 768 the panel shrinks
+        // (padding scales with the root) and the cap can sit just under.
+        if (width === 390) {
+          expect(
+            figure.fontSize,
+            `${width} ${figure.text} 200% font-size`,
+          ).toBeGreaterThan(size100);
+        }
+        if (figure.scrollWidth > figure.innerWidth) {
+          clipped.push(
+            `${figure.text} scrollWidth ${figure.scrollWidth} > inner ${figure.innerWidth}`,
+          );
+        }
+        if (figure.figureRight > figure.innerRight) {
+          clipped.push(
+            `${figure.text} right ${figure.figureRight} > inner right ${figure.innerRight}`,
+          );
+        }
+      }
+      expect(clipped, `${width} figure clipped`).toEqual([]);
+      expect(at200.overflow, `${width} horizontal scroll`).toBe(false);
+    }
+  }, 120_000);
+
+  it("does not grow cards or #work versus main 29221f1 at 100% text", async () => {
+    for (const [width, height] of [
+      [1280, 800],
+      [390, 844],
+      [320, 844],
+    ] as const) {
+      const layout = await measureFigures(width, height, 100);
+      const main = MAIN_29221F1_100[width];
+      expect(layout.figures).toHaveLength(main.cards.length);
+      expect(
+        layout.workHeight,
+        `${width} 100% #work height`,
+      ).toBeLessThanOrEqual(main.work);
+      layout.figures.forEach((figure, index) => {
+        expect(
+          figure.cardHeight,
+          `${width} 100% card ${figure.text} height`,
+        ).toBeLessThanOrEqual(main.cards[index]);
+      });
+    }
+  }, 60_000);
 });
