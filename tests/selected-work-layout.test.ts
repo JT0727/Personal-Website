@@ -45,14 +45,22 @@ const MAIN_29221F1_100 = {
   1280: {
     work: 2150.4375,
     cards: [428.875, 712.65625, 712.65625, 706.90625],
+    pad: 28,
+  },
+  768: {
+    work: 2278.03125,
+    cards: [487.375, 744.328125, 744.328125, 744.328125],
+    pad: 28,
   },
   390: {
     work: 3092.5,
     cards: [754.25, 695.75, 665.75, 695.75],
+    pad: 20,
   },
   320: {
     work: 3345.3125,
     cards: [824.578125, 766.078125, 766.078125, 707.578125],
+    pad: 20,
   },
 } as const;
 
@@ -288,10 +296,18 @@ describe("selected work featured panel layout", () => {
         const panelStyle = panel ? getComputedStyle(panel) : null;
         const padL = panelStyle ? parseFloat(panelStyle.paddingLeft) || 0 : 0;
         const padR = panelStyle ? parseFloat(panelStyle.paddingRight) || 0 : 0;
+        const padT = panelStyle ? parseFloat(panelStyle.paddingTop) || 0 : 0;
+        const padB = panelStyle ? parseFloat(panelStyle.paddingBottom) || 0 : 0;
         const panelRect = panel?.getBoundingClientRect();
         const figureRect = figure?.getBoundingClientRect();
+        const label = figure?.nextElementSibling;
+        const labelRect = label?.getBoundingClientRect();
         const innerWidth = panel ? panel.clientWidth - padL - padR : -1;
         const innerRight = panelRect ? panelRect.right - padR : -1;
+        const innerBottom = panelRect ? panelRect.bottom - padB : -1;
+        const panelHeight = panelRect?.height ?? -1;
+        const ratioHeight =
+          panelRect && panelRect.width > 0 ? (panelRect.width * 2) / 3 : -1;
         return {
           text: figure?.textContent?.trim() ?? "",
           fontSize: figure ? parseFloat(getComputedStyle(figure).fontSize) : -1,
@@ -299,6 +315,15 @@ describe("selected work featured panel layout", () => {
           innerWidth,
           figureRight: figureRect?.right ?? -1,
           innerRight,
+          padL,
+          padR,
+          padT,
+          padB,
+          labelBottom: labelRect?.bottom ?? -1,
+          labelRight: labelRect?.right ?? -1,
+          innerBottom,
+          panelHeight,
+          ratioHeight,
           cardHeight: article.getBoundingClientRect().height,
         };
       });
@@ -328,20 +353,17 @@ describe("selected work featured panel layout", () => {
       expect(at100.figures).toHaveLength(expected.length);
 
       const clipped: string[] = [];
+      const shrunk: string[] = [];
       for (const figure of at200.figures) {
         const size100 =
           at100.figures.find((row) => row.text === figure.text)?.fontSize ?? -1;
         console.log(
           `${width} ${figure.text}: 100%=${size100}px 200%=${figure.fontSize}px`,
         );
-        // 390 is wide enough that 30cqi stays above the 100% rem size, so
-        // 200% text must still grow. At 320 and 768 the panel shrinks
-        // (padding scales with the root) and the cap can sit just under.
-        if (width === 390) {
-          expect(
-            figure.fontSize,
-            `${width} ${figure.text} 200% font-size`,
-          ).toBeGreaterThan(size100);
+        if (figure.fontSize <= size100) {
+          shrunk.push(
+            `${figure.text} 200%=${figure.fontSize}px <= 100%=${size100}px`,
+          );
         }
         if (figure.scrollWidth > figure.innerWidth) {
           clipped.push(
@@ -353,7 +375,21 @@ describe("selected work featured panel layout", () => {
             `${figure.text} right ${figure.figureRight} > inner right ${figure.innerRight}`,
           );
         }
+        if (figure.labelBottom > figure.innerBottom) {
+          clipped.push(
+            `${figure.text} label bottom ${figure.labelBottom} > inner bottom ${figure.innerBottom}`,
+          );
+        }
+        if (figure.labelRight > figure.innerRight) {
+          clipped.push(
+            `${figure.text} label right ${figure.labelRight} > inner right ${figure.innerRight}`,
+          );
+        }
+        console.log(
+          `${width} ${figure.text} panelH=${figure.panelHeight} ratioH=${figure.ratioHeight} labelBottom=${figure.labelBottom} innerBottom=${figure.innerBottom}`,
+        );
       }
+      expect(shrunk, `${width} 200% font not larger`).toEqual([]);
       expect(clipped, `${width} figure clipped`).toEqual([]);
       expect(at200.overflow, `${width} horizontal scroll`).toBe(false);
     }
@@ -362,6 +398,7 @@ describe("selected work featured panel layout", () => {
   it("does not grow cards or #work versus main 29221f1 at 100% text", async () => {
     for (const [width, height] of [
       [1280, 800],
+      [768, 800],
       [390, 844],
       [320, 844],
     ] as const) {
@@ -377,6 +414,10 @@ describe("selected work featured panel layout", () => {
           figure.cardHeight,
           `${width} 100% card ${figure.text} height`,
         ).toBeLessThanOrEqual(main.cards[index]);
+        expect(figure.padL, `${width} ${figure.text} padL`).toBe(main.pad);
+        expect(figure.padR, `${width} ${figure.text} padR`).toBe(main.pad);
+        expect(figure.padT, `${width} ${figure.text} padT`).toBe(main.pad);
+        expect(figure.padB, `${width} ${figure.text} padB`).toBe(main.pad);
       });
     }
   }, 60_000);
