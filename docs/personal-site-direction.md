@@ -73,13 +73,13 @@ the hero test must be reworked there.
 
 ### Writing (Worth Mulling)
 
-Empty state: NOT changed in this PR (round-2 review, kept in round 3).
-#109 was closed on Nov 4, not merged, so it no longer competes for
-this string, but this PR still does not restore its earlier "First
-essays are in draft" change: that is a claim only Jarrod can confirm.
-Restoring it waits on his confirmation (round-3 owner call). Until then
-the base copy stays: "Nothing published yet. Subscribe and the first
-post will land in your inbox."
+Empty state: NOT changed in this PR (round-2 review, kept in round 3
+and round 4). #109 merged on Nov 4, and the copy it renders on current
+main is "First post coming soon. Subscribe to get it by email." This PR
+still does not restore its earlier "First essays are in draft" change:
+that is a claim only Jarrod can confirm. Restoring it waits on his
+confirmation (round-3 owner call). Until then this PR leaves the writing
+string alone.
 
 Seed essays, converted from the existing case studies:
 
@@ -142,10 +142,11 @@ principles stay word for word.
 
 ### Footer
 
-NOT changed in this PR (round-2 review). #98 wins the footer tagline,
-so this PR reverted its earlier "Essays, notes, and the occasional
-strong opinion" change and leaves the base "Tesla · Apple · Waymo"
-line. A future tagline, if one comes back, is a separate decision.
+NOT changed in this PR (round-2 review, kept in round 4). #98 merged
+on Nov 4 and removed the company line, so the footer on current main is
+name plus location only. This PR reverted its earlier "Essays, notes,
+and the occasional strong opinion" change and still does not touch the
+footer. A future tagline, if one comes back, is a separate decision.
 
 ## What this PR changes
 
@@ -156,9 +157,9 @@ line. A future tagline, if one comes back, is a separate decision.
    round-2 About paragraph (duplicate of the surviving principles
    section after #104). Deliberately NOT changed in round 2 or 3:
    components/sections/writing.tsx and components/footer.tsx
-   (reverted to base; #98 still wins the footer string, and #109 is
-   now closed, so the writing string waits only on Jarrod confirming
-   the "in draft" claim).
+   (reverted to base; #98 has merged and removed the footer company
+   line, and #109 has merged its own empty-state copy, so the writing
+   string waits only on Jarrod confirming the "in draft" claim).
 2. tests/sections.test.tsx: CONTACT_INTRO follows the new copy;
    EMPTY_WRITING reverted to base; the contact test now also guards
    "consulting" as absent.
@@ -173,7 +174,8 @@ line. A future tagline, if one comes back, is a separate decision.
    rewrite is a round-2 owner call (see phased plan), not done here.
 5. This doc: sitemap, layout, copy, and phased plan updated per round-2
    review, then again per round-3 review (#104 merged, #109 closed,
-   hero fork, meta length, About duplicate).
+   hero fork, meta length, About duplicate), then again per round-4
+   review (#109 and #98 merged, Capabilities gone on main).
 
 ## Conflicts with current repo rules (need an owner call, not done here)
 
@@ -189,21 +191,27 @@ line. A future tagline, if one comes back, is a separate decision.
 - Hero test pins hero output to name plus headline only. A longer hero
   intro needs that test relaxed. Not changed here.
 - selected-work-layout tests pin the Selected Work section's measured
-  heights on the homepage. Compressing or removing Experience, Selected
-  Work, and Capabilities from the homepage (target layout above) needs
+  heights on the homepage. Compressing or removing Experience and
+  Selected Work from the homepage (target layout above) needs
   those tests reworked. Not changed here.
-- Capabilities section: target state deletes it from the homepage. It
-  stays in this PR for the layout-test reason above.
+- Capabilities section: target state deletes it from the homepage.
+  #104 already deleted it on main, so after the rebase this PR no
+  longer keeps it; the layout-test rework in phase 3 covers only
+  Experience and Selected Work.
 
 ## Phased plan after approval
 
 Corrected per round-2 review (subtraction first; the earlier version
 listed "Work, briefly" as both phase 2 and step 5):
 
-1. The open queue lands first. Update as of round 3: #104 merged
-   (Nov 4) and #109 closed, not merged (Nov 4); #98 is still open, so
-   this step is partly done, not finished. The rebase in step 2 picks
-   up #104 (including its Capabilities removal) and #114.
+1. The open queue lands first. Update as of round 4: #104, #109, and
+   #98 all merged Nov 4, so this step is done. The rebase in step 2
+   picks up #104 (including its Capabilities removal), #109, #98, and
+   #114. Rebase note (round-4 review): the merged tree must update
+   tests/sections.test.tsx, the "has no Capabilities section and still
+   renders How I work" test, to the new "How I think" title in both its
+   name and its literal assertion, since this PR renames
+   sections.approach.title.
 2. Rewrite POSITIONING.md to the personal direction, then land the copy
    changes (with the round-2 line notes) rebased on current main. The
    rebase also has to rework the hero test for #114 (name h1 removed)
@@ -211,8 +219,9 @@ listed "Work, briefly" as both phase 2 and step 5):
    audience pitch from outreach copy in the same rewrite; outreach
    wording itself is an owner call, because the current outreach strings
    are pinned by copy-contract tests and are not visitor copy.
-3. Compress homepage Experience, Selected Work, and Capabilities into
-   "Work, briefly"; rework the layout tests in the same PR.
+3. Compress homepage Experience and Selected Work into
+   "Work, briefly" (Capabilities already removed by #104); rework the
+   layout tests in the same PR.
 4. Decide the writing URL question (owner call: a real /writing/ index
    breaks rule:legacy-redirects), then turn case studies into essays.
 5. /about/ gets a brief only if the homepage is still too long after
