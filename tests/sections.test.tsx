@@ -84,7 +84,7 @@ const SECTION_DESCRIPTIONS = [
 ] as const;
 
 const CONTACT_INTRO =
-  "Growth-stage tech, consulting, early-stage startups, or an operating role at a VC firm. Based in Houston.";
+  "The best conversations start as a reply to something I wrote. Email is fastest. I am also glad to swap notes on AI adoption, or to come speak about it.";
 
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
@@ -108,7 +108,7 @@ describe("hero", () => {
 });
 
 const EMPTY_WRITING =
-  "Nothing published yet. Subscribe and the first post will land in your inbox.";
+  "First essays are in draft. Subscribe and they will land in your inbox as they ship.";
 const threeXml = readFileSync(
   path.join(__dirname, "fixtures/writing/three-posts.xml"),
   "utf8",
@@ -414,15 +414,18 @@ describe("experience", () => {
 describe("contact", () => {
   const html = renderToStaticMarkup(<Contact />);
 
-  it("names all four audiences Jarrod is talking to", () => {
+  it("invites conversation instead of naming audiences", () => {
+    // Direction change (Nov 4, 2026, per Jarrod): personal website, not a
+    // job-search page. The four-audience pitch is retired on purpose.
     const text = textOf(html);
+    expect(text).toContain("Say hello.");
+    expect(text).toContain(CONTACT_INTRO);
     for (const audience of [
       "Growth-stage tech",
-      "consulting",
       "early-stage startups",
       "operating role at a VC firm",
     ]) {
-      expect(text).toContain(audience);
+      expect(text).not.toContain(audience);
     }
   });
 

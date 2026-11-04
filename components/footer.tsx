@@ -10,7 +10,7 @@ export function Footer() {
         <p>
           {site.positioning.location}
           <span aria-hidden="true"> · </span>
-          Tesla · Apple · Waymo
+          Essays, notes, and the occasional strong opinion
         </p>
       </div>
     </footer>
