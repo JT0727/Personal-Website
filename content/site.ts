@@ -128,7 +128,7 @@ export const site: SiteContent = {
     },
     documentTitle: "Jarrod Tran · Product & strategy · Tesla, Apple, Waymo",
     valueProp:
-      "I lead AI enablement at Tesla Energy. My team builds tools people use daily. Here I write about the calls behind that work and what Apple and Waymo taught me.",
+      "I lead AI enablement at Tesla Energy. My team builds tools people use. Here I write about the calls behind that work and what Apple and Waymo taught me.",
     status: "Notes on AI and judgment",
     location: "Houston, TX",
     currentRole: currentTitle,
@@ -541,7 +541,7 @@ export const site: SiteContent = {
     resumeHref: "/resume.pdf",
     resumeFilename: "Jarrod-Tran-Resume.pdf",
     intro:
-      "Reply to anything I write, or just email me. I am always up for swapping notes on AI adoption, or to come speak about it. Based in Houston.",
+      "I am always up for swapping notes on AI adoption. Based in Houston.",
   },
   outreach: {
     linkedin:

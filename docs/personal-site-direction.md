@@ -47,11 +47,13 @@ no five-word phrase repeated across strings, no invented career facts.
 ### Meta
 
 - Title: keep `site.positioning.documentTitle` (tab-length rule).
-- Description (valueProp, changed in this PR, round-3 wording, 158
+- Description (valueProp, changed in this PR, round-5 wording, 152
   characters so it fits the 155 to 160 band search results show): "I lead
-  AI enablement at Tesla Energy. My team builds tools people use daily.
+  AI enablement at Tesla Energy. My team builds tools people use.
   Here I write about the calls behind that work and what Apple and
-  Waymo taught me."
+  Waymo taught me." Round 5 drops "daily": the ledger supports 1,000+
+  active users and 20+ production tools, but no source supports daily
+  frequency, so the claim is out unless Jarrod confirms it.
 - Status (OG image, changed in this PR, round-2 wording): "Notes on AI
   and judgment" replaces "Open to the right role."
 
@@ -100,6 +102,16 @@ and keeps "say each thing once".
 Still open: an outside-work line (training, travel, food). Drafted in the
 working notes, not shipped, because only Jarrod can word it.
 
+Round 5 direction (owner call, not done here): the About paragraph as it
+stands still recaps the current title, the AI team, and the prior
+employers immediately before Experience. In this direction About keeps
+only personal perspective the owner has supplied, and Work carries the
+chronology. The recap is not removed in this round because there is no
+owner-supplied personal-perspective wording to replace it with, and
+inventing outside-work details is out of bounds. The bio stays as is
+until Jarrod supplies the replacement wording; the outside-work line
+above is the same open call.
+
 ### Work, briefly (target copy, phase 2)
 
 - Tesla Energy (2023 to now): current role. 20+ AI tools in production,
@@ -135,9 +147,11 @@ principles stay word for word.
 ### Contact (changed in this PR)
 
 - Heading: "Say hello." (was "Looking for product, strategy, or AI roles.")
-- Intro (round-2 wording): "Reply to anything I write, or just email
-  me. I am always up for swapping notes on AI adoption, or to come speak
-  about it. Based in Houston."
+- Intro (round-5 wording): "I am always up for swapping notes on AI
+  adoption. Based in Houston." Round 5 drops "Reply to anything I write"
+  (the feed has no posts yet) and the "just email me" / "come speak
+  about it" clauses, which repeat the Email and Speaking rows below.
+  The rows carry the contact options; the intro stays factual.
 - Rows stay: Email, LinkedIn, Speaking, Resume (subordinate, last row).
 
 ### Footer
@@ -160,6 +174,10 @@ footer. A future tagline, if one comes back, is a separate decision.
    (reverted to base; #98 has merged and removed the footer company
    line, and #109 has merged its own empty-state copy, so the writing
    string waits only on Jarrod confirming the "in draft" claim).
+   Round 5 drops "daily" from valueProp (no source for daily frequency)
+   and shortens contact.intro to the round-5 wording; the doc records
+   the About chronology-recap removal as an owner call and marks phased
+   steps 3 and 4 as required gates.
 2. tests/sections.test.tsx: CONTACT_INTRO follows the new copy;
    EMPTY_WRITING reverted to base; the contact test now also guards
    "consulting" as absent.
@@ -175,7 +193,10 @@ footer. A future tagline, if one comes back, is a separate decision.
 5. This doc: sitemap, layout, copy, and phased plan updated per round-2
    review, then again per round-3 review (#104 merged, #109 closed,
    hero fork, meta length, About duplicate), then again per round-4
-   review (#109 and #98 merged, Capabilities gone on main).
+   review (#109 and #98 merged, Capabilities gone on main), then again
+   per round-5 review ("daily" dropped, contact intro shortened, About
+   chronology recap parked as an owner call, steps 3 and 4 marked
+   required gates).
 
 ## Conflicts with current repo rules (need an owner call, not done here)
 
@@ -221,9 +242,14 @@ listed "Work, briefly" as both phase 2 and step 5):
    are pinned by copy-contract tests and are not visitor copy.
 3. Compress homepage Experience and Selected Work into
    "Work, briefly" (Capabilities already removed by #104); rework the
-   layout tests in the same PR.
+   layout tests in the same PR. Required gate (round-5 review): this PR
+   alone leaves the current experience and case-study structure in
+   place, so the redesign is not complete until this step lands.
 4. Decide the writing URL question (owner call: a real /writing/ index
    breaks rule:legacy-redirects), then turn case studies into essays.
+   Required gate (round-5 review): same as step 3, the essay conversion
+   is a required phase, not an optional follow-up, before the redesign
+   is called complete.
 5. /about/ gets a brief only if the homepage is still too long after
    step 3. /now/, Reading, and Colophon are dropped.
 6. Nav to Writing, About (conditional), Contact; resume link to About

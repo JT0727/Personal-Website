@@ -84,7 +84,7 @@ const SECTION_DESCRIPTIONS = [
 ] as const;
 
 const CONTACT_INTRO =
-  "Reply to anything I write, or just email me. I am always up for swapping notes on AI adoption, or to come speak about it. Based in Houston.";
+  "I am always up for swapping notes on AI adoption. Based in Houston.";
 
 describe("hero", () => {
   const html = renderToStaticMarkup(<Hero />);
